@@ -1,0 +1,9 @@
+{
+  "verbose": true,
+  "ignore": ["client/*"],
+  "ext": "*.js",
+  "exec": "node app",
+  "execMap": {
+    "server": "node app"
+  }
+}

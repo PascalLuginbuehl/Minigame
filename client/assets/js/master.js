@@ -39,7 +39,7 @@ var Context = function(elemet) {
     console.log(mousePos);
   }.bind(this));*/
 
-  this.getMousePos = function(evt){
+  this.getMousePos = function (evt) {
     var rect = this.canvas.getBoundingClientRect();
     return {
       x: Math.floor((evt.clientX-rect.left)/(rect.right-rect.left)*this.canvas.width),
