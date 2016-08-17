@@ -7,10 +7,18 @@
  */
 
 /**
+ * Gravity for Direction stearing, the velocity gets higher...
+ */
+
+/**
  * Renderloop
  *
  * Gameloop
  * Important, self adjusting timers (else not in sync :( )
+ */
+
+/**
+ * IDEA: Chunks for better performence, only load chunks near the Player
  */
 
 const CONFIG = {
@@ -49,6 +57,7 @@ class Game {
         this.width = config.width;
         this.height = config.height;
         this.entitys = [];
+        // this.chuncks = [];
       }
     };
 
@@ -66,6 +75,7 @@ class Game {
         this.velocityY;
         this.gravityX;
         this.gravityY;
+        this.acceleration;
 
         // IDEA: z-index
 
@@ -108,6 +118,16 @@ class Game {
 
     let delay = overtime + this.config.gameLoopInterval;
     // physics here
+    //
+    /*
+    var newPositionY = Math.round(0.01 * entity.velocity * 100 * 10) / 10;
+    if(!entity.collisionDetection(this.map.entitys, 0, newPositionY)){
+      entity.positionY = entity.positionY + newPositionY;
+      entity.velocity = entity.velocity < 1 ? Math.round((entity.velocity + 0.01 * entity.gravity)*100)/100 : entity.velocity;
+    } else {
+      entity.velocity = 0;
+    }
+    */
     // console.log(delay);
 
     this.expectedInterval += this.config.gameLoopInterval;
@@ -135,6 +155,10 @@ class Render {
 
   render() {
     console.log("asd");
+    for (var i = 0; i < game.map.entitys.length; i++) {
+      game.map.entitys[i];
+      console.log("asd");
+    }
   }
 
   toRender(positionX, positionY) {
