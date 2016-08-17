@@ -40,26 +40,26 @@ app.all('/', function (req, res, next) {
 });
 
 app.ws('/', function(ws, req) {
-  console.log(req.session.test = "LOL");
-  ws.on('message', function(msg) {
-    try {
-      var json = JSON.parse(e.data);
-      switch (json.task) {
-        case "message":
-
-          break;
-        case "loadMessages":
-
-          break;
-        default:
-          console.log("task not found");
-      }
-    } catch (e) {
-      console.log("wrong JSON format");
-    }
-    console.log(req.session);
-    ws.send(msg);
-  });
+  // console.log(req.session.test = "LOL");
+  // ws.on('message', function(msg) {
+  //   try {
+  //     var json = JSON.parse(e.data);
+  //     switch (json.task) {
+  //       case "message":
+  //
+  //         break;
+  //       case "loadMessages":
+  //
+  //         break;
+  //       default:
+  //         console.log("task not found");
+  //     }
+  //   } catch (e) {
+  //     console.log("wrong JSON format");
+  //   }
+  //   console.log(req.session);
+  //   ws.send(msg);
+  // });
 });
 
 
