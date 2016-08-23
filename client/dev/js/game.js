@@ -45,6 +45,13 @@ const CONFIG = {
   },
 }
 
+class Vector2 {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
 // Constructor
 class Game {
   constructor(config) {
@@ -67,18 +74,23 @@ class Game {
     this.Entity = class {
       constructor(params) {
 
+
         // position
         // left top of hitbox
-        this.positionX = params.positionX;
-        this.positionY = params.positionY;
-
-        this.rotation = params.rotation;
+        this.position = new Vector2(params.positionX, params.positionY);
 
         // velocity for movement
-        this.velocityX = params.velocityX;
-        this.velocityY = params.velocityY;
+        this.linearVelocity = new Vector2(0, 0);
 
-        this.mass = params.mass,
+        // pulls into Direction
+        this.force = new Vector2(0, 0);
+
+
+        // rotation
+        this.angle = 0;
+        this.angularVelocity = 0;
+        this.torque = 0;
+
 
         // IDEA: z-index
 
@@ -90,6 +102,7 @@ class Game {
         this.width = params.width;
 
         // Array of polygons
+        // Needs mass for boxshape
         this.hitbox = params.hitbox;
 
 
@@ -98,7 +111,7 @@ class Game {
         this.static = params.static;
       }
 
-      setVelocity() {
+      applyForce() {
 
       }
     }
@@ -110,13 +123,6 @@ class Game {
     this.map.addEntity(new this.Entity({
       positionX: 10,
       positionY: 10,
-
-      rotation: 0,
-
-      velocityX: 0,
-      velocityY: 0,
-
-      mass: 1,
 
       texture: texture,
 
@@ -145,7 +151,7 @@ class Game {
     }
 
     let delay = overtime + this.config.gameLoopInterval;
-    console.log(delay);
+    // console.log(delay);
 
     // physics here
 
@@ -176,10 +182,12 @@ class Render {
 
     this.debugging = debugging;
 
+
+
     // adding new prototypes for rendering and debugging
     game.Entity.prototype.renderHitbox = function (ctx) {
-      let x = this.positionX;
-      let y = this.positionY;
+      let x = this.position.x;
+      let y = this.position.y;
       ctx.beginPath();
       ctx.moveTo(x + this.hitbox[0].positionX, y + this.hitbox[0].positionY);
 
@@ -195,11 +203,12 @@ class Render {
     }
 
     game.Entity.prototype.renderTexture = function (ctx) {
-      let x = this.positionX;
-      let y = this.positionY;
+      let x = this.position.x;
+      let y = this.position.y;
 
       ctx.drawImage(this.texture, x, y, this.height, this.width);
     }
+
 
 
     // standard Interval
@@ -221,10 +230,10 @@ class Render {
     }
   }
 
-  toRender(positionX, positionY) {
-    positionX - this.height;
-    positionY;
-  }
+  // toRender(positionX, positionY) {
+  //   positionX - this.height;
+  //   positionY;
+  // }
 }
 
 
