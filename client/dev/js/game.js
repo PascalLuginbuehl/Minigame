@@ -77,8 +77,8 @@ class Game {
         // velocity for movement
         this.velocityX = params.velocityX;
         this.velocityY = params.velocityY;
-        this.accelerationX = params.accelerationX;
-        this.accelerationY = params.accelerationY;
+
+        this.mass = params.mass,
 
         // IDEA: z-index
 
@@ -104,6 +104,9 @@ class Game {
     }
 
     this.map = new this.Map(this.config.map);
+    let texture = new Image();
+    texture.src = "assets/images/dirt.png";
+
     this.map.addEntity(new this.Entity({
       positionX: 10,
       positionY: 10,
@@ -112,10 +115,10 @@ class Game {
 
       velocityX: 0,
       velocityY: 0,
-      accelerationX: 0,
-      accelerationY: 0,
 
-      texture: new Image("assets/images/dirt.png"),
+      mass: 1,
+
+      texture: texture,
 
       height: 20,
       width: 20,
@@ -127,34 +130,32 @@ class Game {
     }))
 
     // Timer for gameloop
-    this.expectedInterval = Date.now() + this.config.gameLoopInterval;
+    this.expectedInterval = window.performance.now() + this.config.gameLoopInterval;
     setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval);
   }
 
   // catch up loop
   gameLoop() {
-    let overtime = Date.now() - this.expectedInterval;
+    let overtime = window.performance.now() - this.expectedInterval;
 
     if (overtime > this.config.gameLoopInterval) {
+      this.overtimeError(overtime);
+      this.expectedInterval = window.performance.now();
       // error, overtime longer then Interval, sync with server...
     }
 
     let delay = overtime + this.config.gameLoopInterval;
+    console.log(delay);
+
     // physics here
-    //
-    /*
-    var newPositionY = Math.round(0.01 * entity.velocity * 100 * 10) / 10;
-    if(!entity.collisionDetection(this.map.entitys, 0, newPositionY)){
-      entity.positionY = entity.positionY + newPositionY;
-      entity.velocity = entity.velocity < 1 ? Math.round((entity.velocity + 0.01 * entity.gravity)*100)/100 : entity.velocity;
-    } else {
-      entity.velocity = 0;
-    }
-    */
-    // console.log(delay);
+
 
     this.expectedInterval += this.config.gameLoopInterval;
     setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval - overtime);
+  }
+
+  overtimeError(overtime) {
+    console.error("overtimeError: " + overtime);
   }
 }
 
@@ -175,28 +176,47 @@ class Render {
 
     this.debugging = debugging;
 
+    // adding new prototypes for rendering and debugging
+    game.Entity.prototype.renderHitbox = function (ctx) {
+      let x = this.positionX;
+      let y = this.positionY;
+      ctx.beginPath();
+      ctx.moveTo(x + this.hitbox[0].positionX, y + this.hitbox[0].positionY);
+
+      for (let position = 0; position < this.hitbox.length; position++) {
+        let localHitbox = this.hitbox[position];
+        ctx.lineTo(x + localHitbox.positionX, y + localHitbox.positionY);
+        ctx.moveTo(x + localHitbox.positionX, y + localHitbox.positionY);
+      }
+
+      ctx.lineTo(x + this.hitbox[0].positionX, y + this.hitbox[0].positionY);
+
+      ctx.stroke();
+    }
+
+    game.Entity.prototype.renderTexture = function (ctx) {
+      let x = this.positionX;
+      let y = this.positionY;
+
+      ctx.drawImage(this.texture, x, y, this.height, this.width);
+    }
+
+
     // standard Interval
     setInterval(this.render.bind(this), Math.round(1000 / 60));
   }
 
   render() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     for (var i = 0; i < game.map.entitys.length; i++) {
       let entity = game.map.entitys[i];
 
+      entity.renderTexture(this.ctx);
+
+
       if (this.debugging.renderHitbox) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(entity.positionX + entity.hitbox[0].positionX, entity.positionY + entity.hitbox[0].positionY);
-
-        for (let position = 0; position < entity.hitbox.length; position++) {
-          let localHitbox = entity.hitbox[position];
-          this.ctx.lineTo(entity.positionX + localHitbox.positionX, entity.positionY + localHitbox.positionY);
-          this.ctx.moveTo(entity.positionX + localHitbox.positionX, entity.positionY + localHitbox.positionY);
-        }
-
-        this.ctx.lineTo(entity.positionX + entity.hitbox[0].positionX, entity.positionY + entity.hitbox[0].positionY);
-
-        this.ctx.stroke();
+        entity.renderHitbox(this.ctx);
       }
     }
   }
@@ -207,14 +227,60 @@ class Render {
   }
 }
 
+
+/**
+ * Input for user inputs.
+ * Communicator for communicating to WebSocket
+ */
 class Input {
   constructor(game) {
     this.game = game;
+
+    window.addEventListener('keydown', (e) => {
+      if (this.keys.hasOwnProperty(e.key)) {
+        this.keys[e.key] = true;
+        e.preventDefault();
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (this.keys.hasOwnProperty(e.key)) {
+        this.keys[e.key] = false;
+        e.preventDefault();
+      }
+    });
+
+    this.keys = {
+      w: false,
+      a: false,
+      s: false,
+      d: false,
+      ArrowUp: false,
+      ArrowLeft: false,
+      ArrowDown: false,
+      ArrowRigth: false,
+    }
+  }
+}
+
+
+/**
+ * Errorhandling for Client Server has its own...
+ */
+class Communicator {
+  constructor(game) {
+    this.game = game;
+    game.__proto__.overtimeError = (overtime) => {
+      console.log(overtime);
+      console.log(this);
+      this.expectedInterval = window.performance.now();
+    };
   }
 }
 
 let game = new Game(CONFIG);
 let input = new Input(game);
+let communicator = new Communicator(game);
 
 document.addEventListener('DOMContentLoaded', () => {
   let render = new Render(game, document.body, {
