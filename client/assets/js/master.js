@@ -85,9 +85,12 @@ class Game {
         // pulls into Direction
         this.force = new Vector2(0, 0);
 
+        // center of mass and rotation point
+        this.center = new Vector2(params.centerX, params.centerY);
+
 
         // rotation
-        this.angle = 0;
+        this.angle = params.angle;
         this.angularVelocity = 0;
         this.torque = 0;
 
@@ -111,6 +114,10 @@ class Game {
         this.static = params.static;
       }
 
+      calculateCenter() {
+        return new Vector2();
+      }
+
       applyForce() {
 
       }
@@ -121,10 +128,15 @@ class Game {
     texture.src = "assets/images/dirt.png";
 
     this.map.addEntity(new this.Entity({
-      positionX: 10,
-      positionY: 10,
+      positionX: 30,
+      positionY: 30,
 
       texture: texture,
+
+      angle: Math.PI*2,
+
+      centerX: 10,
+      centerY: 10,
 
       height: 20,
       width: 20,
@@ -184,56 +196,88 @@ class Render {
 
 
 
+
+    // adding new prototypes for rendering and debugging
+    game.Entity.prototype.renderCenter = function (ctx) {
+      ctx.rect(0, 0, 1, 1);
+      ctx.fillStyle = 'red';
+      ctx.fill();
+    }
+
     // adding new prototypes for rendering and debugging
     game.Entity.prototype.renderHitbox = function (ctx) {
       let x = this.position.x;
       let y = this.position.y;
+
       ctx.beginPath();
-      ctx.moveTo(x + this.hitbox[0].positionX, y + this.hitbox[0].positionY);
+      ctx.moveTo(this.hitbox[0].positionX - this.center.x, this.hitbox[0].positionY - this.center.y);
 
       for (let position = 0; position < this.hitbox.length; position++) {
         let localHitbox = this.hitbox[position];
-        ctx.lineTo(x + localHitbox.positionX, y + localHitbox.positionY);
-        ctx.moveTo(x + localHitbox.positionX, y + localHitbox.positionY);
+        ctx.lineTo(localHitbox.positionX - this.center.x, localHitbox.positionY - this.center.y);
+        ctx.moveTo(localHitbox.positionX - this.center.x, localHitbox.positionY - this.center.y);
       }
 
-      ctx.lineTo(x + this.hitbox[0].positionX, y + this.hitbox[0].positionY);
+      ctx.lineTo(this.hitbox[0].positionX - this.center.x, this.hitbox[0].positionY - this.center.y);
 
       ctx.stroke();
     }
 
-    game.Entity.prototype.renderTexture = function (ctx) {
-      let x = this.position.x;
-      let y = this.position.y;
 
-      ctx.drawImage(this.texture, x, y, this.height, this.width);
+    game.Entity.prototype.renderTexture = function (ctx) {
+      let x = this.position.x
+        , y = this.position.y
+        , height = this.height
+        , width = this.width;
+
+      ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, height, width);
     }
 
 
 
+
+    // this.render();
+    setTimeout(this.render.bind(this), 1);
+
     // standard Interval
-    setInterval(this.render.bind(this), Math.round(1000 / 60));
+    // setInterval(this.render.bind(this), Math.round(1000 / 60));
   }
 
+
   render() {
+    // save status
+    this.ctx.save();
+
+    // Clear old stuff
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (var i = 0; i < game.map.entitys.length; i++) {
       let entity = game.map.entitys[i];
 
-      entity.renderTexture(this.ctx);
 
+      this.transformContent(this.ctx, entity);
+
+      entity.renderTexture(this.ctx);
+      entity.renderCenter(this.ctx);
 
       if (this.debugging.renderHitbox) {
         entity.renderHitbox(this.ctx);
       }
+
+      // restore status
+      this.ctx.restore();
     }
   }
 
-  // toRender(positionX, positionY) {
-  //   positionX - this.height;
-  //   positionY;
-  // }
+  transformContent(ctx, entity) {
+    let x = entity.position.x
+      , y = entity.position.y
+      , angle = entity.angle;
+
+    // add center to it so it can rotate from center
+    ctx.translate(x + entity.center.x, y + entity.center.y);
+    ctx.rotate(angle);
+  }
 }
 
 
