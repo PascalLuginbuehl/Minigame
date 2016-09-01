@@ -45,12 +45,43 @@ const CONFIG = {
   },
 }
 
-class Vector2 {
-  constructor(x, y) {
+class V {
+  constructor (x, y) {
     this.x = x;
     this.y = y;
   }
+
+  add(v) {
+    return new V(v.x + this.x, v.y + this.y);
+  }
+
+  subtract(v) {
+    return new V(this.x - v.x, this.y - v.y);
+  }
+
+  scale(s) {
+    return new V(this.x * s, this.y * s);
+  }
+
+  dot(v) {
+    return (this.x * v.x + this.y * v.y);
+  }
+
+  cross(v) {
+    return (this.x * v.y - this.y * v.x);
+  }
+
+  rotate(angle, vector) {
+    let x = this.x - vector.x;
+    let y = this.y - vector.y;
+
+    let x_prime = vector.x + ((x * Math.cos(angle)) - (y * Math.sin(angle)));
+    let y_prime = vector.y + ((x * Math.sin(angle)) + (y * Math.cos(angle)));
+
+    return new V(x_prime, y_prime);
+  }
 }
+
 
 // Constructor
 class Game {
@@ -72,25 +103,25 @@ class Game {
     };
 
     this.Entity = class {
-      constructor(params) {
+      constructor({positionX = 0, positionY = 0, centerX = 0, centerY = 0, angle = 0, texture = 0, height = 0, width = 0, hitbox = 0, solid = false, static: staticElem = false}) {
 
 
         // position
         // left top of hitbox
-        this.position = new Vector2(params.positionX, params.positionY);
+        this.position = new V(positionX, positionY);
 
         // velocity for movement
-        this.linearVelocity = new Vector2(0, 0);
+        this.linearVelocity = new V(0, 0);
 
         // pulls into Direction
-        this.force = new Vector2(0, 0);
+        this.force = new V(0, 0);
 
         // center of mass and rotation point
-        this.center = new Vector2(params.centerX, params.centerY);
+        this.center = new V(centerX, centerY);
 
 
         // rotation
-        this.angle = params.angle;
+        this.angle = angle;
         this.angularVelocity = 0;
         this.torque = 0;
 
@@ -98,29 +129,30 @@ class Game {
         // IDEA: z-index
 
         // IDEA: Also able to set via reference to type
-        this.texture = params.texture;
+        this.texture = texture;
 
         // Size for Texture
-        this.height = params.height;
-        this.width = params.width;
+        this.height = height;
+        this.width = width;
 
         // Array of polygons
         // Needs mass for boxshape
-        this.hitbox = params.hitbox;
+        this.hitbox = hitbox;
 
 
         // parameters
-        this.solid = params.solid;
-        this.static = params.static;
+        this.solid = solid;
+        this.static = staticElem;
       }
 
       calculateCenter() {
-        return new Vector2();
+        return new V();
       }
 
       applyForce() {
 
       }
+      
     }
 
     this.map = new this.Map(this.config.map);
