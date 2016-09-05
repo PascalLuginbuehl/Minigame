@@ -25,8 +25,8 @@ const CONFIG = {
   gameLoopInterval: 16,
 
   map: {
-    height: 200,
-    width: 100,
+    height: 1000,
+    width: 1000,
   },
 
   textures: {
@@ -104,14 +104,12 @@ class Game {
 
     this.Entity = class {
       constructor({positionX = 0, positionY = 0, sizeX = 10, sizeY = 10, texture = 0, solid = false, static: staticElem = false}) {
-
-
         // position
         // left top of hitbox
         this.position = new V(positionX, positionY);
 
         // velocity for movement
-        this.linearVelocity = new V(0, 0);
+        this.velocity = new V(0, 0);
 
         // pulls into Direction
         this.force = new V(0, 0);
@@ -149,7 +147,7 @@ class Game {
       texture: texture,
 
       solid: true,
-      static: true,
+      static: false,
     }));
 
 
@@ -171,7 +169,7 @@ class Game {
       // error, overtime longer then Interval, sync with server...
     }
 
-    let delay = overtime + this.config.gameLoopInterval;
+    let delay = (overtime + this.config.gameLoopInterval) / 1000;
     // console.log(delay);
 
     // physics here
@@ -179,14 +177,23 @@ class Game {
       let entity = this.map.entitys[i];
 
       if(!entity.static) {
+        let acceleration = entity.force.scale(500);
+        let friction = 0.8;
+        entity.velocity = entity.velocity.add(acceleration.subtract(entity.velocity.scale(friction)));
+        // entity.velocity = entity.velocity.add(acceleration.scale(delay));
+        console.log(entity.velocity);
+        entity.position = entity.position.add(entity.velocity.scale(delay));
+        // velocity += acceleration * time_step
+        // position += velocity * time_step
+
+
+        // collisions
         for (var o = 0; o < this.map.entitys.length; o++) {
           let entity2 = this.map.entitys[o];
           // check collision
           if (entity != entity2 && entity.solid) {
             // FIXME: do better physX
-            // acceleration = force / mass
-            // velocity += acceleration * time_step
-            // position += velocity * time_step
+            //
           }
         }
       }
@@ -288,7 +295,7 @@ class Input {
       if (keys.d) {
         v.x++;
       }
-      this.map.entitys[0].position = this.map.entitys[0].position.add(v);
+      this.map.entitys[0].force = (v);
     }
 
     window.addEventListener('keydown', (e) => {
