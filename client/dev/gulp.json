@@ -4,7 +4,7 @@
       "taskname": "master",
       "folder": "js",
       "target": "master.js",
-      "files": ["js/game.js"]
+      "files": ["js/test.js"]
     }
   ]
 }

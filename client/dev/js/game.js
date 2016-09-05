@@ -152,8 +152,9 @@ class Game {
       applyForce() {
 
       }
-      
+
     }
+
 
     this.map = new this.Map(this.config.map);
     let texture = new Image();
@@ -177,7 +178,28 @@ class Game {
 
       solid: true,
       static: true,
-    }))
+    }));
+
+    this.map.addEntity(new this.Entity({
+      positionX: 50,
+      positionY: 50,
+
+      texture: texture,
+
+      angle: Math.PI*2,
+
+      centerX: 10,
+      centerY: 10,
+
+      height: 20,
+      width: 20,
+
+      hitbox: [{positionX: 0, positionY: 0}, {positionX:20, positionY: 0}, {positionX: 0, positionY: 20}],
+
+      solid: true,
+      static: true,
+    }));
+
 
     // Timer for gameloop
     this.expectedInterval = window.performance.now() + this.config.gameLoopInterval;
