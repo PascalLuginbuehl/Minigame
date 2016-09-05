@@ -46,28 +46,28 @@ const CONFIG = {
 }
 
 class V {
-  constructor (x = 0, y = 0) {
+  constructor (x, y) {
     this.x = x;
     this.y = y;
   }
 
-  add(v = new V(0, 0)) {
+  add(v) {
     return new V(v.x + this.x, v.y + this.y);
   }
 
-  subtract(v = new V(0, 0)) {
+  subtract(v) {
     return new V(this.x - v.x, this.y - v.y);
   }
 
-  scale(s = 0) {
+  scale(s) {
     return new V(this.x * s, this.y * s);
   }
 
-  dot(v = new V(0, 0)) {
+  dot(v) {
     return (this.x * v.x + this.y * v.y);
   }
 
-  cross(v = new V(0, 0)) {
+  cross(v) {
     return (this.x * v.y - this.y * v.x);
   }
 
@@ -103,7 +103,7 @@ class Game {
     };
 
     this.Entity = class {
-      constructor({positionX = 0, positionY = 0, centerX = 0, centerY = 0, angle = 0, texture = 0, height = 0, width = 0, hitbox = 0, solid = false, static: staticElem = false}) {
+      constructor({positionX = 0, positionY = 0, sizeX = 10, sizeY = 10, texture = 0, solid = false, static: staticElem = false}) {
 
 
         // position
@@ -116,30 +116,12 @@ class Game {
         // pulls into Direction
         this.force = new V(0, 0);
 
-        // center of mass and rotation point
-        this.center = new V(centerX, centerY);
-
-
-        // rotation
-        this.angle = angle;
-        this.angularVelocity = 0;
-        this.torque = 0;
-
-
-        this.collision = false;
+        this.size = new V(sizeX, sizeY);
 
         // IDEA: z-index
 
         // IDEA: Also able to set via reference to type
         this.texture = texture;
-
-        // Size for Texture
-        this.height = height;
-        this.width = width;
-
-        // Array of polygons
-        // Needs mass for boxshape
-        this.hitbox = hitbox;
 
 
         // parameters
@@ -147,45 +129,9 @@ class Game {
         this.static = staticElem;
       }
 
-      checkCollision(entity) {
-        let lastDot = this.hitbox[0].add(this.position);
-
-        for (let i = 1; i < this.hitbox.length; i++) {
-          let dot = this.hitbox[i].add(this.position);
-
-          let a = dot.subtract(lastDot);
-          let scalar = a.y / a.x;
-          console.log(scalar);
-
-
-          let lastDot2 = entity.hitbox[0].add(entity.position);
-          let posX = lastDot2.y * scalar;
-          let more = posX < lastDot.x ? true : false;
-
-          for (let o = 1; o < entity.hitbox.length; o++) {
-            let dot2 = entity.hitbox[i].add(entity.position);
-            let posX2 = dot2.y * scalar;
-            let more2 = posX < dot2.x ? true : false;
-            if (more != more2) {
-              return true;
-            }
-            more = more2;
-          }
-
-          // console.log(this.hitbox[i]);
-        }
-
-        return false;
-      }
-
-      calculateCenter() {
-        return new V();
-      }
-
       applyForce() {
 
       }
-
     }
 
 
@@ -194,40 +140,13 @@ class Game {
     texture.src = "assets/images/dirt.png";
 
     this.map.addEntity(new this.Entity({
-      positionX: 0,
-      positionY: 0,
-
-      texture: texture,
-
-      angle: 0,
-
-      centerX: 10,
-      centerY: 10,
-
-      height: 20,
-      width: 20,
-
-      hitbox: [new V(0, 0), new V(20, 0), new V(0, 20)],
-
-      solid: true,
-      static: true,
-    }));
-
-    this.map.addEntity(new this.Entity({
       positionX: 50,
       positionY: 50,
 
+      sizeX: 16,
+      sizeY: 16,
+
       texture: texture,
-
-      angle: 0,
-
-      centerX: 10,
-      centerY: 10,
-
-      height: 20,
-      width: 20,
-
-      hitbox: [new V(0, 0), new V(20, 0), new V(0, 20)],
 
       solid: true,
       static: true,
@@ -239,13 +158,11 @@ class Game {
     setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval);
   }
 
-  input() {
-
-  }
-
   // catch up loop
   gameLoop() {
-    this.input();
+    // special for communicator and input
+    this.specialInput();
+
     let overtime = window.performance.now() - this.expectedInterval;
 
     if (overtime > this.config.gameLoopInterval) {
@@ -258,17 +175,23 @@ class Game {
     // console.log(delay);
 
     // physics here
-    for (var i = 0; i < this.map.entitys.length; i++) {
+    for (let i = 0; i < this.map.entitys.length; i++) {
       let entity = this.map.entitys[i];
-      for (var o = 0; o < this.map.entitys.length; o++) {
-        let entity2 = this.map.entitys[o];
-        if (entity != entity2) {
-          if (entity.checkCollision(entity2)) {
-            entity.collision = true;
+
+      if(!entity.static) {
+        for (var o = 0; o < this.map.entitys.length; o++) {
+          let entity2 = this.map.entitys[o];
+          // check collision
+          if (entity != entity2 && entity.solid) {
+            // FIXME: do better physX
+            // acceleration = force / mass
+            // velocity += acceleration * time_step
+            // position += velocity * time_step
           }
         }
       }
     }
+
 
     this.expectedInterval += this.config.gameLoopInterval;
     setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval - overtime);
@@ -276,6 +199,10 @@ class Game {
 
   overtimeError(overtime) {
     console.error("overtimeError: " + overtime);
+  }
+
+  specialInput() {
+
   }
 }
 
@@ -298,45 +225,8 @@ class Render {
 
 
 
-
-    // adding new prototypes for rendering and debugging
-    game.Entity.prototype.renderCenter = function (ctx) {
-      ctx.rect(0, 0, 1, 1);
-      ctx.fillStyle = 'red';
-      ctx.fill();
-    }
-
-    // adding new prototypes for rendering and debugging
-    game.Entity.prototype.renderHitbox = function (ctx) {
-      let x = this.position.x
-        , y = this.position.y;
-
-      ctx.beginPath();
-      ctx.moveTo(this.hitbox[0].x - this.center.x, this.hitbox[0].y - this.center.y);
-
-      for (let position = 0; position < this.hitbox.length; position++) {
-        let localHitbox = this.hitbox[position];
-        ctx.lineTo(localHitbox.x - this.center.x, localHitbox.y - this.center.y);
-        ctx.moveTo(localHitbox.x - this.center.x, localHitbox.y - this.center.y);
-      }
-
-      ctx.lineTo(this.hitbox[0].x - this.center.x, this.hitbox[0].y - this.center.y);
-
-      if (this.collision) {
-        ctx.strokeStyle = '#ff0000';
-      }
-
-      ctx.stroke();
-    }
-
-
     game.Entity.prototype.renderTexture = function (ctx) {
-      let x = this.position.x
-        , y = this.position.y
-        , height = this.height
-        , width = this.width;
-
-      ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, height, width);
+      ctx.drawImage(this.texture, this.position.x, this.position.y, this.size.x, this.size.y);
     }
 
 
@@ -344,7 +234,6 @@ class Render {
 
     // this.render();
     // setTimeout(this.render.bind(this), 1);
-    // setTimeout(this.render.bind(this), 1000);
 
     // standard Interval
     setInterval(this.render.bind(this), Math.round(1000 / 60));
@@ -357,32 +246,9 @@ class Render {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (var i = 0; i < game.map.entitys.length; i++) {
-      this.ctx.save();
-
       let entity = game.map.entitys[i];
-
-      this.transformContent(this.ctx, entity);
-
       entity.renderTexture(this.ctx);
-      entity.renderCenter(this.ctx);
-
-      if (this.debugging.renderHitbox) {
-        entity.renderHitbox(this.ctx);
-      }
-
-      // restore status
-      this.ctx.restore();
     }
-  }
-
-  transformContent(ctx, entity) {
-    let x = entity.position.x
-      , y = entity.position.y
-      , angle = entity.angle;
-
-    // add center to it so it can rotate from center
-    ctx.translate(x + entity.center.x, y + entity.center.y);
-    ctx.rotate(angle);
   }
 }
 
@@ -405,9 +271,10 @@ class Input {
       ArrowDown: false,
       ArrowRigth: false,
     }
+
     var keys = this.keys;
 
-    this.game.__proto__.input = function () {
+    game.__proto__.specialInput = function() {
       let v = new V(0, 0);
       if (keys.w) {
         v.y-- ;
@@ -423,7 +290,6 @@ class Input {
       }
       this.map.entitys[0].position = this.map.entitys[0].position.add(v);
     }
-
 
     window.addEventListener('keydown', (e) => {
       if (this.keys.hasOwnProperty(e.key)) {
@@ -442,8 +308,23 @@ class Input {
 }
 
 
+/**
+ * Errorhandling for Client Server has its own...
+ */
+class Communicator {
+  constructor(game) {
+    this.game = game;
+    game.__proto__.overtimeError = (overtime) => {
+      // console.log(overtime);
+      // console.log(this);
+      this.expectedInterval = window.performance.now();
+    };
+  }
+}
+
 let game = new Game(CONFIG);
 let input = new Input(game);
+let communicator = new Communicator(game, input);
 
 document.addEventListener('DOMContentLoaded', () => {
   let render = new Render(game, document.body, {

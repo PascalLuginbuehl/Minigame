@@ -103,7 +103,7 @@ class Game {
     };
 
     this.Entity = class {
-      constructor({positionX = 0, positionY = 0, centerX = 0, centerY = 0, angle = 0, texture = 0, height = 0, width = 0, hitbox = 0, solid = false, static: staticElem = false}) {
+      constructor({positionX = 0, positionY = 0, sizeX = 10, sizeY = 10, texture = 0, solid = false, static: staticElem = false}) {
 
 
         // position
@@ -116,28 +116,12 @@ class Game {
         // pulls into Direction
         this.force = new V(0, 0);
 
-        // center of mass and rotation point
-        this.center = new V(centerX, centerY);
-
-
-        // rotation
-        this.angle = angle;
-        this.angularVelocity = 0;
-        this.torque = 0;
-
+        this.size = new V(sizeX, sizeY);
 
         // IDEA: z-index
 
         // IDEA: Also able to set via reference to type
         this.texture = texture;
-
-        // Size for Texture
-        this.height = height;
-        this.width = width;
-
-        // Array of polygons
-        // Needs mass for boxshape
-        this.hitbox = hitbox;
 
 
         // parameters
@@ -145,14 +129,9 @@ class Game {
         this.static = staticElem;
       }
 
-      calculateCenter() {
-        return new V();
-      }
-
       applyForce() {
 
       }
-
     }
 
 
@@ -161,40 +140,13 @@ class Game {
     texture.src = "assets/images/dirt.png";
 
     this.map.addEntity(new this.Entity({
-      positionX: 30,
-      positionY: 30,
-
-      texture: texture,
-
-      angle: Math.PI*2,
-
-      centerX: 10,
-      centerY: 10,
-
-      height: 20,
-      width: 20,
-
-      hitbox: [{positionX: 0, positionY: 0}, {positionX:20, positionY: 0}, {positionX: 0, positionY: 20}],
-
-      solid: true,
-      static: true,
-    }));
-
-    this.map.addEntity(new this.Entity({
       positionX: 50,
       positionY: 50,
 
+      sizeX: 16,
+      sizeY: 16,
+
       texture: texture,
-
-      angle: Math.PI*2,
-
-      centerX: 10,
-      centerY: 10,
-
-      height: 20,
-      width: 20,
-
-      hitbox: [{positionX: 0, positionY: 0}, {positionX:20, positionY: 0}, {positionX: 0, positionY: 20}],
 
       solid: true,
       static: true,
@@ -208,6 +160,9 @@ class Game {
 
   // catch up loop
   gameLoop() {
+    // special for communicator and input
+    this.specialInput();
+
     let overtime = window.performance.now() - this.expectedInterval;
 
     if (overtime > this.config.gameLoopInterval) {
@@ -220,6 +175,22 @@ class Game {
     // console.log(delay);
 
     // physics here
+    for (let i = 0; i < this.map.entitys.length; i++) {
+      let entity = this.map.entitys[i];
+
+      if(!entity.static) {
+        for (var o = 0; o < this.map.entitys.length; o++) {
+          let entity2 = this.map.entitys[o];
+          // check collision
+          if (entity != entity2 && entity.solid) {
+            // FIXME: do better physX
+            // acceleration = force / mass
+            // velocity += acceleration * time_step
+            // position += velocity * time_step
+          }
+        }
+      }
+    }
 
 
     this.expectedInterval += this.config.gameLoopInterval;
@@ -228,6 +199,10 @@ class Game {
 
   overtimeError(overtime) {
     console.error("overtimeError: " + overtime);
+  }
+
+  specialInput() {
+
   }
 }
 
@@ -250,87 +225,30 @@ class Render {
 
 
 
-
-    // adding new prototypes for rendering and debugging
-    game.Entity.prototype.renderCenter = function (ctx) {
-      ctx.rect(0, 0, 1, 1);
-      ctx.fillStyle = 'red';
-      ctx.fill();
-    }
-
-    // adding new prototypes for rendering and debugging
-    game.Entity.prototype.renderHitbox = function (ctx) {
-      let x = this.position.x;
-      let y = this.position.y;
-
-      ctx.beginPath();
-      ctx.moveTo(this.hitbox[0].positionX - this.center.x, this.hitbox[0].positionY - this.center.y);
-
-      for (let position = 0; position < this.hitbox.length; position++) {
-        let localHitbox = this.hitbox[position];
-        ctx.lineTo(localHitbox.positionX - this.center.x, localHitbox.positionY - this.center.y);
-        ctx.moveTo(localHitbox.positionX - this.center.x, localHitbox.positionY - this.center.y);
-      }
-
-      ctx.lineTo(this.hitbox[0].positionX - this.center.x, this.hitbox[0].positionY - this.center.y);
-
-      ctx.stroke();
-    }
-
-
     game.Entity.prototype.renderTexture = function (ctx) {
-      let x = this.position.x
-        , y = this.position.y
-        , height = this.height
-        , width = this.width;
-
-      ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, height, width);
+      ctx.drawImage(this.texture, this.position.x, this.position.y, this.size.x, this.size.y);
     }
 
 
 
 
     // this.render();
-    setTimeout(this.render.bind(this), 1);
+    // setTimeout(this.render.bind(this), 1);
 
     // standard Interval
-    // setInterval(this.render.bind(this), Math.round(1000 / 60));
+    setInterval(this.render.bind(this), Math.round(1000 / 60));
   }
 
 
   render() {
-    // save status
-    this.ctx.save();
 
     // Clear old stuff
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (var i = 0; i < game.map.entitys.length; i++) {
       let entity = game.map.entitys[i];
-
-
-      this.transformContent(this.ctx, entity);
-
       entity.renderTexture(this.ctx);
-      entity.renderCenter(this.ctx);
-
-      if (this.debugging.renderHitbox) {
-        entity.renderHitbox(this.ctx);
-      }
-
-      // restore status
-      this.ctx.restore();
     }
-  }
-
-  transformContent(ctx, entity) {
-    let x = entity.position.x
-      , y = entity.position.y
-      , angle = entity.angle;
-
-    // add center to it so it can rotate from center
-    ctx.translate(x + entity.center.x, y + entity.center.y);
-    ctx.rotate(angle);
   }
 }
 
@@ -342,6 +260,36 @@ class Render {
 class Input {
   constructor(game) {
     this.game = game;
+
+    this.keys = {
+      w: false,
+      a: false,
+      s: false,
+      d: false,
+      ArrowUp: false,
+      ArrowLeft: false,
+      ArrowDown: false,
+      ArrowRigth: false,
+    }
+
+    var keys = this.keys;
+
+    game.__proto__.specialInput = function() {
+      let v = new V(0, 0);
+      if (keys.w) {
+        v.y-- ;
+      }
+      if (keys.a) {
+        v.x--;
+      }
+      if (keys.s) {
+        v.y++;
+      }
+      if (keys.d) {
+        v.x++;
+      }
+      this.map.entitys[0].position = this.map.entitys[0].position.add(v);
+    }
 
     window.addEventListener('keydown', (e) => {
       if (this.keys.hasOwnProperty(e.key)) {
@@ -356,17 +304,6 @@ class Input {
         e.preventDefault();
       }
     });
-
-    this.keys = {
-      w: false,
-      a: false,
-      s: false,
-      d: false,
-      ArrowUp: false,
-      ArrowLeft: false,
-      ArrowDown: false,
-      ArrowRigth: false,
-    }
   }
 }
 
@@ -378,8 +315,8 @@ class Communicator {
   constructor(game) {
     this.game = game;
     game.__proto__.overtimeError = (overtime) => {
-      console.log(overtime);
-      console.log(this);
+      // console.log(overtime);
+      // console.log(this);
       this.expectedInterval = window.performance.now();
     };
   }
@@ -387,7 +324,7 @@ class Communicator {
 
 let game = new Game(CONFIG);
 let input = new Input(game);
-let communicator = new Communicator(game);
+let communicator = new Communicator(game, input);
 
 document.addEventListener('DOMContentLoaded', () => {
   let render = new Render(game, document.body, {
