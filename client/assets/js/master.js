@@ -177,10 +177,12 @@ class Game {
       let entity = this.map.entitys[i];
 
       if(!entity.static) {
-        let acceleration = entity.force.scale(500);
+        let acceleration = entity.force.scale(2000);
+        // idk wahts betta
+        // let friction = 0.08;
         let friction = 0.8;
-        entity.velocity = entity.velocity.add(acceleration.subtract(entity.velocity.scale(friction)));
-        // entity.velocity = entity.velocity.add(acceleration.scale(delay));
+        // entity.velocity = entity.velocity.add(acceleration.subtract(entity.velocity.scale(friction)));
+        entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(.92);
         console.log(entity.velocity);
         entity.position = entity.position.add(entity.velocity.scale(delay));
         // velocity += acceleration * time_step
