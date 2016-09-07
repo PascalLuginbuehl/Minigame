@@ -116,6 +116,10 @@ class Game {
 
         this.size = new V(sizeX, sizeY);
 
+        this.angle = 0;
+
+        this.center = new V(0, 0);
+
         // IDEA: z-index
 
         // IDEA: Also able to set via reference to type
@@ -127,8 +131,11 @@ class Game {
         this.static = staticElem;
       }
 
-      applyForce() {
-
+      checkCollision(entity) {
+        if(this.position.x < entity.position.x + entity.size.x && this.position.x + this.size.x > entity.position.x && this.position.y < entity.position.y + entity.size.y && this.position.y + this.size.x > entity.position.y) {
+          return true;
+        }
+        return false;
       }
     }
 
@@ -137,6 +144,18 @@ class Game {
     let texture = new Image();
     texture.src = "assets/images/dirt.png";
 
+    this.map.addEntity(new this.Entity({
+      positionX: 50,
+      positionY: 50,
+
+      sizeX: 16,
+      sizeY: 16,
+
+      texture: texture,
+
+      solid: true,
+      static: false,
+    }));
     this.map.addEntity(new this.Entity({
       positionX: 50,
       positionY: 50,
@@ -183,19 +202,19 @@ class Game {
         let friction = 0.8;
         // entity.velocity = entity.velocity.add(acceleration.subtract(entity.velocity.scale(friction)));
         entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(.92);
-        console.log(entity.velocity);
+        // console.log(entity.velocity);
         entity.position = entity.position.add(entity.velocity.scale(delay));
         // velocity += acceleration * time_step
         // position += velocity * time_step
 
 
         // collisions
-        for (var o = 0; o < this.map.entitys.length; o++) {
+        for (let o = 0; o < this.map.entitys.length; o++) {
           let entity2 = this.map.entitys[o];
           // check collision
           if (entity != entity2 && entity.solid) {
             // FIXME: do better physX
-            //
+            console.log(entity.checkCollision(entity2));
           }
         }
       }
@@ -235,9 +254,15 @@ class Render {
 
 
     game.Entity.prototype.renderTexture = function (ctx) {
-      ctx.drawImage(this.texture, this.position.x, this.position.y, this.size.x, this.size.y);
-    }
+      ctx.save();
 
+      // add center to it so it can rotate from center
+      ctx.translate(this.position.x + this.center.x, this.position.y + this.center.y);
+      ctx.rotate(this.angle);
+
+      ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
+      ctx.restore();
+    }
 
 
 
@@ -254,7 +279,7 @@ class Render {
     // Clear old stuff
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for (var i = 0; i < game.map.entitys.length; i++) {
+    for (let i = 0; i < game.map.entitys.length; i++) {
       let entity = game.map.entitys[i];
       entity.renderTexture(this.ctx);
     }
