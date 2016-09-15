@@ -1,5 +1,5 @@
 {
-  "name": "PokeBuyers",
+  "name": "Minigame",
   "version": "0.0.1",
   "description": "Test",
   "main": "server/index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.io/SpargelPlays/PokeBuyers"
+    "url": "github.io/SpargelPlays/Minigame"
   },
   "keywords": [
     "Poke Buyers",
@@ -17,21 +17,23 @@
   "author": "SpargelPlays",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "*",
-    "gulp-autoprefixer": "*",
-    "gulp-concat": "*",
-    "gulp-csso": "*",
-    "gulp-sass": "*",
-    "nodemon": "*"
+    "babel-preset-es2015": "^6.14.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean": "^0.3.2",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-minify": "0.0.14",
+    "gulp-nodemon": "^2.1.0",
+    "gulp-sass": "^2.3.2"
   },
   "dependencies": {
-    "body-parser": "*",
     "express": "*",
     "express-formidable": "*",
     "express-handlebars": "*",
     "express-session": "*",
     "express-ws": "*",
-    "ipaddr.js": "*",
-    "request": "*"
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3"
   }
 }

@@ -82,6 +82,39 @@ class V {
   }
 }
 
+class Shape {
+  constructor() {
+    this.position = new V(0, 0);
+  }
+
+  checkCollision(shape) {
+
+  }
+}
+
+class Circle extends Shape {
+  constructor() {
+    super(x, y);
+    this.center = new V(0, 0);
+    this.radius = 0;
+  }
+}
+
+class Rectangle extends Shape {
+  constructor() {
+    super(x, y);
+    this.max = new V(0, 0);
+    this._rotation = 0;
+  }
+
+  get rotation() {
+    return this._rotation;
+  }
+
+  set rotation(rotation) {
+    this._rotation = rotation;
+  }
+}
 
 // Constructor
 class Game {
