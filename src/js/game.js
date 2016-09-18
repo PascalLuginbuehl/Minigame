@@ -1,25 +1,4 @@
 'use strict'
-/**
- * Always first X then Y
- * Directions:
- * X --
- * Y |
- */
-
-/**
- * Gravity for Direction stearing, the velocity gets higher...
- */
-
-/**
- * Renderloop
- *
- * Gameloop
- * Important, self adjusting timers (else not in sync :( )
- */
-
-/**
- * IDEA: Chunks for better performence, only load chunks near the Player
- */
 
 const CONFIG = {
   gameLoopInterval: 16,
@@ -82,33 +61,19 @@ class V {
   }
 }
 
-class Shape {
-  constructor() {
-    this.position = new V(0, 0);
-  }
 
-  checkCollision(shape) {
-
-  }
-}
-
-class Circle extends Shape {
-  constructor() {
-    super(x, y);
-    this.center = new V(0, 0);
-    this.radius = 0;
-  }
-}
-
-class Rectangle extends Shape {
-  constructor() {
-    super(x, y);
-    this.max = new V(0, 0);
+class Rectangle {
+  constructor({x: x, y: y, w: w, h: h}) {
+    this.min = new V(x, y);
+    this.max = new V(w, h);
     this._rotation = 0;
+    let rotation = 5;
+    this.center = new V(0, 0);
   }
 
   get rotation() {
-    return this._rotation;
+    console.log(rotation, "asd");
+    return rotation;
   }
 
   set rotation(rotation) {
@@ -148,10 +113,8 @@ class Game {
         this.force = new V(0, 0);
 
         this.size = new V(sizeX, sizeY);
+        this.hitbox = new Rectangle({x: 0, y: 0, w: 10, h: 10});
 
-        this.angle = 0;
-
-        this.center = new V(0, 0);
 
         // IDEA: z-index
 

@@ -6,6 +6,7 @@ const gulp = require('gulp')
   , minify = require('gulp-minify')
   , nodemon = require('gulp-nodemon')
   , clean = require('gulp-clean')
+  , sourcemaps = require('gulp-sourcemaps')
   , devPath = 'src/'
   , path = 'public/';
 
@@ -35,17 +36,21 @@ gulp.task("nodemon", function () {
 
 gulp.task("js", function () {
   return gulp.src([
-    devPath + "**/*.js"
+    devPath + "js/**/*.js"
   ])
-  .pipe(babel({
-    presets: ['es2015']
-  }))
-  .on('error', function(e) {
-    console.error(e);
-    this.emit('end');
-  })
-  .pipe(minify())
-  .pipe(gulp.dest(path));
+
+  .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['es2015']
+    }))
+    .on('error', function(e) {
+      console.log(e.codeFrame);
+      this.emit('end');
+    })
+    .pipe(minify())
+  .pipe(sourcemaps.write())
+
+  .pipe(gulp.dest(path + 'js'));
 });
 
 
@@ -58,8 +63,8 @@ gulp.task('clean', function() {
 gulp.task("rest", function () {
   return gulp.src([
     devPath + '**/*.*',
-    '!' + devPath + '**/*.js',
-    '!' + devPath + '**/*.scss'
+    '!' + devPath + 'js/**/*.js',
+    '!' + devPath + 'scss/**/*.scss'
   ])
   .pipe(gulp.dest(path));
 });
@@ -83,7 +88,7 @@ gulp.task('scss:watch', function () {
 
 gulp.task('js:watch', function () {
   gulp.watch([
-    devPath + '**/*.js'
+    devPath + 'js/**/*.js'
   ], ['js']);
 });
 
