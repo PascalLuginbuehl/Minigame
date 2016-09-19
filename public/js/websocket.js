@@ -1,4 +1,1 @@
-'use strict';
-
-var connection = new WebSocket('ws://localhost');
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnNvY2tldC5qcyJdLCJuYW1lcyI6WyJjb25uZWN0aW9uIiwiV2ViU29ja2V0Il0sIm1hcHBpbmdzIjoiWUFBQSxJQUFJQSxZQUFhLEdBQUlDLFdBQVUiLCJmaWxlIjoid2Vic29ja2V0LmpzIiwic291cmNlc0NvbnRlbnQiOlsibGV0IGNvbm5lY3Rpb24gPSBuZXcgV2ViU29ja2V0KCd3czovL2xvY2FsaG9zdCcpO1xyXG4iXSwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=
+let connection = new WebSocket('ws://localhost');

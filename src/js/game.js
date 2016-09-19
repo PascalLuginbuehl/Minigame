@@ -31,7 +31,7 @@ class V {
   }
 
   add(v) {
-    return new V(v.x + this.x, v.y + this.y);
+    return new V(Math.round((v.x + this.x) * 10) / 10, Math.round((v.y + this.y) * 10) / 10);
   }
 
   subtract(v) {
@@ -39,7 +39,7 @@ class V {
   }
 
   scale(s) {
-    return new V(this.x * s, this.y * s);
+    return new V(Math.round((this.x * s) * 10) / 10 , Math.round((this.y * s) * 10) / 10);
   }
 
   dot(v) {
@@ -63,21 +63,33 @@ class V {
 
 
 class Rectangle {
-  constructor({x: x, y: y, w: w, h: h}) {
-    this.min = new V(x, y);
-    this.max = new V(w, h);
-    this._rotation = 0;
-    let rotation = 5;
-    this.center = new V(0, 0);
+  constructor({x: x, y: y, w: w, h: h, min: min, max: max}) {
+    if (min != undefined && max != undefined) {
+      this.min = min;
+      this.max = max;
+    } else {
+      this.min = new V(x, y);
+      this.max = new V(w, h);
+    }
+    // this._rotation = 0;
+    // let rotation = 5;
+    // this.center = new V(0, 0);
   }
 
-  get rotation() {
-    console.log(rotation, "asd");
-    return rotation;
-  }
+  // get rotation() {
+  //   console.log(rotation, "asd");
+  //   return rotation;
+  // }
 
-  set rotation(rotation) {
-    this._rotation = rotation;
+  // set rotation(rotation) {
+  //   this._rotation = rotation;
+  // }
+
+  checkCollision(entity) {
+    if (this.min.x < entity.min.x + entity.max.x && this.max.x + this.min.x > entity.min.x && this.min.y < entity.max.y + entity.min.y && this.max.y + this.min.y > entity.min.y) {
+      return true;
+    }
+    return false;
   }
 }
 
@@ -112,8 +124,7 @@ class Game {
         // pulls into Direction
         this.force = new V(0, 0);
 
-        this.size = new V(sizeX, sizeY);
-        this.hitbox = new Rectangle({x: 0, y: 0, w: 10, h: 10});
+        this.hitbox = new Rectangle({x: positionX, y: positionY, w: 10, h: 10});
 
 
         // IDEA: z-index
@@ -126,13 +137,6 @@ class Game {
         this.solid = solid;
         this.static = staticElem;
       }
-
-      checkCollision(entity) {
-        if(this.position.x < entity.position.x + entity.size.x && this.position.x + this.size.x > entity.position.x && this.position.y < entity.position.y + entity.size.y && this.position.y + this.size.x > entity.position.y) {
-          return true;
-        }
-        return false;
-      }
     }
 
 
@@ -141,7 +145,7 @@ class Game {
     texture.src = "assets/images/dirt.png";
 
     this.map.addEntity(new this.Entity({
-      positionX: 50,
+      positionX: 30,
       positionY: 50,
 
       sizeX: 16,
@@ -199,7 +203,7 @@ class Game {
         // entity.velocity = entity.velocity.add(acceleration.subtract(entity.velocity.scale(friction)));
         entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(.92);
         // console.log(entity.velocity);
-        entity.position = entity.position.add(entity.velocity.scale(delay));
+        let rect = new Rectangle({min: entity.hitbox.min.add(entity.velocity.scale(delay)), max: entity.hitbox.max});
         // velocity += acceleration * time_step
         // position += velocity * time_step
 
@@ -210,7 +214,13 @@ class Game {
           // check collision
           if (entity != entity2 && entity.solid) {
             // FIXME: do better physX
-            console.log(entity.checkCollision(entity2));
+            // Collision detection
+            if (rect.checkCollision(entity2.hitbox)) {
+              console.log(entity.velocity);
+              entity.velocity = entity.velocity.scale(.1);
+            } else {
+              entity.hitbox.min = rect.min;
+            }
           }
         }
       }
@@ -253,10 +263,12 @@ class Render {
       ctx.save();
 
       // add center to it so it can rotate from center
-      ctx.translate(this.position.x + this.center.x, this.position.y + this.center.y);
-      ctx.rotate(this.angle);
+      // ctx.translate(this.position.x + this.center.x, this.position.y + this.center.y);
+      ctx.translate(this.hitbox.min.x, this.hitbox.min.y);
+      // ctx.rotate(this.angle);
 
-      ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
+      ctx.drawImage(this.texture, 0, 0, this.hitbox.max.x, this.hitbox.max.y);
+      // ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
       ctx.restore();
     }
 

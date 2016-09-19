@@ -39,16 +39,16 @@ gulp.task("js", function () {
     devPath + "js/**/*.js"
   ])
 
-  .pipe(sourcemaps.init())
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .on('error', function(e) {
-      console.log(e.codeFrame);
-      this.emit('end');
-    })
-    .pipe(minify())
-  .pipe(sourcemaps.write())
+  // .pipe(sourcemaps.init())
+  //   .pipe(babel({
+  //     presets: ['es2015']
+  //   }))
+  //   .on('error', function(e) {
+  //     console.log(e.codeFrame);
+  //     this.emit('end');
+  //   })
+  //   .pipe(minify())
+  // .pipe(sourcemaps.write())
 
   .pipe(gulp.dest(path + 'js'));
 });
