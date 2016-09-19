@@ -85,11 +85,44 @@ class Rectangle {
   //   this._rotation = rotation;
   // }
 
-  checkCollision(entity) {
-    if (this.min.x < entity.min.x + entity.max.x && this.max.x + this.min.x > entity.min.x && this.min.y < entity.max.y + entity.min.y && this.max.y + this.min.y > entity.min.y) {
+  checkCollision(origin, originRect, rect) {
+    let rectMin = rect.min.add(originRect);
+    let thisMin = rect.min.add(origin);
+
+    if (thisMin.x < rectMin.x + rect.max.x && this.max.x + thisMin.x > rectMin.x && thisMin.y < rect.max.y + rectMin.y && this.max.y + thisMin.y > rectMin.y) {
       return true;
     }
     return false;
+  }
+}
+
+class Entity {
+  constructor({positionX = 0, positionY = 0, sizeX = 10, sizeY = 10, texture = 0, solid = false, static: staticElem = false}) {
+    // position
+    // left top of hitbox
+    this.position = new V(positionX, positionY);
+
+    // velocity for movement
+    this.velocity = new V(0, 0);
+
+    // pulls into Direction
+    this.force = new V(0, 0);
+
+    this.position = new V(positionX, positionY);
+
+    this.hitbox = [new Rectangle({x: 0, y: 0, w: 10, h: 10})];
+    // this.hitbox = new Rectangle({x: positionX, y: positionY, w: 10, h: 10});
+
+
+    // IDEA: z-index
+
+    // IDEA: Also able to set via reference to type
+    this.texture = texture;
+
+
+    // parameters
+    this.solid = solid;
+    this.static = staticElem;
   }
 }
 
@@ -112,39 +145,14 @@ class Game {
       }
     };
 
-    this.Entity = class {
-      constructor({positionX = 0, positionY = 0, sizeX = 10, sizeY = 10, texture = 0, solid = false, static: staticElem = false}) {
-        // position
-        // left top of hitbox
-        this.position = new V(positionX, positionY);
 
-        // velocity for movement
-        this.velocity = new V(0, 0);
-
-        // pulls into Direction
-        this.force = new V(0, 0);
-
-        this.hitbox = new Rectangle({x: positionX, y: positionY, w: 10, h: 10});
-
-
-        // IDEA: z-index
-
-        // IDEA: Also able to set via reference to type
-        this.texture = texture;
-
-
-        // parameters
-        this.solid = solid;
-        this.static = staticElem;
-      }
-    }
 
 
     this.map = new this.Map(this.config.map);
     let texture = new Image();
     texture.src = "assets/images/dirt.png";
 
-    this.map.addEntity(new this.Entity({
+    this.map.addEntity(new Entity({
       positionX: 30,
       positionY: 50,
 
@@ -156,7 +164,7 @@ class Game {
       solid: true,
       static: false,
     }));
-    this.map.addEntity(new this.Entity({
+    this.map.addEntity(new Entity({
       positionX: 50,
       positionY: 50,
 
@@ -215,11 +223,15 @@ class Game {
           if (entity != entity2 && entity.solid) {
             // FIXME: do better physX
             // Collision detection
-            if (rect.checkCollision(entity2.hitbox)) {
-              console.log(entity.velocity);
-              entity.velocity = entity.velocity.scale(.1);
-            } else {
-              entity.hitbox.min = rect.min;
+            for (var i = 0; i < rect.hitbox.length; i++) {
+              let hitbox = rect.hitbox[i];
+
+              if (rect.checkCollision(entity2.hitbox)) {
+                console.log(entity.velocity);
+                entity.velocity = entity.velocity.scale(.1);
+              } else {
+                entity.hitbox.min = rect.min;
+              }
             }
           }
         }
@@ -259,7 +271,7 @@ class Render {
 
 
 
-    game.Entity.prototype.renderTexture = function (ctx) {
+    Entity.prototype.renderTexture = function (ctx) {
       ctx.save();
 
       // add center to it so it can rotate from center
@@ -272,6 +284,19 @@ class Render {
       ctx.restore();
     }
 
+
+    Rectangle.prototype.drawRect = function (ctx) {
+      ctx.save();
+
+      // add center to it so it can rotate from center
+      // ctx.translate(this.position.x + this.center.x, this.position.y + this.center.y);
+      ctx.translate(this.min.x, this.min.y);
+      // ctx.rotate(this.angle);
+      ctx.fillRect(0, 0, this.max.x, this.max.y);
+
+      // ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
+      ctx.restore();
+    };
 
 
     // this.render();
@@ -290,6 +315,7 @@ class Render {
     for (let i = 0; i < game.map.entitys.length; i++) {
       let entity = game.map.entitys[i];
       entity.renderTexture(this.ctx);
+      entity.hitbox.drawRect(this.ctx);
     }
   }
 }
