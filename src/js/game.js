@@ -1,5 +1,6 @@
 'use strict'
 
+// FIXME: Min 2 entitys else no movement :D
 const CONFIG = {
   gameLoopInterval: 16,
 
@@ -8,21 +9,63 @@ const CONFIG = {
     width: 1000,
   },
 
+  textureBasepath: 'assets/images/',
   textures: {
     'dirt': 'dirt.png',
+    'house': 'house.png',
   },
 
-  types: {
-    dirt: {
+  models: {
+    'dirt': {
+      texture: 'dirt',
       solid: true,
       static: true,
       size: {
-        height: 100,
-        width: 100,
-      }
+        height: 10,
+        width: 10,
+      },
+      hitbox: [{
+        position: {
+          x: 0,
+          y: 0,
+        },
+        size: {
+          x: 10,
+          y: 10,
+        }
+      }],
+    },
+    'house': {
+      texture: 'house',
+      solid: true,
+      static: true,
+      size: {
+        h: 20,
+        w: 20,
+      },
+      hitbox: [{
+        position: {
+          x: 0,
+          y: 0,
+        },
+        size: {
+          x: 10,
+          y: 10,
+        },
+        position: {
+          x: 0,
+          y: 0,
+        },
+        size: {
+          x: 10,
+          y: 10,
+        }
+      }],
     }
   },
 }
+
+
 
 class V {
   constructor (x, y) {
@@ -62,6 +105,7 @@ class V {
 }
 
 
+
 class Rectangle {
   constructor({x: x, y: y, w: w, h: h, min: min, max: max}) {
     if (min != undefined && max != undefined) {
@@ -96,8 +140,32 @@ class Rectangle {
   }
 }
 
+
+class Model {
+  constructor({}) {
+    this.hitbox = [new Rectangle({x: 0, y: 0, w: 10, h: 10})];
+
+
+    // comes to renderengine
+    // IDEA: Also able to set via reference to type
+    // this.texture = texture;
+    // this.textureSize = new V(10, 10);
+
+
+    // FIXME: Fix inputs from config
+    // parameters
+    this.solid = true;
+    this.static = false;
+  }
+
+  createHitbox() {
+
+  }
+}
+
+
 class Entity {
-  constructor({positionX = 0, positionY = 0, sizeX = 10, sizeY = 10, texture = 0, solid = false, static: staticElem = false}) {
+  constructor({positionX = 0, positionY = 0, texture = 0, solid = false, static: staticElem = false, model: model}) {
     // position
     // left top of hitbox
     this.position = new V(positionX, positionY);
@@ -108,23 +176,10 @@ class Entity {
     // pulls into Direction
     this.force = new V(0, 0);
 
-    this.position = new V(positionX, positionY);
-
-
-    this.hitbox = [new Rectangle({x: 0, y: 0, w: 10, h: 10})];
-    // this.hitbox = new Rectangle({x: positionX, y: positionY, w: 10, h: 10});
-
-
     // IDEA: z-index
 
-    // IDEA: Also able to set via reference to type
-    this.texture = texture;
-    this.textureSize = new V(10, 10);
-
-
-    // parameters
-    this.solid = solid;
-    this.static = staticElem;
+    // Textures and rest is safed in here
+    this.model = model;
   }
 }
 
@@ -135,54 +190,40 @@ class Game {
 
     // Map starting corner left bottom, render left top
     // IDEA: Chunks for more performence
-    this.Map = class {
-      constructor(config) {
-        this.width = config.width;
-        this.height = config.height;
-        this.entitys = [];
-      }
 
-      addEntity (entity) {
-        this.entitys.push(entity);
-      }
-    };
+    this.height = config.map.height;
+    this.width = config.map.width;
+    this.entitys = [];
 
 
+    this.models = {};
+    for (var name in this.config.models) {
+      this.models[name] = new Model(this.config.models[name]);
+    }
 
 
-    this.map = new this.Map(this.config.map);
-    let texture = new Image();
-    texture.src = "assets/images/dirt.png";
-
-    this.map.addEntity(new Entity({
+    this.addEntity(new Entity({
       positionX: 30,
       positionY: 50,
 
-      sizeX: 16,
-      sizeY: 16,
-
-      texture: texture,
-
-      solid: true,
-      static: false,
+      model: this.models['dirt'],
     }));
-    this.map.addEntity(new Entity({
-      positionX: 50,
+
+    this.addEntity(new Entity({
+      positionX: 12,
       positionY: 50,
 
-      sizeX: 16,
-      sizeY: 16,
-
-      texture: texture,
-
-      solid: true,
-      static: false,
+      model: this.models['dirt'],
     }));
 
 
     // Timer for gameloop
     this.expectedInterval = window.performance.now() + this.config.gameLoopInterval;
     setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval);
+  }
+
+  addEntity (entity) {
+    this.entitys.push(entity);
   }
 
   // catch up loop
@@ -202,8 +243,8 @@ class Game {
     // console.log(delay);
 
     // physics here
-    for (let i = 0; i < this.map.entitys.length; i++) {
-      let entity = this.map.entitys[i];
+    for (let i = 0; i < this.entitys.length; i++) {
+      let entity = this.entitys[i];
 
       if(!entity.static) {
         let acceleration = entity.force.scale(2000);
@@ -220,17 +261,18 @@ class Game {
 
 
         // collisions
-        for (let o = 0; o < this.map.entitys.length; o++) {
-          let entity2 = this.map.entitys[o];
+        for (let o = 0; o < this.entitys.length; o++) {
+          let entity2 = this.entitys[o];
           // check collision
-          if (entity != entity2 && entity.solid) {
+
+          if (entity != entity2 && entity.model.solid) {
             // FIXME: do better physX
             // Collision detection
-            for (let hitboxPositions = 0; hitboxPositions < entity.hitbox.length; hitboxPositions++) {
-              let hitbox = entity.hitbox[hitboxPositions];
+            for (let hitboxPositions = 0; hitboxPositions < entity.model.hitbox.length; hitboxPositions++) {
+              let hitbox = entity.model.hitbox[hitboxPositions];
 
-              for (let entity2Hitbox = 0; entity2Hitbox < entity.hitbox.length; entity2Hitbox++) {
-                if (hitbox.checkCollision(position, entity2.position, entity2.hitbox[entity2Hitbox])) {
+              for (let entity2Hitbox = 0; entity2Hitbox < entity.model.hitbox.length; entity2Hitbox++) {
+                if (hitbox.checkCollision(position, entity2.position, entity2.model.hitbox[entity2Hitbox])) {
                   console.log(entity.velocity);
                   entity.velocity = entity.velocity.scale(.1);
                 } else {
@@ -261,8 +303,8 @@ class Game {
 class Render {
   constructor(game, canvasParent, debugging) {
     this.canvas = document.createElement('canvas');
-    this.canvas.height = game.map.height;
-    this.canvas.width = game.map.width;
+    this.canvas.height = game.height;
+    this.canvas.width = game.width;
     canvasParent.appendChild(this.canvas);
 
     this.canvas.style.imageRendering = "pixelated";
@@ -275,6 +317,16 @@ class Render {
     this.debugging = debugging;
 
 
+    for (var name in this.game.models) {
+      let img = new Image();
+      img.src = "assets/images/" + this.game.config.textures[name];
+
+      this.game.models[name].texture = img;
+      this.game.models[name].textureSize = new V(10, 10);
+    }
+
+
+
 
     Entity.prototype.renderTexture = function (ctx) {
       ctx.save();
@@ -284,7 +336,7 @@ class Render {
       ctx.translate(this.position.x, this.position.y);
       // ctx.rotate(this.angle);
 
-      ctx.drawImage(this.texture, 0, 0, this.textureSize.x, this.textureSize.y);
+      ctx.drawImage(this.model.texture, 0, 0, this.model.textureSize.x, this.model.textureSize.y);
       // ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
       ctx.restore();
     }
@@ -297,6 +349,7 @@ class Render {
       // ctx.translate(this.position.x + this.center.x, this.position.y + this.center.y);
       ctx.translate(position.x, position.y);
       // ctx.rotate(this.angle);
+      ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
       ctx.fillRect(0, 0, textureSize.x, textureSize.y);
 
       // ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
@@ -317,11 +370,11 @@ class Render {
     // Clear old stuff
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for (let i = 0; i < game.map.entitys.length; i++) {
-      let entity = game.map.entitys[i];
+    for (let i = 0; i < game.entitys.length; i++) {
+      let entity = game.entitys[i];
       entity.renderTexture(this.ctx);
-      for (let i = 0; i < entity.hitbox.length; i++) {
-        entity.hitbox[i].drawRect(entity.position, entity.textureSize, this.ctx);
+      for (let i = 0; i < entity.model.hitbox.length; i++) {
+        entity.model.hitbox[i].drawRect(entity.position, entity.model.textureSize, this.ctx);
       }
     }
   }
@@ -363,7 +416,7 @@ class Input {
       if (keys.d) {
         v.x++;
       }
-      this.map.entitys[0].force = (v);
+      this.entitys[0].force = (v);
     }
 
     window.addEventListener('keydown', (e) => {
