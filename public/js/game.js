@@ -110,6 +110,7 @@ class Entity {
 
     this.position = new V(positionX, positionY);
 
+
     this.hitbox = [new Rectangle({x: 0, y: 0, w: 10, h: 10})];
     // this.hitbox = new Rectangle({x: positionX, y: positionY, w: 10, h: 10});
 
@@ -118,6 +119,7 @@ class Entity {
 
     // IDEA: Also able to set via reference to type
     this.texture = texture;
+    this.textureSize = new V(10, 10);
 
 
     // parameters
@@ -211,7 +213,8 @@ class Game {
         // entity.velocity = entity.velocity.add(acceleration.subtract(entity.velocity.scale(friction)));
         entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(.92);
         // console.log(entity.velocity);
-        let rect = new Rectangle({min: entity.hitbox.min.add(entity.velocity.scale(delay)), max: entity.hitbox.max});
+        let position = entity.position.add(entity.velocity.scale(delay));
+        // let rect = new Rectangle({min: entity.hitbox.min.add(entity.velocity.scale(delay)), max: entity.hitbox.max});
         // velocity += acceleration * time_step
         // position += velocity * time_step
 
@@ -223,14 +226,16 @@ class Game {
           if (entity != entity2 && entity.solid) {
             // FIXME: do better physX
             // Collision detection
-            for (var i = 0; i < rect.hitbox.length; i++) {
-              let hitbox = rect.hitbox[i];
+            for (let hitboxPositions = 0; hitboxPositions < entity.hitbox.length; hitboxPositions++) {
+              let hitbox = entity.hitbox[hitboxPositions];
 
-              if (rect.checkCollision(entity2.hitbox)) {
-                console.log(entity.velocity);
-                entity.velocity = entity.velocity.scale(.1);
-              } else {
-                entity.hitbox.min = rect.min;
+              for (let entity2Hitbox = 0; entity2Hitbox < entity.hitbox.length; entity2Hitbox++) {
+                if (hitbox.checkCollision(position, entity2.position, entity2.hitbox[entity2Hitbox])) {
+                  console.log(entity.velocity);
+                  entity.velocity = entity.velocity.scale(.1);
+                } else {
+                  entity.position = position;
+                }
               }
             }
           }
@@ -276,23 +281,23 @@ class Render {
 
       // add center to it so it can rotate from center
       // ctx.translate(this.position.x + this.center.x, this.position.y + this.center.y);
-      ctx.translate(this.hitbox.min.x, this.hitbox.min.y);
+      ctx.translate(this.position.x, this.position.y);
       // ctx.rotate(this.angle);
 
-      ctx.drawImage(this.texture, 0, 0, this.hitbox.max.x, this.hitbox.max.y);
+      ctx.drawImage(this.texture, 0, 0, this.textureSize.x, this.textureSize.y);
       // ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
       ctx.restore();
     }
 
 
-    Rectangle.prototype.drawRect = function (ctx) {
+    Rectangle.prototype.drawRect = function (position, textureSize, ctx) {
       ctx.save();
 
       // add center to it so it can rotate from center
       // ctx.translate(this.position.x + this.center.x, this.position.y + this.center.y);
-      ctx.translate(this.min.x, this.min.y);
+      ctx.translate(position.x, position.y);
       // ctx.rotate(this.angle);
-      ctx.fillRect(0, 0, this.max.x, this.max.y);
+      ctx.fillRect(0, 0, textureSize.x, textureSize.y);
 
       // ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
       ctx.restore();
@@ -315,7 +320,9 @@ class Render {
     for (let i = 0; i < game.map.entitys.length; i++) {
       let entity = game.map.entitys[i];
       entity.renderTexture(this.ctx);
-      entity.hitbox.drawRect(this.ctx);
+      for (let i = 0; i < entity.hitbox.length; i++) {
+        entity.hitbox[i].drawRect(entity.position, entity.textureSize, this.ctx);
+      }
     }
   }
 }
