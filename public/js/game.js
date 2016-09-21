@@ -33,55 +33,27 @@ const CONFIG = {
     'dirt': {
       solid: true,
       static: false,
-      size: {
-        height: 10,
-        width: 10,
-      },
       hitbox: [{
-        position: {
-          x: 0,
-          y: 0,
-        },
-        size: {
-          x: 10,
-          y: 10,
-        }
-      },
-      {
-        position: {
-          x: 10,
-          y: 10,
-        },
-        size: {
-          x: 10,
-          y: 10,
-        }
-      }],
+        x: 0,
+        y: 0,
+        w: 10,
+        h: 10,
+      },{
+        x: 10,
+        y: 10,
+        w: 10,
+        h: 10,
+      }
+    ],
     },
     'house': {
       solid: true,
       static: true,
-      size: {
-        h: 20,
-        w: 20,
-      },
       hitbox: [{
-        position: {
-          x: 0,
-          y: 0,
-        },
-        size: {
-          x: 10,
-          y: 10,
-        },
-        position: {
-          x: 0,
-          y: 0,
-        },
-        size: {
-          x: 10,
-          y: 10,
-        }
+        x: 0,
+        y: 0,
+        w: 10,
+        h: 10,
       }],
     }
   },
@@ -184,8 +156,13 @@ class Model {
     console.log(this);
   }
 
-  createHitbox() {
-    return [new Rectangle({x: 0, y: 0, w: 10, h: 10}),new Rectangle({x: 10, y: 10, w: 10, h: 10})];
+  createHitbox(hitboxconf) {
+    console.log(hitboxconf);
+    let hitbox = [];
+    for (let i = 0; i < hitboxconf.length; i++) {
+      hitbox.push(new Rectangle(hitboxconf[i]));
+    }
+    return hitbox;
   }
 }
 
@@ -299,7 +276,7 @@ class Game {
               let hitbox = entity.model.hitbox[hitboxPositions];
 
               for (let entity2Hitbox = 0; entity2Hitbox < entity2.model.hitbox.length; entity2Hitbox++) {
-                console.log(entity2.model.hitbox);
+
                 if (hitbox.checkCollision(position, entity2.position, entity2.model.hitbox[entity2Hitbox])) {
                   collision = true;
                   console.log(entity.velocity);
