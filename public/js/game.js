@@ -1,6 +1,8 @@
 'use strict'
 
 // FIXME: Min 2 entitys else no movement :D
+// FIXME: Collision when more then one rectangle (hitboxes)
+// Add offset in collisiondetection and rendering
 const CONFIG = {
   gameLoopInterval: 16,
 
@@ -11,15 +13,26 @@ const CONFIG = {
 
   textureBasepath: 'assets/images/',
   textures: {
-    'dirt': 'dirt.png',
-    'house': 'house.png',
+    'dirt': {
+      texture: 'dirt.png',
+      size: {
+        x: 10,
+        y: 10,
+      }
+    },
+    'house': {
+      texture: 'house.png',
+      size: {
+        x: 10,
+        y: 10,
+      }
+    },
   },
 
   models: {
     'dirt': {
-      texture: 'dirt',
       solid: true,
-      static: true,
+      static: false,
       size: {
         height: 10,
         width: 10,
@@ -33,10 +46,19 @@ const CONFIG = {
           x: 10,
           y: 10,
         }
+      },
+      {
+        position: {
+          x: 10,
+          y: 10,
+        },
+        size: {
+          x: 10,
+          y: 10,
+        }
       }],
     },
     'house': {
-      texture: 'house',
       solid: true,
       static: true,
       size: {
@@ -131,7 +153,9 @@ class Rectangle {
 
   checkCollision(origin, originRect, rect) {
     let rectMin = rect.min.add(originRect);
-    let thisMin = rect.min.add(origin);
+
+    // let thisMin = rect.min.add(origin).add(rect.min);
+    let thisMin = this.min.add(origin);
 
     if (thisMin.x < rectMin.x + rect.max.x && this.max.x + thisMin.x > rectMin.x && thisMin.y < rect.max.y + rectMin.y && this.max.y + thisMin.y > rectMin.y) {
       return true;
@@ -142,8 +166,8 @@ class Rectangle {
 
 
 class Model {
-  constructor({}) {
-    this.hitbox = [new Rectangle({x: 0, y: 0, w: 10, h: 10})];
+  constructor({solid: solid = true, static: staticElem = false, hitbox: hitbox}) {
+    // this.hitbox = [new Rectangle({x: 0, y: 0, w: 10, h: 10})];
 
 
     // comes to renderengine
@@ -151,15 +175,17 @@ class Model {
     // this.texture = texture;
     // this.textureSize = new V(10, 10);
 
-
     // FIXME: Fix inputs from config
     // parameters
-    this.solid = true;
-    this.static = false;
+    this.solid = solid;
+    this.static = staticElem;
+
+    this.hitbox = this.createHitbox(hitbox);
+    console.log(this);
   }
 
   createHitbox() {
-
+    return [new Rectangle({x: 0, y: 0, w: 10, h: 10}),new Rectangle({x: 10, y: 10, w: 10, h: 10})];
   }
 }
 
@@ -259,6 +285,7 @@ class Game {
         // velocity += acceleration * time_step
         // position += velocity * time_step
 
+        let collision = false;
 
         // collisions
         for (let o = 0; o < this.entitys.length; o++) {
@@ -271,16 +298,24 @@ class Game {
             for (let hitboxPositions = 0; hitboxPositions < entity.model.hitbox.length; hitboxPositions++) {
               let hitbox = entity.model.hitbox[hitboxPositions];
 
-              for (let entity2Hitbox = 0; entity2Hitbox < entity.model.hitbox.length; entity2Hitbox++) {
+              for (let entity2Hitbox = 0; entity2Hitbox < entity2.model.hitbox.length; entity2Hitbox++) {
+                console.log(entity2.model.hitbox);
                 if (hitbox.checkCollision(position, entity2.position, entity2.model.hitbox[entity2Hitbox])) {
+                  collision = true;
                   console.log(entity.velocity);
-                  entity.velocity = entity.velocity.scale(.1);
-                } else {
-                  entity.position = position;
                 }
               }
             }
           }
+        }
+
+        // TODO: Test this
+        // not sure if workst
+        // fix for only one object
+        if (collision) {
+          entity.velocity = entity.velocity.scale(.1);
+        } else {
+          entity.position = position;
         }
       }
     }
@@ -319,10 +354,12 @@ class Render {
 
     for (var name in this.game.models) {
       let img = new Image();
-      img.src = "assets/images/" + this.game.config.textures[name];
+      let texture = this.game.config.textures[name];
+
+      img.src = "assets/images/" + texture.texture;
 
       this.game.models[name].texture = img;
-      this.game.models[name].textureSize = new V(10, 10);
+      this.game.models[name].textureSize = new V(texture.size.x, texture.size.y);
     }
 
 
@@ -347,6 +384,7 @@ class Render {
 
       // add center to it so it can rotate from center
       // ctx.translate(this.position.x + this.center.x, this.position.y + this.center.y);
+      position = position.add(this.min);
       ctx.translate(position.x, position.y);
       // ctx.rotate(this.angle);
       ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
