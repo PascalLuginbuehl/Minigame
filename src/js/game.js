@@ -23,8 +23,8 @@ const CONFIG = {
     'house': {
       texture: 'house.png',
       size: {
-        x: 10,
-        y: 10,
+        x: 64,
+        y: 50,
       }
     },
   },
@@ -43,8 +43,7 @@ const CONFIG = {
         y: 10,
         w: 10,
         h: 10,
-      }
-    ],
+      }],
     },
     'house': {
       solid: true,
@@ -52,8 +51,23 @@ const CONFIG = {
       hitbox: [{
         x: 0,
         y: 0,
-        w: 10,
-        h: 10,
+        w: 48,
+        h: 48,
+      },{
+        x: 49,
+        y: 8,
+        w: 15,
+        h: 32,
+      },{
+        x: 16,
+        y: 48,
+        w: 4,
+        h: 2,
+      },{
+        x: 28,
+        y: 48,
+        w: 4,
+        h: 2,
       }],
     }
   },
@@ -206,17 +220,17 @@ class Game {
 
 
     this.addEntity(new Entity({
-      positionX: 30,
-      positionY: 50,
+      positionX: 70,
+      positionY: 70,
 
       model: this.models['dirt'],
     }));
 
     this.addEntity(new Entity({
-      positionX: 12,
-      positionY: 50,
+      positionX: 0,
+      positionY: 0,
 
-      model: this.models['dirt'],
+      model: this.models['house'],
     }));
 
 
@@ -356,7 +370,7 @@ class Render {
     }
 
 
-    Rectangle.prototype.drawRect = function (position, textureSize, ctx) {
+    Rectangle.prototype.drawRect = function (position, ctx) {
       ctx.save();
 
       // add center to it so it can rotate from center
@@ -364,8 +378,8 @@ class Render {
       position = position.add(this.min);
       ctx.translate(position.x, position.y);
       // ctx.rotate(this.angle);
-      ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
-      ctx.fillRect(0, 0, textureSize.x, textureSize.y);
+      ctx.fillStyle = "rgba(0, 0, 0, .3)";
+      ctx.fillRect(0, 0, this.max.x, this.max.y);
 
       // ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
       ctx.restore();
@@ -389,7 +403,7 @@ class Render {
       let entity = game.entitys[i];
       entity.renderTexture(this.ctx);
       for (let i = 0; i < entity.model.hitbox.length; i++) {
-        entity.model.hitbox[i].drawRect(entity.position, entity.model.textureSize, this.ctx);
+        entity.model.hitbox[i].drawRect(entity.position, this.ctx);
       }
     }
   }
