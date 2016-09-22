@@ -1,8 +1,13 @@
 'use strict'
+// IDEA: Circle collision
+// IDEA: z-index
+// IDEA: collision side
+// IDEA: Pathfinding
+// IDEA: sprites
+// IDEA: Players controller
+// IDEA: collsion speedup (AABB detection with outer part
+// FIXME: Outer colisionbox
 
-// FIXME: Min 2 entitys else no movement :D
-// FIXME: Collision when more then one rectangle (hitboxes)
-// Add offset in collisiondetection and rendering
 const CONFIG = {
   gameLoopInterval: 16,
 
@@ -101,6 +106,18 @@ class V {
     return (this.x * v.y - this.y * v.x);
   }
 
+  smalest(v) {
+    let x = this.x < v.x ? this.x : v.x
+      , y = this.y < v.y ? this.y : v.y;
+    return new V(x, y);
+  }
+
+  biggest(v) {
+    let x = this.x > v.x ? this.x : v.x
+      , y = this.y > v.y ? this.y : v.y;
+    return new V(x, y);
+  }
+
   rotate(angle, vector) {
     let x = this.x - vector.x;
     let y = this.y - vector.y;
@@ -167,7 +184,8 @@ class Model {
     this.static = staticElem;
 
     this.hitbox = this.createHitbox(hitbox);
-    console.log(this);
+
+    console.log(this.getCollisionBox());
   }
 
   createHitbox(hitboxconf) {
@@ -177,6 +195,24 @@ class Model {
       hitbox.push(new Rectangle(hitboxconf[i]));
     }
     return hitbox;
+  }
+
+  getCollisionBox() {
+    let max = new V(0, 0);
+
+    for (let i = 0; i < this.hitbox.length; i++) {
+      let hitbox = this.hitbox[i];
+
+      max = max.biggest(hitbox.min.add(hitbox.max));
+    }
+
+    let min = new V(max.x, max.y);
+
+    for (let i = 0; i < this.hitbox.length; i++) {
+      min = min.smalest(this.hitbox[i].min);
+    }
+
+    return new Rectangle({min, max});
   }
 }
 
