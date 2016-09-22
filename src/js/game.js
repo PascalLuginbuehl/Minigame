@@ -445,9 +445,10 @@ class Render {
 
     for (let i = 0; i < game.entitys.length; i++) {
       let entity = game.entitys[i];
+
       entity.renderTexture(this.ctx);
-      for (let i = 0; i < entity.model.hitbox.length; i++) {
-        entity.model.hitbox[i].drawRect(entity.position, this.ctx);
+      for (let i = 0; i < entity.model.hitbox.hitboxes.length; i++) {
+        entity.model.hitbox.hitboxes[i].drawRect(entity.position, this.ctx);
       }
     }
   }
