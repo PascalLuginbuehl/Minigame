@@ -1,8 +1,13 @@
 'use strict'
+// IDEA: Circle collision
+// IDEA: z-index
+// IDEA: collision side
+// IDEA: Pathfinding
+// IDEA: sprites
+// IDEA: Players controller
+// IDEA: collsion speedup (AABB detection with outer part
+// FIXME: Outer colisionbox
 
-// FIXME: Min 2 entitys else no movement :D
-// FIXME: Collision when more then one rectangle (hitboxes)
-// Add offset in collisiondetection and rendering
 const CONFIG = {
   gameLoopInterval: 16,
 
@@ -101,6 +106,18 @@ class V {
     return (this.x * v.y - this.y * v.x);
   }
 
+  smalest(v) {
+    let x = this.x < v.x ? this.x : v.x
+      , y = this.y < v.y ? this.y : v.y;
+    return new V(x, y);
+  }
+
+  biggest(v) {
+    let x = this.x > v.x ? this.x : v.x
+      , y = this.y > v.y ? this.y : v.y;
+    return new V(x, y);
+  }
+
   rotate(angle, vector) {
     let x = this.x - vector.x;
     let y = this.y - vector.y;
@@ -150,6 +167,52 @@ class Rectangle {
   }
 }
 
+class Hitbox {
+  constructor(hitboxconf) {
+    this.hitboxes = [];
+    for (let i = 0; i < hitboxconf.length; i++) {
+      this.hitboxes.push(new Rectangle(hitboxconf[i]));
+    }
+
+    this.collisionBox = this.getCollisionBox();
+  }
+
+  checkCollision(origin, eOrigin, eHitbox) {
+    if (this.collisionBox.checkCollision(origin, eOrigin, eHitbox.collisionBox)) {
+      for (let i = 0; i < this.hitboxes.length; i++) {
+        let hitboxes = this.hitboxes[i];
+
+        for (let o = 0; o < eHitbox.hitboxes.length; o++) {
+
+          if (hitboxes.checkCollision(origin, eOrigin, eHitbox.hitboxes[o])) {
+            return true;
+            console.log(entity.velocity);
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  getCollisionBox() {
+    let max = new V(0, 0);
+
+    for (let i = 0; i < this.hitboxes.length; i++) {
+      let hitbox = this.hitboxes[i];
+
+      max = max.biggest(hitbox.min.add(hitbox.max));
+    }
+
+    let min = new V(max.x, max.y);
+
+    for (let i = 0; i < this.hitboxes.length; i++) {
+      min = min.smalest(this.hitboxes[i].min);
+    }
+
+    return new Rectangle({min, max});
+  }
+}
+
 
 class Model {
   constructor({solid: solid = true, static: staticElem = false, hitbox: hitbox}) {
@@ -166,17 +229,7 @@ class Model {
     this.solid = solid;
     this.static = staticElem;
 
-    this.hitbox = this.createHitbox(hitbox);
-    console.log(this);
-  }
-
-  createHitbox(hitboxconf) {
-    console.log(hitboxconf);
-    let hitbox = [];
-    for (let i = 0; i < hitboxconf.length; i++) {
-      hitbox.push(new Rectangle(hitboxconf[i]));
-    }
-    return hitbox;
+    this.hitbox = new Hitbox(hitbox);
   }
 }
 
@@ -284,19 +337,10 @@ class Game {
           // check collision
 
           if (entity != entity2 && entity.model.solid) {
+
             // FIXME: do better physX
             // Collision detection
-            for (let hitboxPositions = 0; hitboxPositions < entity.model.hitbox.length; hitboxPositions++) {
-              let hitbox = entity.model.hitbox[hitboxPositions];
-
-              for (let entity2Hitbox = 0; entity2Hitbox < entity2.model.hitbox.length; entity2Hitbox++) {
-
-                if (hitbox.checkCollision(position, entity2.position, entity2.model.hitbox[entity2Hitbox])) {
-                  collision = true;
-                  console.log(entity.velocity);
-                }
-              }
-            }
+            collision = entity.model.hitbox.checkCollision(position, entity2.position, entity2.model.hitbox);
           }
         }
 
