@@ -15,20 +15,26 @@ class Render {
     this.debugging = debugging;
 
 
-    for (var name in this.game.models) {
+    for (let name in this.game.models) {
       let img = new Image();
       let texture = this.game.config.textures[name];
 
       img.src = "assets/images/" + texture.texture;
 
+      this.game.models[name].spriteMax = texture.spriteMax;
       this.game.models[name].texture = img;
-      this.game.models[name].textureSize = new V(texture.size.x, texture.size.y);
+      this.game.models[name].textureSize = new V(texture.w, texture.h);
     }
 
 
 
 
     Entity.prototype.renderTexture = function (ctx) {
+      if (this.lastSprite == undefined || this.lastSprite >= this.model.spriteMax * 5) {
+        this.lastSprite = 0;
+      }
+
+
       ctx.save();
 
       // add center to it so it can rotate from center
@@ -36,9 +42,11 @@ class Render {
       ctx.translate(this.position.x, this.position.y);
       // ctx.rotate(this.angle);
 
-      ctx.drawImage(this.model.texture, 0, 0, this.model.textureSize.x, this.model.textureSize.y);
+      ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.lastSprite / 5), 0, this.model.textureSize.x, this.model.textureSize.y, 0, 0, this.model.textureSize.x, this.model.textureSize.y);
+      console.log(this.lastSprite);
       // ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
       ctx.restore();
+      this.lastSprite++;
     }
 
 

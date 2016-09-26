@@ -20,17 +20,21 @@ const CONFIG = {
   textures: {
     'dirt': {
       texture: 'dirt.png',
-      size: {
-        x: 10,
-        y: 10,
-      }
+      w: 16,
+      h: 16,
+      spriteMax: 5,
     },
     'house': {
       texture: 'house.png',
-      size: {
-        x: 64,
-        y: 50,
-      }
+      w: 254,
+      h: 198,
+      spriteMax: 1,
+    },
+    'duck': {
+      texture: 'player.png',
+      w: 16,
+      h: 18,
+      spriteMax: 4,
     },
   },
 
@@ -41,13 +45,8 @@ const CONFIG = {
       hitbox: [{
         x: 0,
         y: 0,
-        w: 10,
-        h: 10,
-      },{
-        x: 10,
-        y: 10,
-        w: 10,
-        h: 10,
+        w: 16,
+        h: 16,
       }],
     },
     'house': {
@@ -56,23 +55,18 @@ const CONFIG = {
       hitbox: [{
         x: 0,
         y: 0,
-        w: 48,
-        h: 48,
-      },{
-        x: 49,
-        y: 8,
-        w: 15,
-        h: 32,
-      },{
-        x: 16,
-        y: 48,
-        w: 4,
-        h: 2,
-      },{
-        x: 28,
-        y: 48,
-        w: 4,
-        h: 2,
+        w: 254,
+        h: 198,
+      }],
+    },
+    'duck': {
+      solid: true,
+      static: false,
+      hitbox: [{
+        x: 0,
+        y: 0,
+        w: 18,
+        h: 18,
       }],
     }
   },

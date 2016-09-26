@@ -18,10 +18,10 @@ class Game {
 
 
     this.addEntity(new Entity({
-      positionX: 70,
+      positionX: 300,
       positionY: 70,
 
-      model: this.models['dirt'],
+      model: this.models['duck'],
     }));
 
     this.addEntity(new Entity({
