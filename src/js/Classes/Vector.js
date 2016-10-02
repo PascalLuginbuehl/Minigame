@@ -1,7 +1,7 @@
 class V {
   constructor (x, y) {
-    this.x = x;
-    this.y = y;
+    this.x = Math.round(x * 10) / 10;
+    this.y = Math.round(y * 10) / 10;
   }
 
   add(v) {
@@ -9,7 +9,7 @@ class V {
   }
 
   subtract(v) {
-    return new V(this.x - v.x, this.y - v.y);
+    return new V(Math.round((this.x - v.x) * 10) / 10, Math.round((this.y - v.y) * 10) / 10);
   }
 
   scale(s) {

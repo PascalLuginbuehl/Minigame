@@ -74,7 +74,7 @@ class Render {
       }
 
 
-      this.lastSprite += speed / 1000;
+      this.lastSprite += speed / 500;
       console.log(this.lastSprite);
       // get direction
       // get speed into direction
