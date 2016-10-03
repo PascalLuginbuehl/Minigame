@@ -5,7 +5,7 @@
  */
 class Communicator {
   constructor(game) {
-    this.websocket = new WebSocket('ws://10.71.58.81');
+    this.websocket = new WebSocket('ws://localhost');
 
     this.websocket.onopen = () => {
       this.websocket.send('Ping');
@@ -19,7 +19,7 @@ class Communicator {
     // Log messages from the server
     this.websocket.onmessage = (e) => {
       // console.log(e.data);
-      this.updateForce(0, JSON.parse(e.data));
+      this.updateForce(3, JSON.parse(e.data));
     };
 
 
