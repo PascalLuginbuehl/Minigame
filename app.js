@@ -4,8 +4,8 @@ const express = require('express')
   , bodyParser = require('body-parser')
   , formidable = require('express-formidable')
   , session = require('express-session')
-  , expressWs = require('express-ws')(app);
-
+  , expressWs = require('express-ws')(app)
+  , Game = require('./Classes/Game.js');
 
 app.use('/assets', express.static('public'));
 
@@ -40,32 +40,14 @@ app.all('/', function (req, res, next) {
 });
 
 app.ws('/', function(ws, req) {
-  console.log("asd");
-  console.log(req.session.test = "LOL");
   ws.on('message', function(msg) {
-    try {
-      var json = JSON.parse(e.data);
-      switch (json.task) {
-        case "message":
 
-          break;
-        case "loadMessages":
+    expressWs.getWss().clients.forEach(function (client) {
+      client.send(msg);
+    });
 
-          break;
-        default:
-          console.log("task not found");
-      }
-    } catch (e) {
-      console.log("wrong JSON format");
-    }
-    console.log(req.session);
-    ws.send(msg);
   });
 });
 
-// 404
-// app.use(function(req, res, next) {
-//   res.status(404).render('error', {});
-// });
 
 app.listen(80);

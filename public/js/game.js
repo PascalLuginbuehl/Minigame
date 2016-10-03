@@ -74,11 +74,11 @@ const CONFIG = {
 
 
 let game = new Game(CONFIG);
-let input = new Input(game);
-let communicator = new Communicator(game, input);
+let communicator = new Communicator(game);
+let input = new Input(game, communicator);
 
 document.addEventListener('DOMContentLoaded', () => {
   let render = new Render(game, document.body, {
     renderHitbox: true
-  });
+  }, input.player);
 });

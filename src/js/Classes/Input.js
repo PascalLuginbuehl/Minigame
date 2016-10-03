@@ -4,9 +4,19 @@
  * Communicator for communicating to WebSocket
  */
 class Input {
-  constructor(game) {
+  constructor(game, communicator) {
     this.game = game;
+    this.communicator = communicator;
 
+    this.player = new Entity({
+      positionX: 300,
+      positionY: 300,
+
+      model: this.game.models['duck'],
+    });
+
+    this.game.addEntity(this.player);
+    console.log(this.player);
     this.keys = {
       w: false,
       a: false,
@@ -18,28 +28,32 @@ class Input {
       ArrowRigth: false,
     }
 
-    var keys = this.keys;
 
+    let keys = this.keys;
+    let player = this.player
     game.__proto__.specialInput = function() {
-      let v = new V(0, 0);
-      if (keys.w) {
-        v.y-- ;
-      }
-      if (keys.a) {
-        v.x--;
-      }
-      if (keys.s) {
-        v.y++;
-      }
-      if (keys.d) {
-        v.x++;
-      }
-      this.entitys[0].force = (v);
+      // let v = new V(0, 0);
+      // if (keys.w) {
+      //   v.y-- ;
+      // }
+      // if (keys.a) {
+      //   v.x--;
+      // }
+      // if (keys.s) {
+      //   v.y++;
+      // }
+      // if (keys.d) {
+      //   v.x++;
+      // }
+      // player.force = v;
     }
 
     window.addEventListener('keydown', (e) => {
       if (this.keys.hasOwnProperty(e.key)) {
         this.keys[e.key] = true;
+        this.player.force = this.direction();
+
+        this.communicator.sendInput(this.direction());
         e.preventDefault();
       }
     });
@@ -47,8 +61,28 @@ class Input {
     window.addEventListener('keyup', (e) => {
       if (this.keys.hasOwnProperty(e.key)) {
         this.keys[e.key] = false;
+        this.player.force = this.direction();
+        
+        this.communicator.sendInput(this.direction());
         e.preventDefault();
       }
     });
+  }
+
+  direction() {
+    let v = new V(0, 0);
+    if (this.keys.w) {
+      v.y-- ;
+    }
+    if (this.keys.a) {
+      v.x--;
+    }
+    if (this.keys.s) {
+      v.y++;
+    }
+    if (this.keys.d) {
+      v.x++;
+    }
+    return v;
   }
 }

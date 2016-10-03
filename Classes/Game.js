@@ -1,4 +1,16 @@
 // Constructor
+let V = require('./Vector.js')
+  , Hitbox = require('./Hitbox.js')
+  , Rectangle = require('./Rectangle.js')
+  , Entity = require('./Entity.js')
+  , Model = require('./Model.js');
+
+function getTime() {
+  let hrend = process.hrtime();
+  return hrend[0] + hrend[1]/1000000;
+}
+
+
 
 class Game {
   constructor(config) {
@@ -41,7 +53,7 @@ class Game {
 
 
     // Timer for gameloop
-    this.expectedInterval = window.performance.now() + this.config.gameLoopInterval;
+    this.expectedInterval = getTime() + this.config.gameLoopInterval;
     setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval);
   }
 
@@ -54,11 +66,11 @@ class Game {
     // special for communicator and input
     this.specialInput();
 
-    let overtime = window.performance.now() - this.expectedInterval;
+    let overtime = getTime() - this.expectedInterval;
 
     if (overtime > this.config.gameLoopInterval) {
       this.overtimeError(overtime);
-      this.expectedInterval = window.performance.now();
+      this.expectedInterval = getTime();
       // error, overtime longer then Interval, sync with server...
     }
 
@@ -120,18 +132,6 @@ class Game {
   specialInput() {
 
   }
-
-  exportMap() {
-    let returnValue = [];
-    for (var i = 0; i < this.entitys.length; i++) {
-      let entity = this.entitys[i];
-
-      for (let model in this.models) {
-        if (this.models[model] == entity.model) {
-          returnValue.push({position: entity.position, velocity: entity.velocity, force: entity.force, model: model});
-        }
-      }
-    }
-    return returnValue;
-  }
 }
+
+module.exports = Game;

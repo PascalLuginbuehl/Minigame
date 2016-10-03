@@ -1,4 +1,5 @@
 // Constructor
+
 class Game {
   constructor(config) {
     this.config = config;
@@ -27,6 +28,13 @@ class Game {
     this.addEntity(new Entity({
       positionX: 0,
       positionY: 0,
+
+      model: this.models['house'],
+    }));
+
+    this.addEntity(new Entity({
+      positionX: 700,
+      positionY: 700,
 
       model: this.models['house'],
     }));
@@ -60,8 +68,8 @@ class Game {
     // physics here
     for (let i = 0; i < this.entitys.length; i++) {
       let entity = this.entitys[i];
+      if (!entity.model.static) {
 
-      if(!entity.static) {
         let acceleration = entity.force.scale(2000);
         // idk wahts betta
         // let friction = 0.08;
@@ -81,17 +89,17 @@ class Game {
           let entity2 = this.entitys[o];
           // check collision
 
-          if (entity != entity2 && entity.model.solid) {
+          if (entity != entity2 && entity.model.solid && entity2.model.solid) {
 
             // FIXME: do better physX
             // Collision detection
-            collision = entity.model.hitbox.checkCollision(position, entity2.position, entity2.model.hitbox);
+            if (entity.model.hitbox.checkCollision(position, entity2.position, entity2.model.hitbox)) {
+              collision = true;
+            }
           }
         }
 
-        // TODO: Test this
-        // not sure if workst
-        // fix for only one object
+
         if (collision) {
           entity.velocity = entity.velocity.scale(.1);
         } else {
@@ -111,5 +119,19 @@ class Game {
 
   specialInput() {
 
+  }
+
+  exportMap() {
+    let returnValue = [];
+    for (var i = 0; i < this.entitys.length; i++) {
+      let entity = this.entitys[i];
+
+      for (let model in this.models) {
+        if (this.models[model] == entity.model) {
+          returnValue.push({position: entity.position, velocity: entity.velocity, force: entity.force, model: model});
+        }
+      }
+    }
+    return returnValue;
   }
 }

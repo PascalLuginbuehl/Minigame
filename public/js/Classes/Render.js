@@ -1,13 +1,16 @@
 class Render {
-  constructor(game, canvasParent, debugging) {
+  constructor(game, canvasParent, debugging, origin) {
     this.canvas = document.createElement('canvas');
-    this.canvas.height = game.height;
-    this.canvas.width = game.width;
+    this.canvas.height = this.canvas.height = document.documentElement.clientHeight;
+    this.canvas.width = this.canvas.width = document.documentElement.clientWidth;
+
     canvasParent.appendChild(this.canvas);
 
     this.canvas.style.imageRendering = "pixelated";
 
     this.ctx = this.canvas.getContext("2d");
+
+    this.origin = origin;
 
     // preload images
     this.game = game;
@@ -26,7 +29,10 @@ class Render {
       this.game.models[name].textureSize = new V(texture.w, texture.h);
     }
 
-
+    window.addEventListener('resize', () => {
+      this.canvas.width = document.documentElement.clientWidth;
+      this.canvas.height = document.documentElement.clientHeight;
+    });
 
 
     Entity.prototype.renderTexture = function (ctx) {
@@ -75,7 +81,6 @@ class Render {
 
 
       this.lastSprite += speed / 500;
-      console.log(this.lastSprite);
       // get direction
       // get speed into direction
       // Get texture
@@ -120,9 +125,11 @@ class Render {
 
 
   render() {
-
-    // Clear old stuff
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.save();
+    this.ctx.translate(this.origin.position.x * -1 + this.canvas.width/2, this.origin.position.y * -1 + this.canvas.height/2);
+    // Clear old stuff
+
 
     for (let i = 0; i < game.entitys.length; i++) {
       let entity = game.entitys[i];
@@ -132,5 +139,6 @@ class Render {
         entity.model.hitbox.hitboxes[i].drawRect(entity.position, this.ctx);
       }
     }
+    this.ctx.restore();
   }
 }
