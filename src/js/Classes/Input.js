@@ -53,7 +53,7 @@ class Input {
         this.keys[e.key] = true;
         this.player.force = this.direction();
 
-        this.communicator.sendInput(this.direction());
+        this.communicator.sendInput({action: "updateMovement",  params: {arrayPosition: 3, force: this.direction()}});
         e.preventDefault();
       }
     });
@@ -62,8 +62,8 @@ class Input {
       if (this.keys.hasOwnProperty(e.key)) {
         this.keys[e.key] = false;
         this.player.force = this.direction();
-        
-        this.communicator.sendInput(this.direction());
+
+        this.communicator.sendInput({action: "updateMovement",  params: {arrayPosition: 3, force: this.direction()}});
         e.preventDefault();
       }
     });

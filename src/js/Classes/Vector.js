@@ -1,7 +1,12 @@
 class V {
   constructor (x, y) {
-    this.x = Math.round(x * 10) / 10;
-    this.y = Math.round(y * 10) / 10;
+    if (x instanceof Object) {
+      this.x = Math.round(x.x * 10) / 10;
+      this.y = Math.round(x.y * 10) / 10;
+    } else {
+      this.x = Math.round(x * 10) / 10;
+      this.y = Math.round(y * 10) / 10;
+    }
   }
 
   add(v) {

@@ -19,7 +19,24 @@ class Communicator {
     // Log messages from the server
     this.websocket.onmessage = (e) => {
       // console.log(e.data);
-      this.updateForce(3, JSON.parse(e.data));
+      try {
+        let data = JSON.parse(e.data);
+        switch (data.action) {
+          case "updateMovement":
+            this.updateMovement(data.params);
+            break;
+          case "loadStaticElements":
+            this.loadStaticElements(data.params);
+            break;
+          case "loadMovingElements":
+            this.loadMovingElements(data.params);
+            break;
+          }
+      } catch (e) {
+        console.error(e);
+      }
+
+
     };
 
 
@@ -33,14 +50,34 @@ class Communicator {
     };
   }
 
-  updateForce(arrayPosition, force) {
-    this.game.entitys[arrayPosition].force = new V(force.x, force.y);
+  /**
+   * sets force to force on arrayPosition
+   * @param {number} arrayPosition - position in Array
+   * @param {vector} force - new Force value
+   */
+  updateMovement({arrayPosition: arrayPosition, force: force}) {
+    this.game.entitys[arrayPosition].force = new V(force);
     // console.log(this.game.entitys[arrayPosition]);
+  }
+
+  /**
+   * Initialises static Elements which cant move
+   * @param
+   */
+  loadStaticElements() {
+
+  }
+
+
+  loadMovingElements() {
+
   }
 
   loadMap() {
 
   }
+
+
 
   sendInput(v) {
     this.websocket.send(JSON.stringify(v));

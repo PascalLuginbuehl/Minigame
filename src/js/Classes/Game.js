@@ -1,6 +1,13 @@
-// Constructor
-
+/**
+ * Class for game logic
+ * @author Pascal Luginbühl
+ * @version none
+ */
 class Game {
+
+  /** Creates game
+   * @param {object} config - Config file
+   */
   constructor(config) {
     this.config = config;
 
@@ -44,6 +51,7 @@ class Game {
     this.expectedInterval = window.performance.now() + this.config.gameLoopInterval;
     setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval);
   }
+
 
   addEntity (entity) {
     this.entitys.push(entity);

@@ -7,8 +7,33 @@ const gulp = require('gulp')
   , nodemon = require('gulp-nodemon')
   , clean = require('gulp-clean')
   , sourcemaps = require('gulp-sourcemaps')
+  , browserify = require("browserify")
+  , source = require('vinyl-source-stream')
+  , tsify = require("tsify")
+  , uglify = require('gulp-uglify')
+  , buffer = require('vinyl-buffer')
   , devPath = 'src/'
   , path = 'public/';
+
+
+
+gulp.task("ts", function () {
+    return browserify({
+        basedir: devPath,
+        debug: true,
+        entries: ['js/game.ts'],
+        cache: {},
+        packageCache: {}
+    })
+    .plugin(tsify)
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(path));
+});
 
 gulp.task('scss', function () {
   return gulp.src([
@@ -64,6 +89,7 @@ gulp.task("rest", function () {
   return gulp.src([
     devPath + '**/*.*',
     '!' + devPath + 'js/**/*.js',
+    '!' + devPath + 'js/**/*.ts',
     '!' + devPath + 'scss/**/*.scss'
   ])
   .pipe(gulp.dest(path));
@@ -93,7 +119,14 @@ gulp.task('js:watch', function () {
 });
 
 gulp.task('start', ['clean'], function () {
-  gulp.start(['scss', 'js', 'rest']);
-})
+  gulp.start(['scss', 'js', 'rest', 'ts']);
+});
 
-gulp.task('default', ['start', 'scss:watch', 'js:watch', 'nodemon', 'rest:watch'], function () {});
+
+gulp.task('ts:watch', function () {
+  gulp.watch([
+    devPath + 'js/**/*.ts'
+  ], ['ts']);
+});
+
+gulp.task('default', ['start', 'scss:watch', 'js:watch', 'ts:watch', 'nodemon', 'rest:watch'], function () {});

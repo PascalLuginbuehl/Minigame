@@ -1,7 +1,37 @@
 # Minigame
-This is a 2d Minigame in JavaScript from scratch
+This is a 2D Minigame in JavaScript from scratch
+
+## What is it all about?
+
+
+## Installation
+Install [node.js](https://nodejs.org) version >= 6.6.0
+
+Run as Admin
+```
+$ npm install gulp-cli -g
+```
+## Run Webserver
+Navigate into Minigame folder
+This will install depencies and run local express webserver
+```
+> npm start
+```
+
+Connect with a ECMAScript 2015 compatible browser to [localhost](http://localhost) (Chrome 53, Edge 12...)
 
 ## Plans
+
+## Technologies used
+WebSockets
+ServiceWorker
+ECMAScript 2015
+
+## Classes
+### Client
+
+
+### Server
 
 
 ## Licence
