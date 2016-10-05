@@ -1,7 +1,13 @@
 # Minigame
-This is a 2D Minigame in JavaScript from scratch
 
-## What is it all about?
+## What is this?
+A 2D multiplayer Minigame written in TypeScript from scratch
+
+
+## Todo
+Use extends for Render Entity
+Add types
+Documentation (Class diagramm)
 
 
 ## Installation

@@ -1,4 +1,10 @@
+import V from "./Vector";
+import Rectangle from "./Rectangle";
+
 class Hitbox {
+  hitboxes: Array<Rectangle>;
+  collisionBox: Rectangle;
+
   constructor(hitboxconf) {
     this.hitboxes = [];
     for (let i = 0; i < hitboxconf.length; i++) {
@@ -17,7 +23,6 @@ class Hitbox {
 
           if (hitboxes.checkCollision(origin, eOrigin, eHitbox.hitboxes[o])) {
             return true;
-            console.log(entity.velocity);
           }
         }
       }
@@ -40,6 +45,8 @@ class Hitbox {
       min = min.smalest(this.hitboxes[i].min);
     }
 
-    return new Rectangle({min, max});
+    return new Rectangle({min: min, max: max});
   }
 }
+
+export default Hitbox;

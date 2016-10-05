@@ -1,9 +1,14 @@
+import Game from "./Game";
+import V from "./Vector";
 /**
  * Errorhandling for Client Server has its own...
  * Websocket here
  *
  */
 class Communicator {
+  websocket: WebSocket;
+  game: Game
+
   constructor(game) {
     this.websocket = new WebSocket('ws://localhost');
 
@@ -42,12 +47,12 @@ class Communicator {
 
 
     this.game = game;
-    game.__proto__.overtimeError = (overtime) => {
-      // console.log(overtime);
-      // console.log(this);
-      this.expectedInterval = window.performance.now();
-      // this.loadMap();
-    };
+    // game.__proto__.overtimeError = (overtime) => {
+    //   // console.log(overtime);
+    //   // console.log(this);
+    //   this.expectedInterval = window.performance.now();
+    //   // this.loadMap();
+    // };
   }
 
   /**
@@ -64,12 +69,12 @@ class Communicator {
    * Initialises static Elements which cant move
    * @param
    */
-  loadStaticElements() {
+  loadStaticElements(param) {
 
   }
 
 
-  loadMovingElements() {
+  loadMovingElements(param) {
 
   }
 
@@ -83,3 +88,5 @@ class Communicator {
     this.websocket.send(JSON.stringify(v));
   }
 }
+
+export default Communicator;

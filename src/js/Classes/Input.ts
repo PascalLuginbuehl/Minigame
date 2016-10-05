@@ -1,9 +1,17 @@
-
+import Game from "./Game";
+import Communicator from "./Communicator";
+import Entity from "./Entity";
+import V from "./Vector";
 /**
  * Input for user inputs.
  * Communicator for communicating to WebSocket
  */
 class Input {
+  game: Game
+  communicator: Communicator;
+  player: Entity;
+  keys: any;
+
   constructor(game, communicator) {
     this.game = game;
     this.communicator = communicator;
@@ -86,3 +94,4 @@ class Input {
     return v;
   }
 }
+export default Input;

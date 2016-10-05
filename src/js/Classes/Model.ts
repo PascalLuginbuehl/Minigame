@@ -1,4 +1,13 @@
+import Hitbox from "./Hitbox";
+
 class Model {
+  solid: boolean;
+  static: boolean;
+  hitbox: Hitbox;
+  spriteMax: number;
+  texture: any;
+  textureSize: any;
+
   constructor({solid: solid = true, static: staticElem = false, hitbox: hitbox}) {
     // this.hitbox = [new Rectangle({x: 0, y: 0, w: 10, h: 10})];
 
@@ -16,3 +25,5 @@ class Model {
     this.hitbox = new Hitbox(hitbox);
   }
 }
+
+export default Model;

@@ -90,7 +90,7 @@ gulp.task("rest", function () {
     devPath + '**/*.*',
     '!' + devPath + 'js/**/*.js',
     '!' + devPath + 'js/**/*.ts',
-    '!' + devPath + 'scss/**/*.scss'
+    '!' + devPath + 'scss/**/*.scss',
   ])
   .pipe(gulp.dest(path));
 });
@@ -100,7 +100,8 @@ gulp.task('rest:watch', function () {
   gulp.watch([
     devPath + '**/*.*',
     '!' + devPath + '**/*.js',
-    '!' + devPath + '**/*.scss'
+    '!' + devPath + '**/*.scss',
+    '!' + devPath + '**/*.ts',
   ], ['rest']);
 });
 

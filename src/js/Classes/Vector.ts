@@ -1,5 +1,10 @@
 class V {
-  constructor (x, y) {
+  x: number;
+  y: number;
+
+
+
+  constructor (x, y?) {
     if (x instanceof Object) {
       this.x = Math.round(x.x * 10) / 10;
       this.y = Math.round(x.y * 10) / 10;
@@ -51,3 +56,6 @@ class V {
     return new V(x_prime, y_prime);
   }
 }
+
+
+export default V;

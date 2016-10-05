@@ -1,10 +1,17 @@
+import Model from "./Model";
+import Entity from "./Entity";
 /**
  * Class for game logic
  * @author Pascal Luginbühl
  * @version none
  */
 class Game {
-
+  models: Object;
+  config: any;
+  height: number;
+  width: number;
+  entitys: Array<Entity>
+  expectedInterval: number;
   /** Creates game
    * @param {object} config - Config file
    */
@@ -143,3 +150,5 @@ class Game {
     return returnValue;
   }
 }
+
+export default Game;
