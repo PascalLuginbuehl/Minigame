@@ -22,7 +22,7 @@ app.set('view engine', '.hbs');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(formidable.parse());
+// app.use(formidable.parse());
 
 
 app.use(session({
