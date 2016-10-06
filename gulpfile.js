@@ -27,6 +27,10 @@ gulp.task("ts", function () {
     })
     .plugin(tsify)
     .bundle()
+    .on('error', function(e) {
+        console.log(e.codeFrame);
+        this.emit('end');
+      })
     .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
