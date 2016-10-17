@@ -3,7 +3,6 @@ class V {
   y: number;
 
 
-
   constructor (x, y?) {
     if (x instanceof Object) {
       this.x = Math.round(x.x * 10) / 10;
@@ -14,15 +13,15 @@ class V {
     }
   }
 
-  add(v) {
+  add(v): V {
     return new V(Math.round((v.x + this.x) * 10) / 10, Math.round((v.y + this.y) * 10) / 10);
   }
 
-  subtract(v) {
+  subtract(v): V {
     return new V(Math.round((this.x - v.x) * 10) / 10, Math.round((this.y - v.y) * 10) / 10);
   }
 
-  scale(s) {
+  scale(s): V {
     return new V(Math.round((this.x * s) * 10) / 10 , Math.round((this.y * s) * 10) / 10);
   }
 
@@ -34,19 +33,19 @@ class V {
     return (this.x * v.y - this.y * v.x);
   }
 
-  smalest(v) {
+  smalest(v): V {
     let x = this.x < v.x ? this.x : v.x
       , y = this.y < v.y ? this.y : v.y;
     return new V(x, y);
   }
 
-  biggest(v) {
+  biggest(v): V {
     let x = this.x > v.x ? this.x : v.x
       , y = this.y > v.y ? this.y : v.y;
     return new V(x, y);
   }
 
-  rotate(angle, vector) {
+  rotate(angle, vector): V {
     let x = this.x - vector.x;
     let y = this.y - vector.y;
 

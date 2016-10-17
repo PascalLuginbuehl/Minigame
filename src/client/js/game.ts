@@ -1,7 +1,7 @@
-import Game from "./Classes/Game";
-import Communicator from "./Classes/Communicator";
-import Render from "./Classes/Render";
-import Input from "./Classes/Input";
+import Game from "./../../common/Classes/Game";
+import Communicator from "./../../common/Classes/Communicator";
+import Render from "./../../common/Classes/Render";
+import Input from "./../../common/Classes/Input";
 
 'use strict'
 // IDEA: Circle collision
@@ -78,7 +78,7 @@ const CONFIG = {
 }
 
 
-let game = new Game(CONFIG);
+let game = new Game(CONFIG, performance.now);
 let communicator = new Communicator(game);
 let input = new Input(game, communicator);
 

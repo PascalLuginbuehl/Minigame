@@ -4,10 +4,12 @@ const express = require('express')
   , bodyParser = require('body-parser')
   , formidable = require('express-formidable')
   , session = require('express-session')
-  , expressWs = require('express-ws')(app)
-  , Game = require('./Classes/Game.js');
+  , expressWs = require('express-ws')(app);
 
-app.use('/assets', express.static('public'));
+
+let server = require('./dist/server/server');
+
+app.use('/assets', express.static('dist/client'));
 
 app.engine('.hbs', exphbs({
   extname: '.hbs',

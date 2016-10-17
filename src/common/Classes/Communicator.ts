@@ -7,7 +7,7 @@ import V from "./Vector";
  */
 class Communicator {
   websocket: WebSocket;
-  game: Game
+  game: Game;
 
   constructor(game) {
     this.websocket = new WebSocket('ws://localhost');

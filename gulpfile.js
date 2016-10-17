@@ -12,14 +12,22 @@ const gulp = require('gulp')
   , tsify = require("tsify")
   , uglify = require('gulp-uglify')
   , buffer = require('vinyl-buffer')
+  , ts = require("gulp-typescript")
+  , tsProject = ts.createProject("./src/tsconfig.json")
+  , client = 'client/'
   , devPath = 'src/'
-  , path = 'public/';
+  , path = 'dist/';
+
+gulp.task("ts-server", function() {
+  return tsProject.src()
+      .pipe(tsProject())
+      .js.pipe(gulp.dest(path));
+});
 
 
-
-gulp.task("ts", function () {
+gulp.task("ts-client", function () {
     return browserify({
-        basedir: devPath,
+        basedir: devPath + client,
         debug: true,
         entries: ['js/game.ts'],
         cache: {},
@@ -28,7 +36,7 @@ gulp.task("ts", function () {
     .plugin(tsify)
     .bundle()
     .on('error', function(e) {
-        console.log(e.codeFrame);
+        console.log(e);
         this.emit('end');
       })
     .pipe(source('bundle.js'))
@@ -36,12 +44,12 @@ gulp.task("ts", function () {
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(uglify())
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(path));
+    .pipe(gulp.dest(path + client));
 });
 
 gulp.task('scss', function () {
   return gulp.src([
-    devPath + 'scss/**/*.scss'
+    devPath + client + 'scss/**/*.scss'
   ])
   .pipe(sass().on('error', sass.logError))
   .pipe(autoprefixer({
@@ -49,7 +57,7 @@ gulp.task('scss', function () {
 		cascade: false
 	}))
   .pipe(cssnano())
-  .pipe(gulp.dest(path + 'css'));
+  .pipe(gulp.dest(path + client + 'css'));
 });
 
 
@@ -63,24 +71,24 @@ gulp.task("nodemon", function () {
 });
 
 
-gulp.task("js", function () {
-  return gulp.src([
-    devPath + "js/**/*.js"
-  ])
-
-  // .pipe(sourcemaps.init())
-  //   .pipe(babel({
-  //     presets: ['es2015']
-  //   }))
-  //   .on('error', function(e) {
-  //     console.log(e.codeFrame);
-  //     this.emit('end');
-  //   })
-  //   .pipe(minify())
-  // .pipe(sourcemaps.write())
-
-  .pipe(gulp.dest(path + 'js'));
-});
+// gulp.task("js", function () {
+//   return gulp.src([
+//     devPath + "js/**/*.js"
+//   ])
+//
+//   // .pipe(sourcemaps.init())
+//   //   .pipe(babel({
+//   //     presets: ['es2015']
+//   //   }))
+//   //   .on('error', function(e) {
+//   //     console.log(e.codeFrame);
+//   //     this.emit('end');
+//   //   })
+//   //   .pipe(minify())
+//   // .pipe(sourcemaps.write())
+//
+//   .pipe(gulp.dest(path + 'js'));
+// });
 
 
 gulp.task('clean', function() {
@@ -93,8 +101,9 @@ gulp.task("rest", function () {
   return gulp.src([
     devPath + '**/*.*',
     '!' + devPath + 'js/**/*.js',
-    '!' + devPath + 'js/**/*.ts',
-    '!' + devPath + 'scss/**/*.scss',
+    '!' + devPath + '**/*.ts',
+    '!' + devPath + '**/*.scss',
+    '!**/tsconfig.json',
   ])
   .pipe(gulp.dest(path));
 });
@@ -112,26 +121,32 @@ gulp.task('rest:watch', function () {
 
 gulp.task('scss:watch', function () {
   gulp.watch([
-    devPath + 'scss/**/*.scss'
+    devPath + '**/*.scss'
   ], ['scss']);
 });
 
 
-gulp.task('js:watch', function () {
-  gulp.watch([
-    devPath + 'js/**/*.js'
-  ], ['js']);
-});
+// gulp.task('js:watch', function () {
+//   gulp.watch([
+//     devPath + 'js/**/*.js'
+//   ], ['js']);
+// });
 
 gulp.task('start', ['clean'], function () {
-  gulp.start(['scss', 'js', 'rest', 'ts']);
+  gulp.start(['scss', 'rest', 'ts-client', "ts-server"]);
 });
 
 
-gulp.task('ts:watch', function () {
+gulp.task('ts-client:watch', function () {
+  gulp.watch([
+    devPath + client + 'js/**/*.ts'
+  ], ['ts-client']);
+});
+
+gulp.task('ts-server:watch', function () {
   gulp.watch([
     devPath + 'js/**/*.ts'
-  ], ['ts']);
+  ], ['ts-server']);
 });
 
-gulp.task('default', ['start', 'scss:watch', 'js:watch', 'ts:watch', 'nodemon', 'rest:watch'], function () {});
+gulp.task('default', ['start', 'scss:watch', 'ts-client:watch', 'ts-server:watch', 'nodemon', 'rest:watch'], function () {});

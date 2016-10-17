@@ -1,19 +1,24 @@
-// Constructor
-let V = require('./Vector.js')
-  , Hitbox = require('./Hitbox.js')
-  , Rectangle = require('./Rectangle.js')
-  , Entity = require('./Entity.js')
-  , Model = require('./Model.js');
+import Model from "./Model";
+import Entity from "./Entity";
+/**
+ * Class for game logic
+ * @author Pascal Luginbühl
+ * @version none
+ */
 
-function getTime() {
-  let hrend = process.hrtime();
-  return hrend[0] + hrend[1]/1000000;
-}
-
-
-
+// needs timerfunction as param... :D
 class Game {
-  constructor(config) {
+  models: Object;
+  config: any;
+  height: number;
+  width: number;
+  entitys: Array<Entity>
+  expectedInterval: number;
+  timeFunction: Function;
+  /** Creates game
+   * @param {object} config - Config file
+   */
+  constructor(config, timeFunction: Function) {
     this.config = config;
 
     // Map starting corner left bottom, render left top
@@ -21,6 +26,8 @@ class Game {
 
     this.height = config.map.height;
     this.width = config.map.width;
+    this.timeFunction = timeFunction;
+
     this.entitys = [];
 
 
@@ -53,9 +60,10 @@ class Game {
 
 
     // Timer for gameloop
-    this.expectedInterval = getTime() + this.config.gameLoopInterval;
+    this.expectedInterval = this.timeFunction() + this.config.gameLoopInterval;
     setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval);
   }
+
 
   addEntity (entity) {
     this.entitys.push(entity);
@@ -66,11 +74,11 @@ class Game {
     // special for communicator and input
     this.specialInput();
 
-    let overtime = getTime() - this.expectedInterval;
+    let overtime = this.timeFunction() - this.expectedInterval;
 
     if (overtime > this.config.gameLoopInterval) {
       this.overtimeError(overtime);
-      this.expectedInterval = getTime();
+      this.expectedInterval = this.timeFunction();
       // error, overtime longer then Interval, sync with server...
     }
 
@@ -132,6 +140,20 @@ class Game {
   specialInput() {
 
   }
+
+  exportMap() {
+    let returnValue = [];
+    for (var i = 0; i < this.entitys.length; i++) {
+      let entity = this.entitys[i];
+
+      for (let model in this.models) {
+        if (this.models[model] == entity.model) {
+          returnValue.push({position: entity.position, velocity: entity.velocity, force: entity.force, model: model});
+        }
+      }
+    }
+    return returnValue;
+  }
 }
 
-module.exports = Game;
+export default Game;
