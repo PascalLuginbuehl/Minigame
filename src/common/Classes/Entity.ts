@@ -8,7 +8,7 @@ class Entity {
   position: V;
   lastSprite: number;
 
-  constructor({positionX = 0, positionY = 0, texture = 0, solid = false, static: staticElem = false, model: model}) {
+  constructor({positionX = 0, positionY = 0, model: model}) {
     // position
     // left top of hitbox
     this.position = new V(positionX, positionY);

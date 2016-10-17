@@ -26,25 +26,25 @@ gulp.task("ts-server", function() {
 
 
 gulp.task("ts-client", function () {
-    return browserify({
-        basedir: devPath + client,
-        debug: true,
-        entries: ['js/game.ts'],
-        cache: {},
-        packageCache: {}
+  return browserify({
+      basedir: devPath + client,
+      debug: true,
+      entries: ['js/game.ts'],
+      cache: {},
+      packageCache: {}
+  })
+  .plugin(tsify)
+  .bundle()
+  .on('error', function(e) {
+      console.log(e);
+      this.emit('end');
     })
-    .plugin(tsify)
-    .bundle()
-    .on('error', function(e) {
-        console.log(e);
-        this.emit('end');
-      })
-    .pipe(source('bundle.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(uglify())
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(path + client));
+  .pipe(source('bundle.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({loadMaps: true}))
+  // .pipe(uglify())
+  .pipe(sourcemaps.write('./'))
+  .pipe(gulp.dest(path + client));
 });
 
 gulp.task('scss', function () {

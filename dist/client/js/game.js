@@ -64,7 +64,7 @@ var CONFIG = {
         }
     },
 };
-var game = new Game_1.default(CONFIG, window.performance.now);
+var game = new Game_1.default(CONFIG, function () { return window.performance.now(); });
 var communicator = new Communicator_1.default(game);
 var input = new Input_1.default(game, communicator);
 document.addEventListener('DOMContentLoaded', function () {

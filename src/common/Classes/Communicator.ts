@@ -40,8 +40,6 @@ class Communicator {
       } catch (e) {
         console.error(e);
       }
-
-
     };
 
 

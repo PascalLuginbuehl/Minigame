@@ -36,7 +36,6 @@ class Game {
       this.models[name] = new Model(this.config.models[name]);
     }
 
-
     this.addEntity(new Entity({
       positionX: 300,
       positionY: 70,
@@ -95,7 +94,9 @@ class Game {
         // let friction = 0.08;
         let friction = 0.8;
         // entity.velocity = entity.velocity.add(acceleration.subtract(entity.velocity.scale(friction)));
+
         entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(.92);
+
         // console.log(entity.velocity);
         let position = entity.position.add(entity.velocity.scale(delay));
         // let rect = new Rectangle({min: entity.hitbox.min.add(entity.velocity.scale(delay)), max: entity.hitbox.max});

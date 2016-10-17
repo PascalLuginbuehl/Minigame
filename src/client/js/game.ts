@@ -78,7 +78,7 @@ const CONFIG = {
 }
 
 
-let game = new Game(CONFIG, performance.now);
+let game = new Game(CONFIG, function() {return window.performance.now()});
 let communicator = new Communicator(game);
 let input = new Input(game, communicator);
 
