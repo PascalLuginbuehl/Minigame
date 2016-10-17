@@ -27,7 +27,7 @@ var Game = (function () {
             positionY: 700,
             model: this.models['house'],
         }));
-        this.expectedInterval = this.timeFunction + this.config.gameLoopInterval;
+        this.expectedInterval = this.timeFunction() + this.config.gameLoopInterval;
         setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval);
     }
     Game.prototype.addEntity = function (entity) {

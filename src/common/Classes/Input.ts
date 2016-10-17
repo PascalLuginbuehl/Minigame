@@ -39,7 +39,7 @@ class Input {
 
     let keys = this.keys;
     let player = this.player;
-  
+
 
     window.addEventListener('keydown', (e) => {
       if (this.keys.hasOwnProperty(e.key)) {

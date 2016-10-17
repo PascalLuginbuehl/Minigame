@@ -12,14 +12,13 @@
     "removeComments": true,
     "noLib": false,
     "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "outDir": "./../public"
+    "suppressImplicitAnyIndexErrors": true
   },
   "exclude": [
-    "public",
+    "dist",
     "node_modules"
   ],
-  "compileOnSave": true,
+  "compileOnSave": false,
   "buildOnSave": false,
   "atom": {
     "rewriteTsconfig": false

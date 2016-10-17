@@ -16,6 +16,7 @@ const gulp = require('gulp')
   , tsProject = ts.createProject("./src/tsconfig.json")
   , client = 'client/'
   , devPath = 'src/'
+  , common = 'common/'
   , path = 'dist/';
 
 gulp.task("ts-server", function() {
@@ -23,7 +24,6 @@ gulp.task("ts-server", function() {
       .pipe(tsProject())
       .js.pipe(gulp.dest(path));
 });
-
 
 gulp.task("ts-client", function () {
   return browserify({
@@ -47,6 +47,7 @@ gulp.task("ts-client", function () {
   .pipe(gulp.dest(path + client));
 });
 
+
 gulp.task('scss', function () {
   return gulp.src([
     devPath + client + 'scss/**/*.scss'
@@ -64,31 +65,11 @@ gulp.task('scss', function () {
 gulp.task("nodemon", function () {
   nodemon({
     script: 'app.js'
-  , ignore: ['src/', 'public/', 'gulpfile.js']
+  , ignore: [devPath, path + client, path + common, 'gulpfile.js']
   , ext: 'js'
   , env: { 'NODE_ENV': 'development' }
   })
 });
-
-
-// gulp.task("js", function () {
-//   return gulp.src([
-//     devPath + "js/**/*.js"
-//   ])
-//
-//   // .pipe(sourcemaps.init())
-//   //   .pipe(babel({
-//   //     presets: ['es2015']
-//   //   }))
-//   //   .on('error', function(e) {
-//   //     console.log(e.codeFrame);
-//   //     this.emit('end');
-//   //   })
-//   //   .pipe(minify())
-//   // .pipe(sourcemaps.write())
-//
-//   .pipe(gulp.dest(path + 'js'));
-// });
 
 
 gulp.task('clean', function() {
@@ -126,27 +107,28 @@ gulp.task('scss:watch', function () {
 });
 
 
-// gulp.task('js:watch', function () {
-//   gulp.watch([
-//     devPath + 'js/**/*.js'
-//   ], ['js']);
-// });
+gulp.task("prestart", ['clean'],function() {
+  gulp.start("start");
+});
 
-gulp.task('start', ['clean'], function () {
-  gulp.start(['scss', 'rest', 'ts-client', "ts-server"]);
+gulp.task("start", ['scss', 'rest', 'ts-client', "ts-server"], function () {
+  gulp.start(['nodemon']);
 });
 
 
 gulp.task('ts-client:watch', function () {
   gulp.watch([
-    devPath + client + 'js/**/*.ts'
+    devPath + client + 'js/**/*.ts',
+    devPath + common + '**/*.ts',
   ], ['ts-client']);
 });
 
 gulp.task('ts-server:watch', function () {
   gulp.watch([
-    devPath + 'js/**/*.ts'
+    devPath + '**/*.ts',
+    devPath + '**/*.ts',
+    '!' + devPath + client + 'js/**/*.ts',
   ], ['ts-server']);
 });
 
-gulp.task('default', ['start', 'scss:watch', 'ts-client:watch', 'ts-server:watch', 'nodemon', 'rest:watch'], function () {});
+gulp.task('default', ['prestart', 'scss:watch', 'ts-client:watch', 'ts-server:watch', 'rest:watch'], function () {});

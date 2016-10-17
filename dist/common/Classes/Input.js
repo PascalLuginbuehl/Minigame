@@ -6,7 +6,6 @@ var Input = (function () {
         var _this = this;
         this.game = game;
         this.communicator = communicator;
-        console.log("asd");
         this.player = new Entity_1.default({
             positionX: 300,
             positionY: 300,
@@ -25,8 +24,6 @@ var Input = (function () {
         };
         var keys = this.keys;
         var player = this.player;
-        game.__proto__.specialInput = function () {
-        };
         window.addEventListener('keydown', function (e) {
             if (_this.keys.hasOwnProperty(e.key)) {
                 _this.keys[e.key] = true;
