@@ -1,33 +1,10 @@
 "use strict";
-var Game_1 = require("./../common/Classes/Game");
-var Communicator_1 = require("./../server/Communicator");
-var express = require('express'), app = express(), exphbs = require('express-handlebars'), bodyParser = require('body-parser'), formidable = require('express-formidable'), session = require('express-session'), expressWs = require('express-ws')(app);
-app.use('/assets', express.static('dist/client'));
-app.engine('.hbs', exphbs({
-    extname: '.hbs',
-    layoutsDir: 'views/layouts',
-    defaultLayout: 'layout',
-    partialsDir: [
-        'views/partials/',
-    ],
-}));
-app.set('view engine', '.hbs');
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: true },
-}));
-app.all('/', function (req, res, next) {
-    res.render('index', {});
-});
+var Game_js_1 = require("./../common/Classes/Game.js");
 function getTime() {
     var hrend = process.hrtime();
     return hrend[0] + hrend[1] / 1000000;
 }
-var game = new Game_1.default({
+var b = new Game_js_1.default({
     gameLoopInterval: 16,
     map: {
         height: 1000,
@@ -87,5 +64,3 @@ var game = new Game_1.default({
         }
     },
 }, getTime);
-var communicator = new Communicator_1.default(game, app, expressWs);
-app.listen(80);

@@ -5,7 +5,8 @@ var Communicator = (function () {
         var _this = this;
         this.websocket = new WebSocket('ws://localhost');
         this.websocket.onopen = function () {
-            _this.websocket.send('Ping');
+            _this.getStaticElements();
+            _this.getMovingElements();
         };
         this.websocket.onerror = function (error) {
             console.log('WebSocket Error ' + error);
@@ -17,11 +18,11 @@ var Communicator = (function () {
                     case "updateMovement":
                         _this.updateMovement(data.params);
                         break;
-                    case "loadStaticElements":
-                        _this.loadStaticElements(data.params);
+                    case "staticElements":
+                        _this.updateStaticElements(data.params);
                         break;
-                    case "loadMovingElements":
-                        _this.loadMovingElements(data.params);
+                    case "movingElements":
+                        _this.updateMovingElements(data.params);
                         break;
                 }
             }
@@ -35,11 +36,13 @@ var Communicator = (function () {
         var arrayPosition = _a.arrayPosition, force = _a.force;
         this.game.entitys[arrayPosition].force = new Vector_1.default(force);
     };
-    Communicator.prototype.loadStaticElements = function (param) {
+    Communicator.prototype.getStaticElements = function () {
     };
-    Communicator.prototype.loadMovingElements = function (param) {
+    Communicator.prototype.getMovingElements = function () {
     };
-    Communicator.prototype.loadMap = function () {
+    Communicator.prototype.updateMovingElements = function (data) {
+    };
+    Communicator.prototype.updateStaticElements = function (data) {
     };
     Communicator.prototype.sendInput = function (v) {
         this.websocket.send(JSON.stringify(v));

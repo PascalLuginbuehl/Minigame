@@ -7,7 +7,7 @@ import Entity from "./Entity";
  */
 
 // needs timerfunction as param... :D
-class Game {
+export default class Game {
   models: Object;
   config: any;
   height: number;
@@ -156,5 +156,3 @@ class Game {
     return returnValue;
   }
 }
-
-export default Game;

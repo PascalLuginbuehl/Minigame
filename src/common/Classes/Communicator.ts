@@ -13,7 +13,8 @@ class Communicator {
     this.websocket = new WebSocket('ws://localhost');
 
     this.websocket.onopen = () => {
-      this.websocket.send('Ping');
+      this.getStaticElements();
+      this.getMovingElements();
     };
 
     // Log errors
@@ -30,13 +31,13 @@ class Communicator {
           case "updateMovement":
             this.updateMovement(data.params);
             break;
-          case "loadStaticElements":
-            this.loadStaticElements(data.params);
+          case "staticElements":
+            this.updateStaticElements(data.params);
             break;
-          case "loadMovingElements":
-            this.loadMovingElements(data.params);
+          case "movingElements":
+            this.updateMovingElements(data.params);
             break;
-          }
+        }
       } catch (e) {
         console.error(e);
       }
@@ -67,19 +68,22 @@ class Communicator {
    * Initialises static Elements which cant move
    * @param
    */
-  loadStaticElements(param) {
+  getStaticElements() {
 
   }
 
 
-  loadMovingElements(param) {
+  getMovingElements() {
 
   }
 
-  loadMap() {
+  updateMovingElements(data) {
 
   }
 
+  updateStaticElements(data) {
+
+  }
 
 
   sendInput(v) {
