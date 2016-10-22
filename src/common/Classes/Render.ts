@@ -68,10 +68,11 @@ class Render {
 
     for (let i = 0; i < this.game.entitys.length; i++) {
       let entity = this.game.entitys[i];
-
-      entity.renderTexture(this.ctx);
-      for (let i = 0; i < entity.model.hitbox.hitboxes.length; i++) {
-        entity.model.hitbox.hitboxes[i].drawRect(entity.position, this.ctx);
+      if (entity) {
+        entity.renderTexture(this.ctx);
+        for (let i = 0; i < entity.model.hitbox.hitboxes.length; i++) {
+          entity.model.hitbox.hitboxes[i].drawRect(entity.position, this.ctx);
+        }
       }
     }
     this.ctx.restore();

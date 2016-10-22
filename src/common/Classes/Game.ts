@@ -36,31 +36,10 @@ export default class Game {
       this.models[name] = new Model(this.config.models[name]);
     }
 
-    this.addEntity(new Entity({
-      positionX: 300,
-      positionY: 70,
-
-      model: this.models['duck'],
-    }));
-
-    this.addEntity(new Entity({
-      positionX: 0,
-      positionY: 0,
-
-      model: this.models['house'],
-    }));
-
-    this.addEntity(new Entity({
-      positionX: 700,
-      positionY: 700,
-
-      model: this.models['house'],
-    }));
-
 
     // Timer for gameloop
     this.expectedInterval = this.timeFunction() + this.config.gameLoopInterval;
-    setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval);
+    setInterval(this.gameLoop.bind(this), this.config.gameLoopInterval, this.config.gameLoopInterval);
   }
 
 
@@ -73,21 +52,27 @@ export default class Game {
     // special for communicator and input
     this.specialInput();
 
-    let overtime = this.timeFunction() - this.expectedInterval;
+    // let overtime = this.timeFunction() - this.expectedInterval;
 
-    if (overtime > this.config.gameLoopInterval) {
-      this.overtimeError(overtime);
-      this.expectedInterval = this.timeFunction();
-      // error, overtime longer then Interval, sync with server...
-    }
+    // console.log(overtime);
+    // console.log(this.config.gameLoopInterval);
+    // console.log(this.expectedInterval);
 
-    let delay = (overtime + this.config.gameLoopInterval) / 1000;
+    // if (overtime > this.config.gameLoopInterval) {
+    //   this.overtimeError(overtime);
+    //   console.log("error");
+    //   this.expectedInterval = this.timeFunction();
+    //   // error, overtime longer then Interval, sync with server...
+    // }
+    //
+    // let delay = (overtime + this.config.gameLoopInterval) / 1000;
+    let delay = 16 / 1000;
     // console.log(delay);
 
     // physics here
     for (let i = 0; i < this.entitys.length; i++) {
       let entity = this.entitys[i];
-      if (!entity.model.static) {
+      if (entity && !entity.model.static) {
 
         let acceleration = entity.force.scale(2000);
         // idk wahts betta
@@ -110,7 +95,7 @@ export default class Game {
           let entity2 = this.entitys[o];
           // check collision
 
-          if (entity != entity2 && entity.model.solid && entity2.model.solid) {
+          if (entity2 && entity != entity2 && entity.model.solid && entity2.model.solid) {
 
             // FIXME: do better physX
             // Collision detection
@@ -130,8 +115,12 @@ export default class Game {
     }
 
 
-    this.expectedInterval += this.config.gameLoopInterval;
-    setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval - overtime);
+    // this.expectedInterval += this.config.gameLoopInterval;
+    //
+    // console.log(this.config.gameLoopInterval);
+    // console.log(overtime);
+    // console.log(this.config.gameLoopInterval - overtime);
+    // setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval - overtime);
   }
 
   overtimeError(overtime) {

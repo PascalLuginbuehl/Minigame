@@ -70,5 +70,5 @@ var input = new Input_1.default(game, communicator);
 document.addEventListener('DOMContentLoaded', function () {
     var render = new Render_1.default(game, document.body, {
         renderHitbox: true
-    }, input.player);
+    }, communicator.player);
 });

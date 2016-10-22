@@ -6,7 +6,7 @@ import Player from "./Player";
 export default class Communicator {
   game: Game;
   expressWs: any;
-  staticElements: Array<Entity>;
+  staticElements: Array<Object>;
   players: Array<Player>;
 
   constructor(game, app, expressWs) {
@@ -19,18 +19,28 @@ export default class Communicator {
     for (let i = 0; i < this.game.entitys.length; i++) {
       let entity = this.game.entitys[i];
       if (entity.model.static) {
-        this.staticElements.push(entity);
+        this.staticElements[i] = {
+          position: entity.position,
+          model: entity.getModel(this.game.models),
+        };
       }
     }
 
     app.ws('/', (ws, req) => {
-      this.players.push(new Player(ws, this.game, this.staticElements, this.broadcast.bind(this)));
+      let a = this.players.push(new Player(ws, this.game, this.staticElements, this.broadcast.bind(this)));
+      for (let i = 0; i < this.players.length; i++) {
+        if (a != i) {
+          this.players[i].sendMovingElements();
+        }
+      }
     });
   }
 
-  broadcast(msg) {
+  broadcast(ws, msg) {
     this.expressWs.getWss().clients.forEach(function (client) {
-      client.send(msg);
+      if (client != ws) {
+        client.send(msg);
+      }
     });
   }
 }

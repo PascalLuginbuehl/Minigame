@@ -8,10 +8,10 @@ class Entity {
   position: V;
   lastSprite: number;
 
-  constructor({positionX = 0, positionY = 0, model: model}) {
+  constructor(position: V, model: Model, force: V = new V(0, 0), velocity: V = new V(0, 0)) {
     // position
     // left top of hitbox
-    this.position = new V(positionX, positionY);
+    this.position = new V(position);
 
     // velocity for movement
     this.velocity = new V(0, 0);
@@ -87,6 +87,15 @@ class Entity {
     ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.lastSprite), 0, this.model.textureSize.x, this.model.textureSize.y, 0, 0, this.model.textureSize.x, this.model.textureSize.y);
     // ctx.drawImage(this.texture, 0 - this.center.x, 0 - this.center.y, this.size.x, this.size.y);
     ctx.restore();
+  }
+
+
+  getModel(models) {
+    for (var name in models) {
+      if(this.model == models[name]) {
+        return name;
+      }
+    }
   }
 }
 

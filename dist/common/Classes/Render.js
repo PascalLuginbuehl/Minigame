@@ -32,9 +32,11 @@ var Render = (function () {
         this.ctx.translate(this.origin.position.x * -1 + this.canvas.width / 2, this.origin.position.y * -1 + this.canvas.height / 2);
         for (var i = 0; i < this.game.entitys.length; i++) {
             var entity = this.game.entitys[i];
-            entity.renderTexture(this.ctx);
-            for (var i_1 = 0; i_1 < entity.model.hitbox.hitboxes.length; i_1++) {
-                entity.model.hitbox.hitboxes[i_1].drawRect(entity.position, this.ctx);
+            if (entity) {
+                entity.renderTexture(this.ctx);
+                for (var i_1 = 0; i_1 < entity.model.hitbox.hitboxes.length; i_1++) {
+                    entity.model.hitbox.hitboxes[i_1].drawRect(entity.position, this.ctx);
+                }
             }
         }
         this.ctx.restore();

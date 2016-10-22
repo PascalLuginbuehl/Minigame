@@ -71,34 +71,41 @@ var input = new Input_1.default(game, communicator);
 document.addEventListener('DOMContentLoaded', function () {
     var render = new Render_1.default(game, document.body, {
         renderHitbox: true
-    }, input.player);
+    }, communicator.player);
 });
 },{"./../../common/Classes/Communicator":2,"./../../common/Classes/Game":4,"./../../common/Classes/Input":6,"./../../common/Classes/Render":9}],2:[function(require,module,exports){
 "use strict";
 var Vector_1 = require("./Vector");
+var Entity_1 = require("./Entity");
 var Communicator = (function () {
     function Communicator(game) {
         var _this = this;
-        this.websocket = new WebSocket('ws://localhost');
+        this.game = game;
+        this.websocket = new WebSocket('ws://192.168.1.112:8080');
+        this.player = new Entity_1.default(new Vector_1.default(300, 300), game.models['duck']);
         this.websocket.onopen = function () {
-            _this.getStaticElements();
-            _this.getMovingElements();
         };
         this.websocket.onerror = function (error) {
             console.log('WebSocket Error ' + error);
         };
+        setInterval(function () {
+            _this.websocket.send(JSON.stringify({ action: "movingElements" }));
+        }, this.game.config.gameLoopInterval * 2);
         this.websocket.onmessage = function (e) {
             try {
                 var data = JSON.parse(e.data);
                 switch (data.action) {
-                    case "updateMovement":
-                        _this.updateMovement(data.params);
-                        break;
                     case "staticElements":
                         _this.updateStaticElements(data.params);
                         break;
                     case "movingElements":
                         _this.updateMovingElements(data.params);
+                        break;
+                    case "force":
+                        _this.updateForce(data.params);
+                        break;
+                    case "player":
+                        _this.createPlayer(data.params);
                         break;
                 }
             }
@@ -106,19 +113,36 @@ var Communicator = (function () {
                 console.error(e);
             }
         };
-        this.game = game;
+        this.websocket.onopen = function () {
+            _this.websocket.send('{"action": "staticElements"}');
+        };
     }
-    Communicator.prototype.updateMovement = function (_a) {
+    Communicator.prototype.updateForce = function (_a) {
         var arrayPosition = _a.arrayPosition, force = _a.force;
         this.game.entitys[arrayPosition].force = new Vector_1.default(force);
-    };
-    Communicator.prototype.getStaticElements = function () {
     };
     Communicator.prototype.getMovingElements = function () {
     };
     Communicator.prototype.updateMovingElements = function (data) {
+        for (var i = 0; i < data.length; i++) {
+            var entity = data[i];
+            if (entity) {
+                this.game.entitys[i] = new Entity_1.default(entity.position, this.game.models[entity.model], new Vector_1.default(entity.velocity), new Vector_1.default(entity.force));
+            }
+        }
+        this.player = this.game.entitys[this.arrayPosition];
+    };
+    Communicator.prototype.createPlayer = function (params) {
+        this.arrayPosition = params;
+        this.player = this.game.entitys[params];
     };
     Communicator.prototype.updateStaticElements = function (data) {
+        for (var i = 0; i < data.length; i++) {
+            var entity = data[i];
+            if (entity) {
+                this.game.entitys[i] = new Entity_1.default(entity.position, this.game.models[entity.model]);
+            }
+        }
     };
     Communicator.prototype.sendInput = function (v) {
         this.websocket.send(JSON.stringify(v));
@@ -127,13 +151,14 @@ var Communicator = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Communicator;
-},{"./Vector":10}],3:[function(require,module,exports){
+},{"./Entity":3,"./Vector":10}],3:[function(require,module,exports){
 "use strict";
 var Vector_1 = require("./Vector");
 var Entity = (function () {
-    function Entity(_a) {
-        var _b = _a.positionX, positionX = _b === void 0 ? 0 : _b, _c = _a.positionY, positionY = _c === void 0 ? 0 : _c, model = _a.model;
-        this.position = new Vector_1.default(positionX, positionY);
+    function Entity(position, model, force, velocity) {
+        if (force === void 0) { force = new Vector_1.default(0, 0); }
+        if (velocity === void 0) { velocity = new Vector_1.default(0, 0); }
+        this.position = new Vector_1.default(position);
         this.velocity = new Vector_1.default(0, 0);
         this.force = new Vector_1.default(0, 0);
         this.model = model;
@@ -179,6 +204,13 @@ var Entity = (function () {
         ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.lastSprite), 0, this.model.textureSize.x, this.model.textureSize.y, 0, 0, this.model.textureSize.x, this.model.textureSize.y);
         ctx.restore();
     };
+    Entity.prototype.getModel = function (models) {
+        for (var name in models) {
+            if (this.model == models[name]) {
+                return name;
+            }
+        }
+    };
     return Entity;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -186,7 +218,6 @@ exports.default = Entity;
 },{"./Vector":10}],4:[function(require,module,exports){
 "use strict";
 var Model_1 = require("./Model");
-var Entity_1 = require("./Entity");
 var Game = (function () {
     function Game(config, timeFunction) {
         this.config = config;
@@ -198,38 +229,18 @@ var Game = (function () {
         for (var name in this.config.models) {
             this.models[name] = new Model_1.default(this.config.models[name]);
         }
-        this.addEntity(new Entity_1.default({
-            positionX: 300,
-            positionY: 70,
-            model: this.models['duck'],
-        }));
-        this.addEntity(new Entity_1.default({
-            positionX: 0,
-            positionY: 0,
-            model: this.models['house'],
-        }));
-        this.addEntity(new Entity_1.default({
-            positionX: 700,
-            positionY: 700,
-            model: this.models['house'],
-        }));
         this.expectedInterval = this.timeFunction() + this.config.gameLoopInterval;
-        setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval);
+        setInterval(this.gameLoop.bind(this), this.config.gameLoopInterval, this.config.gameLoopInterval);
     }
     Game.prototype.addEntity = function (entity) {
         this.entitys.push(entity);
     };
     Game.prototype.gameLoop = function () {
         this.specialInput();
-        var overtime = this.timeFunction() - this.expectedInterval;
-        if (overtime > this.config.gameLoopInterval) {
-            this.overtimeError(overtime);
-            this.expectedInterval = this.timeFunction();
-        }
-        var delay = (overtime + this.config.gameLoopInterval) / 1000;
+        var delay = 16 / 1000;
         for (var i = 0; i < this.entitys.length; i++) {
             var entity = this.entitys[i];
-            if (!entity.model.static) {
+            if (entity && !entity.model.static) {
                 var acceleration = entity.force.scale(2000);
                 var friction = 0.8;
                 entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(.92);
@@ -237,7 +248,7 @@ var Game = (function () {
                 var collision = false;
                 for (var o = 0; o < this.entitys.length; o++) {
                     var entity2 = this.entitys[o];
-                    if (entity != entity2 && entity.model.solid && entity2.model.solid) {
+                    if (entity2 && entity != entity2 && entity.model.solid && entity2.model.solid) {
                         if (entity.model.hitbox.checkCollision(position, entity2.position, entity2.model.hitbox)) {
                             collision = true;
                         }
@@ -251,8 +262,6 @@ var Game = (function () {
                 }
             }
         }
-        this.expectedInterval += this.config.gameLoopInterval;
-        setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval - overtime);
     };
     Game.prototype.overtimeError = function (overtime) {
         console.error("overtimeError: " + overtime);
@@ -275,7 +284,7 @@ var Game = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Game;
-},{"./Entity":3,"./Model":7}],5:[function(require,module,exports){
+},{"./Model":7}],5:[function(require,module,exports){
 "use strict";
 var Vector_1 = require("./Vector");
 var Rectangle_1 = require("./Rectangle");
@@ -318,19 +327,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Hitbox;
 },{"./Rectangle":8,"./Vector":10}],6:[function(require,module,exports){
 "use strict";
-var Entity_1 = require("./Entity");
 var Vector_1 = require("./Vector");
 var Input = (function () {
     function Input(game, communicator) {
         var _this = this;
         this.game = game;
         this.communicator = communicator;
-        this.player = new Entity_1.default({
-            positionX: 300,
-            positionY: 300,
-            model: this.game.models['duck'],
-        });
-        this.game.addEntity(this.player);
         this.keys = {
             w: false,
             a: false,
@@ -342,20 +344,19 @@ var Input = (function () {
             ArrowRigth: false,
         };
         var keys = this.keys;
-        var player = this.player;
         window.addEventListener('keydown', function (e) {
             if (_this.keys.hasOwnProperty(e.key)) {
                 _this.keys[e.key] = true;
-                _this.player.force = _this.direction();
-                _this.communicator.sendInput({ action: "updateMovement", params: { arrayPosition: 3, force: _this.direction() } });
+                _this.communicator.player.force = _this.direction();
+                _this.communicator.sendInput({ action: "force", params: _this.direction() });
                 e.preventDefault();
             }
         });
         window.addEventListener('keyup', function (e) {
             if (_this.keys.hasOwnProperty(e.key)) {
                 _this.keys[e.key] = false;
-                _this.player.force = _this.direction();
-                _this.communicator.sendInput({ action: "updateMovement", params: { arrayPosition: 3, force: _this.direction() } });
+                _this.communicator.player.force = _this.direction();
+                _this.communicator.sendInput({ action: "force", params: _this.direction() });
                 e.preventDefault();
             }
         });
@@ -380,7 +381,7 @@ var Input = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Input;
-},{"./Entity":3,"./Vector":10}],7:[function(require,module,exports){
+},{"./Vector":10}],7:[function(require,module,exports){
 "use strict";
 var Hitbox_1 = require("./Hitbox");
 var Model = (function () {
@@ -465,9 +466,11 @@ var Render = (function () {
         this.ctx.translate(this.origin.position.x * -1 + this.canvas.width / 2, this.origin.position.y * -1 + this.canvas.height / 2);
         for (var i = 0; i < this.game.entitys.length; i++) {
             var entity = this.game.entitys[i];
-            entity.renderTexture(this.ctx);
-            for (var i_1 = 0; i_1 < entity.model.hitbox.hitboxes.length; i_1++) {
-                entity.model.hitbox.hitboxes[i_1].drawRect(entity.position, this.ctx);
+            if (entity) {
+                entity.renderTexture(this.ctx);
+                for (var i_1 = 0; i_1 < entity.model.hitbox.hitboxes.length; i_1++) {
+                    entity.model.hitbox.hitboxes[i_1].drawRect(entity.position, this.ctx);
+                }
             }
         }
         this.ctx.restore();

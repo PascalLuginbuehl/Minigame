@@ -1,17 +1,10 @@
 "use strict";
-var Entity_1 = require("./Entity");
 var Vector_1 = require("./Vector");
 var Input = (function () {
     function Input(game, communicator) {
         var _this = this;
         this.game = game;
         this.communicator = communicator;
-        this.player = new Entity_1.default({
-            positionX: 300,
-            positionY: 300,
-            model: this.game.models['duck'],
-        });
-        this.game.addEntity(this.player);
         this.keys = {
             w: false,
             a: false,
@@ -23,20 +16,19 @@ var Input = (function () {
             ArrowRigth: false,
         };
         var keys = this.keys;
-        var player = this.player;
         window.addEventListener('keydown', function (e) {
             if (_this.keys.hasOwnProperty(e.key)) {
                 _this.keys[e.key] = true;
-                _this.player.force = _this.direction();
-                _this.communicator.sendInput({ action: "updateMovement", params: { arrayPosition: 3, force: _this.direction() } });
+                _this.communicator.player.force = _this.direction();
+                _this.communicator.sendInput({ action: "force", params: _this.direction() });
                 e.preventDefault();
             }
         });
         window.addEventListener('keyup', function (e) {
             if (_this.keys.hasOwnProperty(e.key)) {
                 _this.keys[e.key] = false;
-                _this.player.force = _this.direction();
-                _this.communicator.sendInput({ action: "updateMovement", params: { arrayPosition: 3, force: _this.direction() } });
+                _this.communicator.player.force = _this.direction();
+                _this.communicator.sendInput({ action: "force", params: _this.direction() });
                 e.preventDefault();
             }
         });

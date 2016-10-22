@@ -1,5 +1,7 @@
 /// <reference path="../../definitions/node.d.ts"/>
-import Game from "./../common/Classes/Game";
+import Game from "../common/Classes/Game";
+import Entity from "../common/Classes/Entity";
+import V from "../common/Classes/Vector";
 import Communicator from "./../server/Communicator";
 
 const express = require('express')
@@ -119,10 +121,20 @@ let game = new Game({
 }, getTime);
 
 
+game.addEntity(new Entity(
+  new V(0, 0),
+  game.models['house'],
+));
+
+game.addEntity(new Entity(
+  new V(700, 700),
+  game.models['house'],
+));
+
 
 let communicator = new Communicator(game, app, expressWs);
 
 
 
 
-app.listen(80);
+app.listen(8080);

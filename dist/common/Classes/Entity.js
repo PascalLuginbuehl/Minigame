@@ -1,9 +1,10 @@
 "use strict";
 var Vector_1 = require("./Vector");
 var Entity = (function () {
-    function Entity(_a) {
-        var _b = _a.positionX, positionX = _b === void 0 ? 0 : _b, _c = _a.positionY, positionY = _c === void 0 ? 0 : _c, model = _a.model;
-        this.position = new Vector_1.default(positionX, positionY);
+    function Entity(position, model, force, velocity) {
+        if (force === void 0) { force = new Vector_1.default(0, 0); }
+        if (velocity === void 0) { velocity = new Vector_1.default(0, 0); }
+        this.position = new Vector_1.default(position);
         this.velocity = new Vector_1.default(0, 0);
         this.force = new Vector_1.default(0, 0);
         this.model = model;
@@ -48,6 +49,13 @@ var Entity = (function () {
         ctx.translate(this.position.x, this.position.y);
         ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.lastSprite), 0, this.model.textureSize.x, this.model.textureSize.y, 0, 0, this.model.textureSize.x, this.model.textureSize.y);
         ctx.restore();
+    };
+    Entity.prototype.getModel = function (models) {
+        for (var name in models) {
+            if (this.model == models[name]) {
+                return name;
+            }
+        }
     };
     return Entity;
 }());

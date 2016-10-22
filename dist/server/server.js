@@ -1,5 +1,7 @@
 "use strict";
-var Game_1 = require("./../common/Classes/Game");
+var Game_1 = require("../common/Classes/Game");
+var Entity_1 = require("../common/Classes/Entity");
+var Vector_1 = require("../common/Classes/Vector");
 var Communicator_1 = require("./../server/Communicator");
 var express = require('express'), app = express(), exphbs = require('express-handlebars'), bodyParser = require('body-parser'), formidable = require('express-formidable'), session = require('express-session'), expressWs = require('express-ws')(app);
 app.use('/assets', express.static('dist/client'));
@@ -87,5 +89,7 @@ var game = new Game_1.default({
         }
     },
 }, getTime);
+game.addEntity(new Entity_1.default(new Vector_1.default(0, 0), game.models['house']));
+game.addEntity(new Entity_1.default(new Vector_1.default(700, 700), game.models['house']));
 var communicator = new Communicator_1.default(game, app, expressWs);
-app.listen(80);
+app.listen(8080);

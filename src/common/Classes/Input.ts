@@ -9,21 +9,13 @@ import V from "./Vector";
 class Input {
   game: Game
   communicator: Communicator;
-  player: Entity;
   keys: any;
 
   constructor(game, communicator) {
     this.game = game;
     this.communicator = communicator;
 
-    this.player = new Entity({
-      positionX: 300,
-      positionY: 300,
 
-      model: this.game.models['duck'],
-    });
-
-    this.game.addEntity(this.player);
 
     this.keys = {
       w: false,
@@ -35,18 +27,17 @@ class Input {
       ArrowDown: false,
       ArrowRigth: false,
     }
-
+    // console.log(communicator);
 
     let keys = this.keys;
-    let player = this.player;
-
 
     window.addEventListener('keydown', (e) => {
+      // console.log(this.communicator);
       if (this.keys.hasOwnProperty(e.key)) {
         this.keys[e.key] = true;
-        this.player.force = this.direction();
+        this.communicator.player.force = this.direction();
 
-        this.communicator.sendInput({action: "updateMovement",  params: {arrayPosition: 3, force: this.direction()}});
+        this.communicator.sendInput({action: "force",  params: this.direction()});
         e.preventDefault();
       }
     });
@@ -54,9 +45,9 @@ class Input {
     window.addEventListener('keyup', (e) => {
       if (this.keys.hasOwnProperty(e.key)) {
         this.keys[e.key] = false;
-        this.player.force = this.direction();
+        this.communicator.player.force = this.direction();
 
-        this.communicator.sendInput({action: "updateMovement",  params: {arrayPosition: 3, force: this.direction()}});
+        this.communicator.sendInput({action: "force",  params: this.direction()});
         e.preventDefault();
       }
     });
