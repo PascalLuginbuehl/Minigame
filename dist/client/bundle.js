@@ -71,7 +71,9 @@ var input = new Input_1.default(game, communicator);
 document.addEventListener('DOMContentLoaded', function () {
     var render = new Render_1.default(game, document.body, {
         renderHitbox: true
-    }, communicator.player);
+    }, function () {
+        return communicator.player.position;
+    });
 });
 },{"./../../common/Classes/Communicator":2,"./../../common/Classes/Game":4,"./../../common/Classes/Input":6,"./../../common/Classes/Render":9}],2:[function(require,module,exports){
 "use strict";
@@ -90,7 +92,7 @@ var Communicator = (function () {
         };
         setInterval(function () {
             _this.websocket.send(JSON.stringify({ action: "movingElements" }));
-        }, this.game.config.gameLoopInterval * 2);
+        }, this.game.config.gameLoopInterval * 10);
         this.websocket.onmessage = function (e) {
             try {
                 var data = JSON.parse(e.data);
@@ -155,12 +157,12 @@ exports.default = Communicator;
 "use strict";
 var Vector_1 = require("./Vector");
 var Entity = (function () {
-    function Entity(position, model, force, velocity) {
-        if (force === void 0) { force = new Vector_1.default(0, 0); }
+    function Entity(position, model, velocity, force) {
         if (velocity === void 0) { velocity = new Vector_1.default(0, 0); }
+        if (force === void 0) { force = new Vector_1.default(0, 0); }
         this.position = new Vector_1.default(position);
-        this.velocity = new Vector_1.default(0, 0);
-        this.force = new Vector_1.default(0, 0);
+        this.velocity = velocity;
+        this.force = force;
         this.model = model;
     }
     Entity.prototype.renderTexture = function (ctx) {
@@ -435,7 +437,7 @@ exports.default = Rectangle;
 "use strict";
 var Vector_1 = require("./Vector");
 var Render = (function () {
-    function Render(game, canvasParent, debugging, origin) {
+    function Render(game, canvasParent, debugging, positionFn) {
         var _this = this;
         this.canvas = document.createElement('canvas');
         this.canvas.height = this.canvas.height = document.documentElement.clientHeight;
@@ -443,7 +445,7 @@ var Render = (function () {
         canvasParent.appendChild(this.canvas);
         this.canvas.style.imageRendering = "pixelated";
         this.ctx = this.canvas.getContext("2d");
-        this.origin = origin;
+        this.positionFn = positionFn;
         this.game = game;
         this.debugging = debugging;
         for (var name_1 in this.game.models) {
@@ -463,7 +465,7 @@ var Render = (function () {
     Render.prototype.render = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.save();
-        this.ctx.translate(this.origin.position.x * -1 + this.canvas.width / 2, this.origin.position.y * -1 + this.canvas.height / 2);
+        this.ctx.translate(this.positionFn().x * -1 + this.canvas.width / 2, this.positionFn().y * -1 + this.canvas.height / 2);
         for (var i = 0; i < this.game.entitys.length; i++) {
             var entity = this.game.entitys[i];
             if (entity) {

@@ -8,16 +8,16 @@ class Entity {
   position: V;
   lastSprite: number;
 
-  constructor(position: V, model: Model, force: V = new V(0, 0), velocity: V = new V(0, 0)) {
+  constructor(position: V, model: Model, velocity: V = new V(0, 0), force: V = new V(0, 0)) {
     // position
     // left top of hitbox
     this.position = new V(position);
 
     // velocity for movement
-    this.velocity = new V(0, 0);
+    this.velocity = velocity;
 
     // pulls into Direction
-    this.force = new V(0, 0);
+    this.force = force;
 
     // IDEA: z-index
 
@@ -29,6 +29,7 @@ class Entity {
     if (this.lastSprite == undefined || this.lastSprite >= this.model.spriteMax) {
       this.lastSprite = 0;
     }
+    // console.log(this.velocity);
 
     // get direction
     let rad = Math.atan2(this.velocity.x, this.velocity.y);
@@ -68,7 +69,6 @@ class Entity {
         speed = ((this.velocity.x + this.velocity.y) / 2) * -1
         break;
     }
-
 
     this.lastSprite += speed / 500;
     // get direction

@@ -85,5 +85,7 @@ let input = new Input(game, communicator);
 document.addEventListener('DOMContentLoaded', () => {
   let render = new Render(game, document.body, {
     renderHitbox: true
-  }, communicator.player);
+  }, function() {
+    return communicator.player.position;
+  });
 });

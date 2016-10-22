@@ -7,12 +7,12 @@ import Rectangle from "./Rectangle";
 class Render {
   canvas: any;
   ctx: CanvasRenderingContext2D;
-  origin: any;
+  positionFn: Function;
   game: Game;
   debugging: any;
 
 
-  constructor(game, canvasParent, debugging, origin) {
+  constructor(game, canvasParent, debugging, positionFn) {
 
     this.canvas = document.createElement('canvas');
     this.canvas.height = this.canvas.height = document.documentElement.clientHeight;
@@ -24,7 +24,7 @@ class Render {
 
     this.ctx = this.canvas.getContext("2d");
 
-    this.origin = origin;
+    this.positionFn = positionFn;
 
     // preload images
     this.game = game;
@@ -62,7 +62,7 @@ class Render {
   render() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.save();
-    this.ctx.translate(this.origin.position.x * -1 + this.canvas.width/2, this.origin.position.y * -1 + this.canvas.height/2);
+    this.ctx.translate(this.positionFn().x * -1 + this.canvas.width/2, this.positionFn().y * -1 + this.canvas.height/2);
     // Clear old stuff
 
 

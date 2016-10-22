@@ -14,7 +14,7 @@ var Communicator = (function () {
         };
         setInterval(function () {
             _this.websocket.send(JSON.stringify({ action: "movingElements" }));
-        }, this.game.config.gameLoopInterval * 2);
+        }, this.game.config.gameLoopInterval * 10);
         this.websocket.onmessage = function (e) {
             try {
                 var data = JSON.parse(e.data);

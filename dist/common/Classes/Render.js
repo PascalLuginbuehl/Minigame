@@ -1,7 +1,7 @@
 "use strict";
 var Vector_1 = require("./Vector");
 var Render = (function () {
-    function Render(game, canvasParent, debugging, origin) {
+    function Render(game, canvasParent, debugging, positionFn) {
         var _this = this;
         this.canvas = document.createElement('canvas');
         this.canvas.height = this.canvas.height = document.documentElement.clientHeight;
@@ -9,7 +9,7 @@ var Render = (function () {
         canvasParent.appendChild(this.canvas);
         this.canvas.style.imageRendering = "pixelated";
         this.ctx = this.canvas.getContext("2d");
-        this.origin = origin;
+        this.positionFn = positionFn;
         this.game = game;
         this.debugging = debugging;
         for (var name_1 in this.game.models) {
@@ -29,7 +29,7 @@ var Render = (function () {
     Render.prototype.render = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.save();
-        this.ctx.translate(this.origin.position.x * -1 + this.canvas.width / 2, this.origin.position.y * -1 + this.canvas.height / 2);
+        this.ctx.translate(this.positionFn().x * -1 + this.canvas.width / 2, this.positionFn().y * -1 + this.canvas.height / 2);
         for (var i = 0; i < this.game.entitys.length; i++) {
             var entity = this.game.entitys[i];
             if (entity) {

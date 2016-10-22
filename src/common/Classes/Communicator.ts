@@ -33,7 +33,7 @@ class Communicator {
 
     setInterval(() => {
       this.websocket.send(JSON.stringify({action: "movingElements"}))
-    }, this.game.config.gameLoopInterval * 2);
+    }, this.game.config.gameLoopInterval * 10);
     // Log messages from the server
     this.websocket.onmessage = (e) => {
       // console.log(e.data);
