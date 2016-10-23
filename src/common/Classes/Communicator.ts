@@ -11,10 +11,17 @@ class Communicator {
   game: Game;
   player: Entity;
   arrayPosition: number;
+  pingTime: any;
 
   constructor(game) {
     this.game = game;
     this.websocket = new WebSocket('ws://192.168.1.112:8080');
+
+    setInterval(() => {
+      this.pingTime = performance.now();
+      this.websocket.send('{"action": "ping"}');
+    }, 1000)
+
 
     this.player = new Entity(
       new V(300, 300),
@@ -31,9 +38,11 @@ class Communicator {
       console.log('WebSocket Error ' + error);
     };
 
-    setInterval(() => {
-      this.websocket.send(JSON.stringify({action: "movingElements"}))
-    }, this.game.config.gameLoopInterval * 10);
+
+    // setInterval(() => {
+    //   this.websocket.send(JSON.stringify({action: "movingElements"}))
+    // }, this.game.config.gameLoopInterval * 5);
+
     // Log messages from the server
     this.websocket.onmessage = (e) => {
       // console.log(e.data);
@@ -51,6 +60,11 @@ class Communicator {
             break;
           case "player":
             this.createPlayer(data.params);
+            break;
+          case "ping":
+            console.log(performance.now() - this.pingTime);
+            console.log();
+            this.pingTime = performance.now();
             break;
         }
       } catch (e) {
@@ -100,6 +114,7 @@ class Communicator {
           this.game.models[entity.model],
           new V(entity.velocity),
           new V(entity.force),
+           this.game.entitys[i] ? this.game.entitys[i].lastSprite : 0
         );
       }
     }

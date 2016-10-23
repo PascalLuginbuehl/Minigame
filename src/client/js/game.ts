@@ -82,6 +82,10 @@ let game = new Game(CONFIG, function() {return window.performance.now()});
 let communicator = new Communicator(game);
 let input = new Input(game, communicator);
 
+// setInterval(function() {
+//   input.communicator.sendInput({action: "force",  params: {x: Math.round(Math.random() * 2) -1, y: Math.round(Math.random() * 2) -1}});
+// }, 1000);
+
 document.addEventListener('DOMContentLoaded', () => {
   let render = new Render(game, document.body, {
     renderHitbox: true

@@ -40,18 +40,24 @@ export default class Player {
     });
 
     this.ws.on('message', (msg) => {
+      let data = {action: null, params: null};
+
       try {
-        let data = JSON.parse(msg);
-        switch (data.action) {
-          case "movingElements":
-            this.sendMovingElements();
-            break;
-          case "force":
-            this.updateForce(data.params);
-            break;
-        }
+        data = JSON.parse(msg);
       } catch (e) {
         console.log(e);
+      }
+
+      switch (data.action) {
+        case "movingElements":
+          this.sendMovingElements();
+          break;
+        case "force":
+          this.updateForce(data.params);
+          break;
+        case "ping":
+          ws.send('{"action": "ping"}');
+          break;
       }
     });
   }
@@ -68,6 +74,8 @@ export default class Player {
           velocity: entity.velocity,
           force: entity.force
         };
+      } else {
+        elems[i] = null;
       }
     }
     this.send({action: "movingElements", params: elems});

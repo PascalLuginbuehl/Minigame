@@ -8,7 +8,7 @@ class Entity {
   position: V;
   lastSprite: number;
 
-  constructor(position: V, model: Model, velocity: V = new V(0, 0), force: V = new V(0, 0)) {
+  constructor(position: V, model: Model, velocity: V = new V(0, 0), force: V = new V(0, 0), lastSprite = 0) {
     // position
     // left top of hitbox
     this.position = new V(position);
@@ -18,6 +18,8 @@ class Entity {
 
     // pulls into Direction
     this.force = force;
+
+    this.lastSprite = lastSprite;
 
     // IDEA: z-index
 

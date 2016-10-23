@@ -6,15 +6,16 @@ var Communicator = (function () {
         var _this = this;
         this.game = game;
         this.websocket = new WebSocket('ws://192.168.1.112:8080');
+        setInterval(function () {
+            _this.pingTime = performance.now();
+            _this.websocket.send('{"action": "ping"}');
+        }, 1000);
         this.player = new Entity_1.default(new Vector_1.default(300, 300), game.models['duck']);
         this.websocket.onopen = function () {
         };
         this.websocket.onerror = function (error) {
             console.log('WebSocket Error ' + error);
         };
-        setInterval(function () {
-            _this.websocket.send(JSON.stringify({ action: "movingElements" }));
-        }, this.game.config.gameLoopInterval * 10);
         this.websocket.onmessage = function (e) {
             try {
                 var data = JSON.parse(e.data);
@@ -30,6 +31,11 @@ var Communicator = (function () {
                         break;
                     case "player":
                         _this.createPlayer(data.params);
+                        break;
+                    case "ping":
+                        console.log(performance.now() - _this.pingTime);
+                        console.log();
+                        _this.pingTime = performance.now();
                         break;
                 }
             }
@@ -51,7 +57,7 @@ var Communicator = (function () {
         for (var i = 0; i < data.length; i++) {
             var entity = data[i];
             if (entity) {
-                this.game.entitys[i] = new Entity_1.default(entity.position, this.game.models[entity.model], new Vector_1.default(entity.velocity), new Vector_1.default(entity.force));
+                this.game.entitys[i] = new Entity_1.default(entity.position, this.game.models[entity.model], new Vector_1.default(entity.velocity), new Vector_1.default(entity.force), this.game.entitys[i] ? this.game.entitys[i].lastSprite : 0);
             }
         }
         this.player = this.game.entitys[this.arrayPosition];

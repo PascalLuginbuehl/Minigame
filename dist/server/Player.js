@@ -20,19 +20,23 @@ var Player = (function () {
             console.log("err");
         });
         this.ws.on('message', function (msg) {
+            var data = { action: null, params: null };
             try {
-                var data = JSON.parse(msg);
-                switch (data.action) {
-                    case "movingElements":
-                        _this.sendMovingElements();
-                        break;
-                    case "force":
-                        _this.updateForce(data.params);
-                        break;
-                }
+                data = JSON.parse(msg);
             }
             catch (e) {
                 console.log(e);
+            }
+            switch (data.action) {
+                case "movingElements":
+                    _this.sendMovingElements();
+                    break;
+                case "force":
+                    _this.updateForce(data.params);
+                    break;
+                case "ping":
+                    ws.send('{"action": "ping"}');
+                    break;
             }
         });
     }
@@ -48,6 +52,9 @@ var Player = (function () {
                     velocity: entity.velocity,
                     force: entity.force
                 };
+            }
+            else {
+                elems[i] = null;
             }
         }
         this.send({ action: "movingElements", params: elems });

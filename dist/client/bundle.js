@@ -84,15 +84,16 @@ var Communicator = (function () {
         var _this = this;
         this.game = game;
         this.websocket = new WebSocket('ws://192.168.1.112:8080');
+        setInterval(function () {
+            _this.pingTime = performance.now();
+            _this.websocket.send('{"action": "ping"}');
+        }, 1000);
         this.player = new Entity_1.default(new Vector_1.default(300, 300), game.models['duck']);
         this.websocket.onopen = function () {
         };
         this.websocket.onerror = function (error) {
             console.log('WebSocket Error ' + error);
         };
-        setInterval(function () {
-            _this.websocket.send(JSON.stringify({ action: "movingElements" }));
-        }, this.game.config.gameLoopInterval * 10);
         this.websocket.onmessage = function (e) {
             try {
                 var data = JSON.parse(e.data);
@@ -108,6 +109,11 @@ var Communicator = (function () {
                         break;
                     case "player":
                         _this.createPlayer(data.params);
+                        break;
+                    case "ping":
+                        console.log(performance.now() - _this.pingTime);
+                        console.log();
+                        _this.pingTime = performance.now();
                         break;
                 }
             }
@@ -129,7 +135,7 @@ var Communicator = (function () {
         for (var i = 0; i < data.length; i++) {
             var entity = data[i];
             if (entity) {
-                this.game.entitys[i] = new Entity_1.default(entity.position, this.game.models[entity.model], new Vector_1.default(entity.velocity), new Vector_1.default(entity.force));
+                this.game.entitys[i] = new Entity_1.default(entity.position, this.game.models[entity.model], new Vector_1.default(entity.velocity), new Vector_1.default(entity.force), this.game.entitys[i] ? this.game.entitys[i].lastSprite : 0);
             }
         }
         this.player = this.game.entitys[this.arrayPosition];
@@ -157,12 +163,14 @@ exports.default = Communicator;
 "use strict";
 var Vector_1 = require("./Vector");
 var Entity = (function () {
-    function Entity(position, model, velocity, force) {
+    function Entity(position, model, velocity, force, lastSprite) {
         if (velocity === void 0) { velocity = new Vector_1.default(0, 0); }
         if (force === void 0) { force = new Vector_1.default(0, 0); }
+        if (lastSprite === void 0) { lastSprite = 0; }
         this.position = new Vector_1.default(position);
         this.velocity = velocity;
         this.force = force;
+        this.lastSprite = lastSprite;
         this.model = model;
     }
     Entity.prototype.renderTexture = function (ctx) {
@@ -238,7 +246,6 @@ var Game = (function () {
         this.entitys.push(entity);
     };
     Game.prototype.gameLoop = function () {
-        this.specialInput();
         var delay = 16 / 1000;
         for (var i = 0; i < this.entitys.length; i++) {
             var entity = this.entitys[i];
@@ -264,6 +271,7 @@ var Game = (function () {
                 }
             }
         }
+        this.specialInput();
     };
     Game.prototype.overtimeError = function (overtime) {
         console.error("overtimeError: " + overtime);

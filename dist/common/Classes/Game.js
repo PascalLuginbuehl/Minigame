@@ -18,7 +18,6 @@ var Game = (function () {
         this.entitys.push(entity);
     };
     Game.prototype.gameLoop = function () {
-        this.specialInput();
         var delay = 16 / 1000;
         for (var i = 0; i < this.entitys.length; i++) {
             var entity = this.entitys[i];
@@ -44,6 +43,7 @@ var Game = (function () {
                 }
             }
         }
+        this.specialInput();
     };
     Game.prototype.overtimeError = function (overtime) {
         console.error("overtimeError: " + overtime);

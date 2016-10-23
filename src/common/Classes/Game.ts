@@ -50,7 +50,6 @@ export default class Game {
   // catch up loop
   gameLoop() {
     // special for communicator and input
-    this.specialInput();
 
     // let overtime = this.timeFunction() - this.expectedInterval;
 
@@ -121,6 +120,8 @@ export default class Game {
     // console.log(overtime);
     // console.log(this.config.gameLoopInterval - overtime);
     // setTimeout(this.gameLoop.bind(this), this.config.gameLoopInterval - overtime);
+    
+    this.specialInput();
   }
 
   overtimeError(overtime) {

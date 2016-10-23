@@ -1,12 +1,14 @@
 "use strict";
 var Vector_1 = require("./Vector");
 var Entity = (function () {
-    function Entity(position, model, velocity, force) {
+    function Entity(position, model, velocity, force, lastSprite) {
         if (velocity === void 0) { velocity = new Vector_1.default(0, 0); }
         if (force === void 0) { force = new Vector_1.default(0, 0); }
+        if (lastSprite === void 0) { lastSprite = 0; }
         this.position = new Vector_1.default(position);
         this.velocity = velocity;
         this.force = force;
+        this.lastSprite = lastSprite;
         this.model = model;
     }
     Entity.prototype.renderTexture = function (ctx) {
