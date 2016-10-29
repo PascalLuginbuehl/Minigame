@@ -1,264 +1,80 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
-var Game_1 = require("./../../common/Classes/Game");
-var Communicator_1 = require("./../../common/Classes/Communicator");
-var Render_1 = require("./../../common/Classes/Render");
-var Input_1 = require("./../../common/Classes/Input");
-'use strict';
-var CONFIG = {
-    gameLoopInterval: 16,
-    map: {
-        height: 1000,
-        width: 1000,
-    },
-    textureBasepath: 'assets/images/',
-    textures: {
-        'dirt': {
-            texture: 'dirt.png',
-            w: 16,
-            h: 16,
-            spriteMax: 5,
-        },
-        'house': {
-            texture: 'house.png',
-            w: 254,
-            h: 198,
-            spriteMax: 1,
-        },
-        'duck': {
-            texture: 'player.png',
-            w: 16,
-            h: 18,
-            spriteMax: 4,
-        },
-    },
-    models: {
-        'dirt': {
-            solid: true,
-            static: false,
-            hitbox: [{
-                    x: 0,
-                    y: 0,
-                    w: 16,
-                    h: 16,
-                }],
-        },
-        'house': {
-            solid: true,
-            static: true,
-            hitbox: [{
-                    x: 0,
-                    y: 0,
-                    w: 254,
-                    h: 198,
-                }],
-        },
-        'duck': {
-            solid: true,
-            static: false,
-            hitbox: [{
-                    x: 0,
-                    y: 0,
-                    w: 18,
-                    h: 18,
-                }],
-        }
-    },
-};
-var game = new Game_1.default(CONFIG, function () { return window.performance.now(); });
-var communicator = new Communicator_1.default(game);
-var input = new Input_1.default(game, communicator);
+var Game_1 = require("../../common/Game");
+var Render_1 = require("../../common/Render");
+var Vector_1 = require("../../common/Vector");
+var Input_1 = require("../../common/Input");
+var Player_1 = require("../../common/Player");
+var game = new Game_1.default();
+var input = new Input_1.default(game);
+var player = new Player_1.default(input, 1);
 document.addEventListener('DOMContentLoaded', function () {
-    var render = new Render_1.default(game, document.body, {
-        renderHitbox: true
-    }, function () {
-        return communicator.player.position;
+    var render = new Render_1.default(game, document.body, function () {
+        return new Vector_1.default(0, 0);
     });
 });
-},{"./../../common/Classes/Communicator":2,"./../../common/Classes/Game":4,"./../../common/Classes/Input":6,"./../../common/Classes/Render":9}],2:[function(require,module,exports){
+},{"../../common/Game":4,"../../common/Input":6,"../../common/Player":9,"../../common/Render":11,"../../common/Vector":12}],2:[function(require,module,exports){
 "use strict";
-var Vector_1 = require("./Vector");
-var Entity_1 = require("./Entity");
-var Communicator = (function () {
-    function Communicator(game) {
-        var _this = this;
-        this.game = game;
-        this.websocket = new WebSocket('ws://192.168.1.112:8080');
-        setInterval(function () {
-            _this.pingTime = performance.now();
-            _this.websocket.send('{"action": "ping"}');
-        }, 1000);
-        this.player = new Entity_1.default(new Vector_1.default(300, 300), game.models['duck']);
-        this.websocket.onopen = function () {
-        };
-        this.websocket.onerror = function (error) {
-            console.log('WebSocket Error ' + error);
-        };
-        this.websocket.onmessage = function (e) {
-            try {
-                var data = JSON.parse(e.data);
-                switch (data.action) {
-                    case "staticElements":
-                        _this.updateStaticElements(data.params);
-                        break;
-                    case "movingElements":
-                        _this.updateMovingElements(data.params);
-                        break;
-                    case "force":
-                        _this.updateForce(data.params);
-                        break;
-                    case "player":
-                        _this.createPlayer(data.params);
-                        break;
-                    case "ping":
-                        console.log(performance.now() - _this.pingTime);
-                        console.log();
-                        _this.pingTime = performance.now();
-                        break;
-                }
-            }
-            catch (e) {
-                console.error(e);
-            }
-        };
-        this.websocket.onopen = function () {
-            _this.websocket.send('{"action": "staticElements"}');
-        };
-    }
-    Communicator.prototype.updateForce = function (_a) {
-        var arrayPosition = _a.arrayPosition, force = _a.force;
-        this.game.entitys[arrayPosition].force = new Vector_1.default(force);
-    };
-    Communicator.prototype.getMovingElements = function () {
-    };
-    Communicator.prototype.updateMovingElements = function (data) {
-        for (var i = 0; i < data.length; i++) {
-            var entity = data[i];
-            if (entity) {
-                this.game.entitys[i] = new Entity_1.default(entity.position, this.game.models[entity.model], new Vector_1.default(entity.velocity), new Vector_1.default(entity.force), this.game.entitys[i] ? this.game.entitys[i].lastSprite : 0);
-            }
-        }
-        this.player = this.game.entitys[this.arrayPosition];
-    };
-    Communicator.prototype.createPlayer = function (params) {
-        this.arrayPosition = params;
-        this.player = this.game.entitys[params];
-    };
-    Communicator.prototype.updateStaticElements = function (data) {
-        for (var i = 0; i < data.length; i++) {
-            var entity = data[i];
-            if (entity) {
-                this.game.entitys[i] = new Entity_1.default(entity.position, this.game.models[entity.model]);
-            }
-        }
-    };
-    Communicator.prototype.sendInput = function (v) {
-        this.websocket.send(JSON.stringify(v));
-    };
-    return Communicator;
-}());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Communicator;
-},{"./Entity":3,"./Vector":10}],3:[function(require,module,exports){
-"use strict";
-var Vector_1 = require("./Vector");
-var Entity = (function () {
-    function Entity(position, model, velocity, force, lastSprite) {
-        if (velocity === void 0) { velocity = new Vector_1.default(0, 0); }
-        if (force === void 0) { force = new Vector_1.default(0, 0); }
-        if (lastSprite === void 0) { lastSprite = 0; }
-        this.position = new Vector_1.default(position);
-        this.velocity = velocity;
-        this.force = force;
-        this.lastSprite = lastSprite;
+var Body = (function () {
+    function Body(positon, model) {
+        this.position = positon;
         this.model = model;
     }
-    Entity.prototype.renderTexture = function (ctx) {
-        if (this.lastSprite == undefined || this.lastSprite >= this.model.spriteMax) {
-            this.lastSprite = 0;
-        }
-        var rad = Math.atan2(this.velocity.x, this.velocity.y);
-        var a = Math.round(rad * (4 / Math.PI));
-        var direction = (a < -0 ? a * (-1) + 4 : a);
-        var speed = 0;
-        switch (direction) {
-            case 0:
-                speed = this.velocity.y;
-                break;
-            case 1:
-                speed = (this.velocity.x + this.velocity.y) / 2;
-                break;
-            case 2:
-                speed = this.velocity.x;
-                break;
-            case 3:
-                speed = (this.velocity.x + (this.velocity.y * -1)) / 2;
-                break;
-            case 8:
-            case 4:
-                speed = this.velocity.y * -1;
-                break;
-            case 5:
-                speed = ((this.velocity.x * -1) + this.velocity.y) / 2;
-                break;
-            case 6:
-                speed = this.velocity.x * -1;
-                break;
-            case 7:
-                speed = ((this.velocity.x + this.velocity.y) / 2) * -1;
-                break;
-        }
-        this.lastSprite += speed / 500;
-        ctx.save();
-        ctx.translate(this.position.x, this.position.y);
-        ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.lastSprite), 0, this.model.textureSize.x, this.model.textureSize.y, 0, 0, this.model.textureSize.x, this.model.textureSize.y);
-        ctx.restore();
+    Body.prototype.checkCollision = function (body, newPositon) {
+        if (newPositon === void 0) { newPositon = this.position; }
+        return this.model.checkCollision(body.position, newPositon, body.model);
     };
-    Entity.prototype.getModel = function (models) {
-        for (var name in models) {
-            if (this.model == models[name]) {
-                return name;
-            }
-        }
+    Body.prototype.render = function (ctx) {
+        ctx.drawImage(this.model.texture, this.position.x, this.position.y);
     };
-    return Entity;
+    return Body;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Entity;
-},{"./Vector":10}],4:[function(require,module,exports){
+exports.default = Body;
+},{}],3:[function(require,module,exports){
 "use strict";
-var Model_1 = require("./Model");
-var Game = (function () {
-    function Game(config, timeFunction) {
-        this.config = config;
-        this.height = config.map.height;
-        this.width = config.map.width;
-        this.timeFunction = timeFunction;
-        this.entitys = [];
-        this.models = {};
-        for (var name in this.config.models) {
-            this.models[name] = new Model_1.default(this.config.models[name]);
-        }
-        this.expectedInterval = this.timeFunction() + this.config.gameLoopInterval;
-        setInterval(this.gameLoop.bind(this), this.config.gameLoopInterval, this.config.gameLoopInterval);
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Body_1 = require("./Body");
+var Vector_1 = require("./Vector");
+var Entity = (function (_super) {
+    __extends(Entity, _super);
+    function Entity(position, model, force, velocity) {
+        if (force === void 0) { force = new Vector_1.default(0, 0); }
+        if (velocity === void 0) { velocity = new Vector_1.default(0, 0); }
+        _super.call(this, position, model);
+        this.velocity = velocity;
+        this.force = force;
     }
-    Game.prototype.addEntity = function (entity) {
-        this.entitys.push(entity);
-    };
+    return Entity;
+}(Body_1.default));
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Entity;
+},{"./Body":2,"./Vector":12}],4:[function(require,module,exports){
+"use strict";
+var Map_1 = require("./Map");
+var Game = (function () {
+    function Game() {
+        this.map = new Map_1.default();
+        setInterval(this.gameLoop.bind(this), 16);
+    }
     Game.prototype.gameLoop = function () {
         var delay = 16 / 1000;
-        for (var i = 0; i < this.entitys.length; i++) {
-            var entity = this.entitys[i];
-            if (entity && !entity.model.static) {
+        for (var i = 0; i < this.map.entitys.length; i++) {
+            var entity = this.map.entitys[i];
+            if (entity) {
                 var acceleration = entity.force.scale(2000);
-                var friction = 0.8;
-                entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(.92);
+                var friction = .92;
+                entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(friction);
                 var position = entity.position.add(entity.velocity.scale(delay));
                 var collision = false;
-                for (var o = 0; o < this.entitys.length; o++) {
-                    var entity2 = this.entitys[o];
-                    if (entity2 && entity != entity2 && entity.model.solid && entity2.model.solid) {
-                        if (entity.model.hitbox.checkCollision(position, entity2.position, entity2.model.hitbox)) {
+                for (var o = 0; o < this.map.entitys.length; o++) {
+                    var entity2 = this.map.entitys[o];
+                    if (entity2 && entity != entity2) {
+                        if (entity.checkCollision(entity2, position)) {
                             collision = true;
                         }
                     }
@@ -271,47 +87,27 @@ var Game = (function () {
                 }
             }
         }
-        this.specialInput();
-    };
-    Game.prototype.overtimeError = function (overtime) {
-        console.error("overtimeError: " + overtime);
-    };
-    Game.prototype.specialInput = function () {
-    };
-    Game.prototype.exportMap = function () {
-        var returnValue = [];
-        for (var i = 0; i < this.entitys.length; i++) {
-            var entity = this.entitys[i];
-            for (var model in this.models) {
-                if (this.models[model] == entity.model) {
-                    returnValue.push({ position: entity.position, velocity: entity.velocity, force: entity.force, model: model });
-                }
-            }
-        }
-        return returnValue;
     };
     return Game;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Game;
-},{"./Model":7}],5:[function(require,module,exports){
+},{"./Map":7}],5:[function(require,module,exports){
 "use strict";
 var Vector_1 = require("./Vector");
 var Rectangle_1 = require("./Rectangle");
 var Hitbox = (function () {
-    function Hitbox(hitboxconf) {
-        this.hitboxes = [];
-        for (var i = 0; i < hitboxconf.length; i++) {
-            this.hitboxes.push(new Rectangle_1.default(hitboxconf[i]));
-        }
+    function Hitbox(rectangles) {
+        this.rectangles = rectangles;
         this.collisionBox = this.getCollisionBox();
     }
-    Hitbox.prototype.checkCollision = function (origin, eOrigin, eHitbox) {
-        if (this.collisionBox.checkCollision(origin, eOrigin, eHitbox.collisionBox)) {
-            for (var i = 0; i < this.hitboxes.length; i++) {
-                var hitboxes = this.hitboxes[i];
-                for (var o = 0; o < eHitbox.hitboxes.length; o++) {
-                    if (hitboxes.checkCollision(origin, eOrigin, eHitbox.hitboxes[o])) {
+    Hitbox.prototype.checkCollision = function (origin, originHitbox, hitbox) {
+        if (this.collisionBox.checkCollision(origin, originHitbox, hitbox.collisionBox)) {
+            for (var i = 0; i < this.rectangles.length; i++) {
+                for (var o = 0; o < hitbox.rectangles.length; o++) {
+                    var otherRect = hitbox.rectangles[i];
+                    var thisRect = this.rectangles[i];
+                    if (thisRect.checkCollision(origin, originHitbox, otherRect)) {
                         return true;
                     }
                 }
@@ -321,57 +117,107 @@ var Hitbox = (function () {
     };
     Hitbox.prototype.getCollisionBox = function () {
         var max = new Vector_1.default(0, 0);
-        for (var i = 0; i < this.hitboxes.length; i++) {
-            var hitbox = this.hitboxes[i];
+        for (var i = 0; i < this.rectangles.length; i++) {
+            var hitbox = this.rectangles[i];
             max = max.biggest(hitbox.min.add(hitbox.max));
         }
         var min = new Vector_1.default(max.x, max.y);
-        for (var i = 0; i < this.hitboxes.length; i++) {
-            min = min.smalest(this.hitboxes[i].min);
+        for (var i = 0; i < this.rectangles.length; i++) {
+            min = min.smalest(this.rectangles[i].min);
         }
-        return new Rectangle_1.default({ min: min, max: max });
+        return new Rectangle_1.default(min, max);
     };
     return Hitbox;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Hitbox;
-},{"./Rectangle":8,"./Vector":10}],6:[function(require,module,exports){
+},{"./Rectangle":10,"./Vector":12}],6:[function(require,module,exports){
+"use strict";
+var Input = (function () {
+    function Input(game) {
+        this.game = game;
+    }
+    Input.prototype.setForce = function (index, force) {
+        this.game.map.entitys[index].force = force;
+    };
+    Input.prototype.updateEntity = function (index, force, velocity, position) {
+        this.game.map.entitys[index].force = force;
+        this.game.map.entitys[index].position = position;
+        this.game.map.entitys[index].velocity = velocity;
+    };
+    return Input;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Input;
+},{}],7:[function(require,module,exports){
+"use strict";
+var Entity_1 = require("./Entity");
+var Vector_1 = require("./Vector");
+var Model_1 = require("./Model");
+var Hitbox_1 = require("./Hitbox");
+var Rectangle_1 = require("./Rectangle");
+var Map = (function () {
+    function Map() {
+        this.entitys = [
+            new Entity_1.default(new Vector_1.default(10, 10), new Model_1.default(new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(10, 10))
+            ]), "assets/images/dirt.png"), new Vector_1.default(.1, 0)),
+            new Entity_1.default(new Vector_1.default(100, 10), new Model_1.default(new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(10, 10))
+            ]), "assets/images/dirt.png"))
+        ];
+        this.blocks = [];
+        console.log(this.entitys);
+    }
+    return Map;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Map;
+},{"./Entity":3,"./Hitbox":5,"./Model":8,"./Rectangle":10,"./Vector":12}],8:[function(require,module,exports){
+"use strict";
+var Model = (function () {
+    function Model(hitbox, texture) {
+        this.hitbox = hitbox;
+        this.texture = new Image();
+        this.texture.src = texture;
+    }
+    Model.prototype.checkCollision = function (origin, originHitbox, model) {
+        return this.hitbox.checkCollision(origin, originHitbox, model.hitbox);
+    };
+    return Model;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Model;
+},{}],9:[function(require,module,exports){
 "use strict";
 var Vector_1 = require("./Vector");
-var Input = (function () {
-    function Input(game, communicator) {
+var Player = (function () {
+    function Player(input, index) {
         var _this = this;
-        this.game = game;
-        this.communicator = communicator;
+        this.input = input;
+        var date = Date.now();
         this.keys = {
             w: false,
             a: false,
             s: false,
             d: false,
-            ArrowUp: false,
-            ArrowLeft: false,
-            ArrowDown: false,
-            ArrowRigth: false,
         };
-        var keys = this.keys;
         window.addEventListener('keydown', function (e) {
             if (_this.keys.hasOwnProperty(e.key)) {
                 _this.keys[e.key] = true;
-                _this.communicator.player.force = _this.direction();
-                _this.communicator.sendInput({ action: "force", params: _this.direction() });
+                _this.input.setForce(index, _this.getDirection(_this.keys));
                 e.preventDefault();
             }
         });
         window.addEventListener('keyup', function (e) {
             if (_this.keys.hasOwnProperty(e.key)) {
                 _this.keys[e.key] = false;
-                _this.communicator.player.force = _this.direction();
-                _this.communicator.sendInput({ action: "force", params: _this.direction() });
+                _this.input.setForce(index, _this.getDirection(_this.keys));
                 e.preventDefault();
             }
         });
     }
-    Input.prototype.direction = function () {
+    Player.prototype.getDirection = function (keys) {
         var v = new Vector_1.default(0, 0);
         if (this.keys.w) {
             v.y--;
@@ -387,38 +233,16 @@ var Input = (function () {
         }
         return v;
     };
-    return Input;
+    return Player;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Input;
-},{"./Vector":10}],7:[function(require,module,exports){
+exports.default = Player;
+},{"./Vector":12}],10:[function(require,module,exports){
 "use strict";
-var Hitbox_1 = require("./Hitbox");
-var Model = (function () {
-    function Model(_a) {
-        var _b = _a.solid, solid = _b === void 0 ? true : _b, _c = _a.static, staticElem = _c === void 0 ? false : _c, hitbox = _a.hitbox;
-        this.solid = solid;
-        this.static = staticElem;
-        this.hitbox = new Hitbox_1.default(hitbox);
-    }
-    return Model;
-}());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Model;
-},{"./Hitbox":5}],8:[function(require,module,exports){
-"use strict";
-var Vector_1 = require("./Vector");
 var Rectangle = (function () {
-    function Rectangle(_a) {
-        var _b = _a.x, x = _b === void 0 ? 0 : _b, _c = _a.y, y = _c === void 0 ? 0 : _c, _d = _a.w, w = _d === void 0 ? 0 : _d, _e = _a.h, h = _e === void 0 ? 0 : _e, min = _a.min, max = _a.max;
-        if (min != undefined && max != undefined) {
-            this.min = min;
-            this.max = max;
-        }
-        else {
-            this.min = new Vector_1.default(x, y);
-            this.max = new Vector_1.default(w, h);
-        }
+    function Rectangle(min, max) {
+        this.min = min;
+        this.max = max;
     }
     Rectangle.prototype.checkCollision = function (origin, originRect, rect) {
         var rectMin = rect.min.add(originRect);
@@ -428,72 +252,45 @@ var Rectangle = (function () {
         }
         return false;
     };
-    Rectangle.prototype.drawRect = function (position, ctx) {
-        ctx.save();
-        position = position.add(this.min);
-        ctx.translate(position.x, position.y);
-        ctx.fillStyle = "rgba(0, 0, 0, .3)";
-        ctx.fillRect(0, 0, this.max.x, this.max.y);
-        ctx.restore();
-    };
-    ;
     return Rectangle;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Rectangle;
-},{"./Vector":10}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
-var Vector_1 = require("./Vector");
 var Render = (function () {
-    function Render(game, canvasParent, debugging, positionFn) {
+    function Render(game, canvasParent, getRenderPosition) {
         var _this = this;
         this.canvas = document.createElement('canvas');
-        this.canvas.height = this.canvas.height = document.documentElement.clientHeight;
-        this.canvas.width = this.canvas.width = document.documentElement.clientWidth;
         canvasParent.appendChild(this.canvas);
-        this.canvas.style.imageRendering = "pixelated";
-        this.ctx = this.canvas.getContext("2d");
-        this.positionFn = positionFn;
+        this.context = this.canvas.getContext('2d');
         this.game = game;
-        this.debugging = debugging;
-        for (var name_1 in this.game.models) {
-            var img = new Image();
-            var texture = this.game.config.textures[name_1];
-            img.src = "assets/images/" + texture.texture;
-            this.game.models[name_1].spriteMax = texture.spriteMax;
-            this.game.models[name_1].texture = img;
-            this.game.models[name_1].textureSize = new Vector_1.default(texture.w, texture.h);
-        }
+        this.canvas.height = document.documentElement.clientHeight;
+        this.canvas.width = document.documentElement.clientWidth;
         window.addEventListener('resize', function () {
             _this.canvas.width = document.documentElement.clientWidth;
             _this.canvas.height = document.documentElement.clientHeight;
         });
-        setInterval(this.render.bind(this), Math.round(1000 / 60));
+        setInterval(this.renderLoop.bind(this), 16);
     }
-    Render.prototype.render = function () {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.save();
-        this.ctx.translate(this.positionFn().x * -1 + this.canvas.width / 2, this.positionFn().y * -1 + this.canvas.height / 2);
-        for (var i = 0; i < this.game.entitys.length; i++) {
-            var entity = this.game.entitys[i];
-            if (entity) {
-                entity.renderTexture(this.ctx);
-                for (var i_1 = 0; i_1 < entity.model.hitbox.hitboxes.length; i_1++) {
-                    entity.model.hitbox.hitboxes[i_1].drawRect(entity.position, this.ctx);
-                }
-            }
+    Render.prototype.renderLoop = function () {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        for (var i = 0; i < this.game.map.blocks.length; i++) {
+            this.game.map.blocks[i].render(this.context);
         }
-        this.ctx.restore();
+        for (var i = 0; i < this.game.map.entitys.length; i++) {
+            this.game.map.entitys[i].render(this.context);
+        }
     };
     return Render;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Render;
-},{"./Vector":10}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 var V = (function () {
     function V(x, y) {
-        if (x instanceof Object) {
+        if (typeof (x) == "object") {
             this.x = Math.round(x.x * 10) / 10;
             this.y = Math.round(x.y * 10) / 10;
         }
@@ -502,27 +299,27 @@ var V = (function () {
             this.y = Math.round(y * 10) / 10;
         }
     }
-    V.prototype.add = function (v) {
-        return new V(Math.round((v.x + this.x) * 10) / 10, Math.round((v.y + this.y) * 10) / 10);
+    V.prototype.add = function (vector) {
+        return new V(Math.round((vector.x + this.x) * 10) / 10, Math.round((vector.y + this.y) * 10) / 10);
     };
-    V.prototype.subtract = function (v) {
-        return new V(Math.round((this.x - v.x) * 10) / 10, Math.round((this.y - v.y) * 10) / 10);
+    V.prototype.subtract = function (vector) {
+        return new V(Math.round((this.x - vector.x) * 10) / 10, Math.round((this.y - vector.y) * 10) / 10);
     };
     V.prototype.scale = function (s) {
         return new V(Math.round((this.x * s) * 10) / 10, Math.round((this.y * s) * 10) / 10);
     };
-    V.prototype.dot = function (v) {
-        return (this.x * v.x + this.y * v.y);
+    V.prototype.dot = function (vector) {
+        return (this.x * vector.x + this.y * vector.y);
     };
-    V.prototype.cross = function (v) {
-        return (this.x * v.y - this.y * v.x);
+    V.prototype.cross = function (vector) {
+        return (this.x * vector.y - this.y * vector.x);
     };
-    V.prototype.smalest = function (v) {
-        var x = this.x < v.x ? this.x : v.x, y = this.y < v.y ? this.y : v.y;
+    V.prototype.smalest = function (vector) {
+        var x = this.x < vector.x ? this.x : vector.x, y = this.y < vector.y ? this.y : vector.y;
         return new V(x, y);
     };
-    V.prototype.biggest = function (v) {
-        var x = this.x > v.x ? this.x : v.x, y = this.y > v.y ? this.y : v.y;
+    V.prototype.biggest = function (vector) {
+        var x = this.x > vector.x ? this.x : vector.x, y = this.y > vector.y ? this.y : vector.y;
         return new V(x, y);
     };
     V.prototype.rotate = function (angle, vector) {

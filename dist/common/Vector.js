@@ -1,7 +1,7 @@
 "use strict";
 var V = (function () {
     function V(x, y) {
-        if (x instanceof Object) {
+        if (typeof (x) == "object") {
             this.x = Math.round(x.x * 10) / 10;
             this.y = Math.round(x.y * 10) / 10;
         }
@@ -10,27 +10,27 @@ var V = (function () {
             this.y = Math.round(y * 10) / 10;
         }
     }
-    V.prototype.add = function (v) {
-        return new V(Math.round((v.x + this.x) * 10) / 10, Math.round((v.y + this.y) * 10) / 10);
+    V.prototype.add = function (vector) {
+        return new V(Math.round((vector.x + this.x) * 10) / 10, Math.round((vector.y + this.y) * 10) / 10);
     };
-    V.prototype.subtract = function (v) {
-        return new V(Math.round((this.x - v.x) * 10) / 10, Math.round((this.y - v.y) * 10) / 10);
+    V.prototype.subtract = function (vector) {
+        return new V(Math.round((this.x - vector.x) * 10) / 10, Math.round((this.y - vector.y) * 10) / 10);
     };
     V.prototype.scale = function (s) {
         return new V(Math.round((this.x * s) * 10) / 10, Math.round((this.y * s) * 10) / 10);
     };
-    V.prototype.dot = function (v) {
-        return (this.x * v.x + this.y * v.y);
+    V.prototype.dot = function (vector) {
+        return (this.x * vector.x + this.y * vector.y);
     };
-    V.prototype.cross = function (v) {
-        return (this.x * v.y - this.y * v.x);
+    V.prototype.cross = function (vector) {
+        return (this.x * vector.y - this.y * vector.x);
     };
-    V.prototype.smalest = function (v) {
-        var x = this.x < v.x ? this.x : v.x, y = this.y < v.y ? this.y : v.y;
+    V.prototype.smalest = function (vector) {
+        var x = this.x < vector.x ? this.x : vector.x, y = this.y < vector.y ? this.y : vector.y;
         return new V(x, y);
     };
-    V.prototype.biggest = function (v) {
-        var x = this.x > v.x ? this.x : v.x, y = this.y > v.y ? this.y : v.y;
+    V.prototype.biggest = function (vector) {
+        var x = this.x > vector.x ? this.x : vector.x, y = this.y > vector.y ? this.y : vector.y;
         return new V(x, y);
     };
     V.prototype.rotate = function (angle, vector) {
