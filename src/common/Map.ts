@@ -22,9 +22,11 @@ export default class Map {
               )
             ]
           ),
-          "assets/images/dirt.png"
+          "assets/images/dirt.png",
+          "dirt",
+          new V(10, 10),
         ),
-        new V(.1, 0),
+        new V(0, 0),
       ),
 
       new Entity(
@@ -38,7 +40,10 @@ export default class Map {
               )
             ]
           ),
-          "assets/images/dirt.png"
+          "assets/images/player.png",
+          "player",
+          new V(16, 18),
+          4,
         )
       )
     ];

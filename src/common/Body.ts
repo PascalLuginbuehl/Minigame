@@ -6,7 +6,6 @@ import Model from "./Model";
 export default class Body {
   public position: V;
   protected model: Model;
-  private spritePositon: number;
 
   /**
    * constructor for Body
