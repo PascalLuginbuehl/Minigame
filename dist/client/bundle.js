@@ -140,12 +140,16 @@ var Hitbox = (function () {
         this.collisionBox = this.getCollisionBox();
     }
     Hitbox.prototype.checkCollision = function (origin, originHitbox, hitbox) {
-        if (this.collisionBox.checkCollision(origin, originHitbox, hitbox.collisionBox)) {
+        var collisionBox = new Rectangle_1.default(this.collisionBox.min.add(originHitbox), this.collisionBox.max);
+        var collisionBox2 = new Rectangle_1.default(hitbox.collisionBox.min.add(origin), hitbox.collisionBox.max);
+        if (collisionBox.checkCollision(collisionBox2)) {
             for (var i = 0; i < this.rectangles.length; i++) {
                 for (var o = 0; o < hitbox.rectangles.length; o++) {
-                    var otherRect = hitbox.rectangles[i];
+                    var otherRect = hitbox.rectangles[o];
                     var thisRect = this.rectangles[i];
-                    if (thisRect.checkCollision(origin, originHitbox, otherRect)) {
+                    var rect = new Rectangle_1.default(thisRect.min.add(originHitbox), thisRect.max);
+                    var rect2 = new Rectangle_1.default(otherRect.min.add(origin), otherRect.max);
+                    if (rect.checkCollision(rect2)) {
                         return true;
                     }
                 }
@@ -197,11 +201,11 @@ var Rectangle_1 = require("./Rectangle");
 var Map = (function () {
     function Map() {
         this.entitys = [
-            new Entity_1.default(new Vector_1.default(10, 10), new Model_1.default(new Hitbox_1.default([
-                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(10, 10))
+            new Entity_1.default(new Vector_1.default(20, 20), new Model_1.default(new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(10, 10)),
             ]), "assets/images/dirt.png", "dirt", new Vector_1.default(10, 10)), new Vector_1.default(0, 0)),
-            new Entity_1.default(new Vector_1.default(100, 10), new Model_1.default(new Hitbox_1.default([
-                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(10, 10))
+            new Entity_1.default(new Vector_1.default(123, 123), new Model_1.default(new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(16, 18))
             ]), "assets/images/player.png", "player", new Vector_1.default(16, 18), 4))
         ];
         this.blocks = [];
@@ -286,9 +290,9 @@ var Rectangle = (function () {
         this.min = min;
         this.max = max;
     }
-    Rectangle.prototype.checkCollision = function (origin, originRect, rect) {
-        var rectMin = rect.min.add(originRect);
-        var thisMin = this.min.add(origin);
+    Rectangle.prototype.checkCollision = function (rect) {
+        var rectMin = rect.min;
+        var thisMin = this.min;
         if (thisMin.x < rectMin.x + rect.max.x && this.max.x + thisMin.x > rectMin.x && thisMin.y < rect.max.y + rectMin.y && this.max.y + thisMin.y > rectMin.y) {
             return true;
         }

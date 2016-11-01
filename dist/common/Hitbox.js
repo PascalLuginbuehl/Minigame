@@ -7,12 +7,16 @@ var Hitbox = (function () {
         this.collisionBox = this.getCollisionBox();
     }
     Hitbox.prototype.checkCollision = function (origin, originHitbox, hitbox) {
-        if (this.collisionBox.checkCollision(origin, originHitbox, hitbox.collisionBox)) {
+        var collisionBox = new Rectangle_1.default(this.collisionBox.min.add(originHitbox), this.collisionBox.max);
+        var collisionBox2 = new Rectangle_1.default(hitbox.collisionBox.min.add(origin), hitbox.collisionBox.max);
+        if (collisionBox.checkCollision(collisionBox2)) {
             for (var i = 0; i < this.rectangles.length; i++) {
                 for (var o = 0; o < hitbox.rectangles.length; o++) {
-                    var otherRect = hitbox.rectangles[i];
+                    var otherRect = hitbox.rectangles[o];
                     var thisRect = this.rectangles[i];
-                    if (thisRect.checkCollision(origin, originHitbox, otherRect)) {
+                    var rect = new Rectangle_1.default(thisRect.min.add(originHitbox), thisRect.max);
+                    var rect2 = new Rectangle_1.default(otherRect.min.add(origin), otherRect.max);
+                    if (rect.checkCollision(rect2)) {
                         return true;
                     }
                 }

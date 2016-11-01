@@ -26,14 +26,19 @@ export default class Hitbox {
    */
   public checkCollision(origin: V, originHitbox: V, hitbox: Hitbox): boolean {
     // unaccurate collisiondetection for performence reasons
-    if (this.collisionBox.checkCollision(origin, originHitbox, hitbox.collisionBox)) {
-      // accurate colsionsdetection
+    let collisionBox = new Rectangle(this.collisionBox.min.add(originHitbox), this.collisionBox.max)
+    let collisionBox2 = new Rectangle(hitbox.collisionBox.min.add(origin), hitbox.collisionBox.max)
+    if (collisionBox.checkCollision(collisionBox2)) {
+      // accurate collisionsdetection
       for (let i = 0; i < this.rectangles.length; i++) {
         for (let o = 0; o < hitbox.rectangles.length; o++) {
-          let otherRect = hitbox.rectangles[i];
+          let otherRect = hitbox.rectangles[o];
           let thisRect = this.rectangles[i];
 
-          if (thisRect.checkCollision(origin, originHitbox, otherRect)) {
+          let rect = new Rectangle(thisRect.min.add(originHitbox), thisRect.max);
+          let rect2 = new Rectangle(otherRect.min.add(origin), otherRect.max);
+
+          if (rect.checkCollision(rect2)) {
             return true;
           }
         }

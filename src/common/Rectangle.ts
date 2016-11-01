@@ -23,11 +23,9 @@ export default class Rectangle {
    * @param  {Rectangle} rect       Rectangle to check collision with
    * @return {boolean}              wheater or wheater not they collided
    */
-  public checkCollision(origin: V, originRect: V, rect: Rectangle): boolean {
-    let rectMin = rect.min.add(originRect);
-
-    // let thisMin = rect.min.add(origin).add(rect.min);
-    let thisMin = this.min.add(origin);
+  public checkCollision(rect: Rectangle): boolean {
+    let rectMin = rect.min;
+    let thisMin = this.min;
 
     if (thisMin.x < rectMin.x + rect.max.x && this.max.x + thisMin.x > rectMin.x && thisMin.y < rect.max.y + rectMin.y && this.max.y + thisMin.y > rectMin.y) {
       return true;

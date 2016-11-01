@@ -4,9 +4,9 @@ var Rectangle = (function () {
         this.min = min;
         this.max = max;
     }
-    Rectangle.prototype.checkCollision = function (origin, originRect, rect) {
-        var rectMin = rect.min.add(originRect);
-        var thisMin = this.min.add(origin);
+    Rectangle.prototype.checkCollision = function (rect) {
+        var rectMin = rect.min;
+        var thisMin = this.min;
         if (thisMin.x < rectMin.x + rect.max.x && this.max.x + thisMin.x > rectMin.x && thisMin.y < rect.max.y + rectMin.y && this.max.y + thisMin.y > rectMin.y) {
             return true;
         }
