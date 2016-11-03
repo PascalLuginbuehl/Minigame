@@ -51,7 +51,7 @@ var Entity = (function (_super) {
                 break;
         }
         this.spritePositon += speed / 1000;
-        ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.spritePositon), 0, this.model.texture.width / this.model.spriteMax, this.model.texture.height, this.position.x, this.position.y, this.model.textureSize.x, this.model.textureSize.y);
+        ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.spritePositon), 0, this.model.texture.width / this.model.spriteMax, this.model.texture.height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
     };
     return Entity;
 }(Body_1.default));

@@ -4,6 +4,7 @@ var Player = (function () {
     function Player(input, index) {
         var _this = this;
         this.input = input;
+        this.playerIndex = index;
         var date = Date.now();
         this.keys = {
             w: false,

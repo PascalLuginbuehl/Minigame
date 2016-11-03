@@ -10,5 +10,5 @@ var player = new Player_1.default(input, 1);
 document.addEventListener('DOMContentLoaded', function () {
     var render = new Render_1.default(game, document.body, function () {
         return new Vector_1.default(0, 0);
-    });
+    }, game.map.entitys[1]);
 });

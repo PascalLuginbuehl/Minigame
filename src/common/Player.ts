@@ -13,6 +13,7 @@ interface keys {
 export default class Player {
   public input: Input;
   private keys: keys;
+  private playerIndex: number;
 
   /**
    * Constructor for player, initialises listeners
@@ -21,6 +22,8 @@ export default class Player {
    */
   constructor(input: Input, index: number) {
     this.input = input;
+    this.playerIndex = index;
+    
     let date: number = Date.now();
 
     this.keys = {

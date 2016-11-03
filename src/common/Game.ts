@@ -2,14 +2,67 @@ import V from "./Vector";
 import Map from "./Map";
 import Entity from "./Entity";
 import Block from "./Block";
+import Model from "./Model";
+import Hitbox from "./Hitbox";
+import Rectangle from "./Rectangle";
 
+interface AllModels {
+   [s: string]: Model;
+};
 
 /** Class representing a point. */
 export default class Game {
   public map: Map;
+  public models: AllModels;
 
   constructor() {
-    this.map = new Map();
+    this.models = {
+      grass: new Model(
+        new Hitbox(
+          [
+            new Rectangle(
+              new V(0, 0),
+              new V(10, 10),
+            ),
+          ]
+        ),
+        "assets/images/grass.png",
+        "grass",
+        new V(100000, 500),
+        1,
+        true,
+      ),
+      dirt: new Model(
+        new Hitbox(
+          [
+            new Rectangle(
+              new V(0, 0),
+              new V(10, 10),
+            ),
+          ]
+        ),
+        "assets/images/dirt.png",
+        "dirt",
+        new V(10, 10),
+        1,
+      ),
+      player: new Model(
+        new Hitbox(
+          [
+            new Rectangle(
+              new V(0, 0),
+              new V(16, 18)
+            )
+          ]
+        ),
+        "assets/images/player.png",
+        "player",
+        new V(16, 18),
+        4,
+      )
+    };
+
+    this.map = new Map(this);
 
 
     setInterval(this.gameLoop.bind(this), 16);
@@ -34,6 +87,19 @@ export default class Game {
         let position: V = entity.position.add(entity.velocity.scale(delay));
 
         let collision: boolean = false;
+
+        for (let o = 0; o < this.map.blocks.length; o++) {
+          let block: Block = this.map.blocks[o];
+          if (block) {
+
+            // Collision detection
+            if (block.collision) {
+              if (entity.checkCollision(block, position)) {
+                collision = true;
+              }
+            }
+          }
+        }
 
         for (let o = 0; o < this.map.entitys.length; o++) {
           let entity2: Entity = this.map.entitys[o];

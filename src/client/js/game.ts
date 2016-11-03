@@ -11,5 +11,5 @@ let player = new Player(input, 1);
 document.addEventListener('DOMContentLoaded', () => {
   let render = new Render(game, document.body, function() {
     return new V(0, 0);
-  });
+  }, game.map.entitys[1]);
 });

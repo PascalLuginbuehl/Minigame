@@ -11,9 +11,28 @@ var player = new Player_1.default(input, 1);
 document.addEventListener('DOMContentLoaded', function () {
     var render = new Render_1.default(game, document.body, function () {
         return new Vector_1.default(0, 0);
-    });
+    }, game.map.entitys[1]);
 });
-},{"../../common/Game":4,"../../common/Input":6,"../../common/Player":9,"../../common/Render":11,"../../common/Vector":12}],2:[function(require,module,exports){
+},{"../../common/Game":5,"../../common/Input":7,"../../common/Player":10,"../../common/Render":12,"../../common/Vector":13}],2:[function(require,module,exports){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Body_1 = require("./Body");
+var Block = (function (_super) {
+    __extends(Block, _super);
+    function Block(position, model, collision) {
+        if (collision === void 0) { collision = true; }
+        _super.call(this, position, model);
+        this.collision = collision;
+    }
+    return Block;
+}(Body_1.default));
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Block;
+},{"./Body":3}],3:[function(require,module,exports){
 "use strict";
 var Body = (function () {
     function Body(positon, model) {
@@ -25,13 +44,21 @@ var Body = (function () {
         return this.model.checkCollision(body.position, newPositon, body.model);
     };
     Body.prototype.render = function (ctx) {
-        ctx.drawImage(this.model.texture, this.position.x, this.position.y);
+        if (this.model.hasPattern) {
+            var pattern = ctx.createPattern(this.model.texture, "repeat");
+            ctx.rect(this.position.x, this.position.y, this.model.textureSize.x, this.model.textureSize.y);
+            ctx.fillStyle = pattern;
+            ctx.fill();
+        }
+        else {
+            ctx.drawImage(this.model.texture, 0, 0, this.model.texture.width, this.model.texture.height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
+        }
     };
     return Body;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Body;
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -85,18 +112,34 @@ var Entity = (function (_super) {
                 break;
         }
         this.spritePositon += speed / 1000;
-        ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.spritePositon), 0, this.model.texture.width / this.model.spriteMax, this.model.texture.height, this.position.x, this.position.y, this.model.textureSize.x, this.model.textureSize.y);
+        ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.spritePositon), 0, this.model.texture.width / this.model.spriteMax, this.model.texture.height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
     };
     return Entity;
 }(Body_1.default));
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Entity;
-},{"./Body":2,"./Vector":12}],4:[function(require,module,exports){
+},{"./Body":3,"./Vector":13}],5:[function(require,module,exports){
 "use strict";
+var Vector_1 = require("./Vector");
 var Map_1 = require("./Map");
+var Model_1 = require("./Model");
+var Hitbox_1 = require("./Hitbox");
+var Rectangle_1 = require("./Rectangle");
+;
 var Game = (function () {
     function Game() {
-        this.map = new Map_1.default();
+        this.models = {
+            grass: new Model_1.default(new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(10, 10)),
+            ]), "assets/images/grass.png", "grass", new Vector_1.default(100000, 500), 1, true),
+            dirt: new Model_1.default(new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(10, 10)),
+            ]), "assets/images/dirt.png", "dirt", new Vector_1.default(10, 10), 1),
+            player: new Model_1.default(new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(16, 18))
+            ]), "assets/images/player.png", "player", new Vector_1.default(16, 18), 4)
+        };
+        this.map = new Map_1.default(this);
         setInterval(this.gameLoop.bind(this), 16);
     }
     Game.prototype.gameLoop = function () {
@@ -109,6 +152,16 @@ var Game = (function () {
                 entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(friction);
                 var position = entity.position.add(entity.velocity.scale(delay));
                 var collision = false;
+                for (var o = 0; o < this.map.blocks.length; o++) {
+                    var block = this.map.blocks[o];
+                    if (block) {
+                        if (block.collision) {
+                            if (entity.checkCollision(block, position)) {
+                                collision = true;
+                            }
+                        }
+                    }
+                }
                 for (var o = 0; o < this.map.entitys.length; o++) {
                     var entity2 = this.map.entitys[o];
                     if (entity2 && entity != entity2) {
@@ -130,7 +183,7 @@ var Game = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Game;
-},{"./Map":7}],5:[function(require,module,exports){
+},{"./Hitbox":6,"./Map":8,"./Model":9,"./Rectangle":11,"./Vector":13}],6:[function(require,module,exports){
 "use strict";
 var Vector_1 = require("./Vector");
 var Rectangle_1 = require("./Rectangle");
@@ -173,7 +226,7 @@ var Hitbox = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Hitbox;
-},{"./Rectangle":10,"./Vector":12}],6:[function(require,module,exports){
+},{"./Rectangle":11,"./Vector":13}],7:[function(require,module,exports){
 "use strict";
 var Input = (function () {
     function Input(game) {
@@ -191,41 +244,38 @@ var Input = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Input;
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
+var Block_1 = require("./Block");
 var Entity_1 = require("./Entity");
 var Vector_1 = require("./Vector");
-var Model_1 = require("./Model");
-var Hitbox_1 = require("./Hitbox");
-var Rectangle_1 = require("./Rectangle");
 var Map = (function () {
-    function Map() {
-        this.entitys = [
-            new Entity_1.default(new Vector_1.default(20, 20), new Model_1.default(new Hitbox_1.default([
-                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(10, 10)),
-            ]), "assets/images/dirt.png", "dirt", new Vector_1.default(10, 10)), new Vector_1.default(0, 0)),
-            new Entity_1.default(new Vector_1.default(123, 123), new Model_1.default(new Hitbox_1.default([
-                new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(16, 18))
-            ]), "assets/images/player.png", "player", new Vector_1.default(16, 18), 4))
+    function Map(game) {
+        this.blocks = [
+            new Block_1.default(new Vector_1.default(0, 0), game.models["grass"], false),
+            new Block_1.default(new Vector_1.default(20, 20), game.models["dirt"]),
         ];
-        this.blocks = [];
-        console.log(this.entitys);
+        this.entitys = [
+            new Entity_1.default(new Vector_1.default(100, 123), game.models["player"]),
+            new Entity_1.default(new Vector_1.default(123, 123), game.models["player"])
+        ];
     }
     return Map;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Map;
-},{"./Entity":3,"./Hitbox":5,"./Model":8,"./Rectangle":10,"./Vector":12}],8:[function(require,module,exports){
+},{"./Block":2,"./Entity":4,"./Vector":13}],9:[function(require,module,exports){
 "use strict";
 var Model = (function () {
-    function Model(hitbox, texture, name, textureSize, spriteMax) {
+    function Model(hitbox, texturePath, name, textureSize, spriteMax, hasPattern) {
         if (spriteMax === void 0) { spriteMax = 1; }
+        if (hasPattern === void 0) { hasPattern = false; }
         this.hitbox = hitbox;
         this.name = name;
         this.textureSize = textureSize;
+        this.hasPattern = hasPattern;
         this.spriteMax = spriteMax;
-        this.texture = new Image();
-        this.texture.src = texture;
+        this.texturePath = texturePath;
     }
     Model.prototype.checkCollision = function (origin, originHitbox, model) {
         return this.hitbox.checkCollision(origin, originHitbox, model.hitbox);
@@ -234,13 +284,14 @@ var Model = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Model;
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 var Vector_1 = require("./Vector");
 var Player = (function () {
     function Player(input, index) {
         var _this = this;
         this.input = input;
+        this.playerIndex = index;
         var date = Date.now();
         this.keys = {
             w: false,
@@ -283,7 +334,7 @@ var Player = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Player;
-},{"./Vector":12}],10:[function(require,module,exports){
+},{"./Vector":13}],11:[function(require,module,exports){
 "use strict";
 var Rectangle = (function () {
     function Rectangle(min, max) {
@@ -302,37 +353,65 @@ var Rectangle = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Rectangle;
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 var Render = (function () {
-    function Render(game, canvasParent, getRenderPosition) {
+    function Render(game, canvasParent, getRenderPosition, cameraEntity) {
         var _this = this;
+        this.game = game;
+        this.cameraEntity = cameraEntity;
         this.canvas = document.createElement('canvas');
         canvasParent.appendChild(this.canvas);
         this.context = this.canvas.getContext('2d');
-        this.game = game;
         this.canvas.height = document.documentElement.clientHeight;
         this.canvas.width = document.documentElement.clientWidth;
+        this.mapCanvas = document.createElement('canvas');
+        this.mapCanvas.height = 10000;
+        this.mapCanvas.width = 10000;
+        this.mapContext = this.mapCanvas.getContext('2d');
         window.addEventListener('resize', function () {
             _this.canvas.width = document.documentElement.clientWidth;
             _this.canvas.height = document.documentElement.clientHeight;
         });
-        setInterval(this.renderLoop.bind(this), 16);
+        var texturesToLoad = Object.keys(this.game.models).length;
+        var loadedTextures = 0;
+        var _loop_1 = function(modelName) {
+            var model = this_1.game.models[modelName];
+            model.texture = new Image();
+            model.texture.src = model.texturePath;
+            model.texture.addEventListener('load', function () {
+                loadedTextures++;
+                if (model.hasPattern) {
+                    model.pattern = _this.context.createPattern(model.texture, "repeat");
+                }
+                if (loadedTextures >= texturesToLoad) {
+                    for (var i = 0; i < _this.game.map.blocks.length; i++) {
+                        _this.game.map.blocks[i].render(_this.mapContext);
+                    }
+                    setInterval(_this.renderLoop.bind(_this), 16);
+                }
+            });
+        };
+        var this_1 = this;
+        for (var modelName in this.game.models) {
+            _loop_1(modelName);
+        }
     }
     Render.prototype.renderLoop = function () {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        for (var i = 0; i < this.game.map.blocks.length; i++) {
-            this.game.map.blocks[i].render(this.context);
-        }
+        this.context.save();
+        this.context.translate(Math.round(this.cameraEntity.position.x) * -1 + Math.round(this.canvas.width / 2), Math.round(this.cameraEntity.position.y) * -1 + Math.round(this.canvas.height / 2));
+        this.context.drawImage(this.mapCanvas, 0, 0);
         for (var i = 0; i < this.game.map.entitys.length; i++) {
             this.game.map.entitys[i].render(this.context);
         }
+        this.context.restore();
     };
     return Render;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Render;
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 var V = (function () {
     function V(x, y) {
