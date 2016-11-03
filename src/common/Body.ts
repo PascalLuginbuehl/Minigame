@@ -5,7 +5,7 @@ import Model from "./Model";
 /** Body class with basic parameters for positon and hitbox, it also provides a function for cehcking collision */
 export default class Body {
   public position: V;
-  protected model: Model;
+  public model: Model;
 
   /**
    * constructor for Body

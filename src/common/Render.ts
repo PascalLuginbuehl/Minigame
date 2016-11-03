@@ -32,8 +32,8 @@ export default class Render {
 
     // Map canvas
     this.mapCanvas = document.createElement('canvas');
-    this.mapCanvas.height = 10000;
-    this.mapCanvas.width = 10000;
+    this.mapCanvas.height = this.game.map.size.x;
+    this.mapCanvas.width = this.game.map.size.x;
 
     this.mapContext = this.mapCanvas.getContext('2d');
 

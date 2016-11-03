@@ -62,7 +62,7 @@ export default class Game {
       )
     };
 
-    this.map = new Map(this);
+    this.map = new Map(this, 1000, 1000);
 
 
     setInterval(this.gameLoop.bind(this), 16);
@@ -113,7 +113,7 @@ export default class Game {
         }
 
         // sets new position or keeps last depending on collision
-        if (collision) {
+        if (collision || !new Rectangle(new V(0, 0), this.map.size).checkCollision(new Rectangle(position, entity.model.hitbox.collisionBox.max))) {
           entity.velocity = entity.velocity.scale(.1);
         } else {
           entity.position = position;

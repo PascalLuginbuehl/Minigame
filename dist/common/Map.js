@@ -3,7 +3,10 @@ var Block_1 = require("./Block");
 var Entity_1 = require("./Entity");
 var Vector_1 = require("./Vector");
 var Map = (function () {
-    function Map(game) {
+    function Map(game, sizeX, sizeY) {
+        if (sizeX === void 0) { sizeX = 1000; }
+        if (sizeY === void 0) { sizeY = 1000; }
+        this.size = new Vector_1.default(sizeX, sizeY);
         this.blocks = [
             new Block_1.default(new Vector_1.default(0, 0), game.models["grass"], false),
             new Block_1.default(new Vector_1.default(20, 20), game.models["dirt"]),

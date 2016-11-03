@@ -3,8 +3,7 @@ import Rectangle from "./Rectangle";
 
 export default class Hitbox {
   protected rectangles: Array<Rectangle>;
-  private collisionBox: Rectangle;
-  public test: string;
+  public collisionBox: Rectangle;
 
 
   /**

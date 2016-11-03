@@ -18,7 +18,7 @@ var Game = (function () {
                 new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(16, 18))
             ]), "assets/images/player.png", "player", new Vector_1.default(16, 18), 4)
         };
-        this.map = new Map_1.default(this);
+        this.map = new Map_1.default(this, 1000, 1000);
         setInterval(this.gameLoop.bind(this), 16);
     }
     Game.prototype.gameLoop = function () {
@@ -49,7 +49,7 @@ var Game = (function () {
                         }
                     }
                 }
-                if (collision) {
+                if (collision || !new Rectangle_1.default(new Vector_1.default(0, 0), this.map.size).checkCollision(new Rectangle_1.default(position, entity.model.hitbox.collisionBox.max))) {
                     entity.velocity = entity.velocity.scale(.1);
                 }
                 else {

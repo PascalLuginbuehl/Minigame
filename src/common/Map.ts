@@ -11,7 +11,9 @@ export default class Map {
   public blocks: Array<Block>;
   public size: V;
 
-  constructor(game: Game) {
+  constructor(game: Game, sizeX: number = 1000, sizeY: number = 1000) {
+    this.size = new V(sizeX, sizeY);
+    
     this.blocks = [
       new Block(
         new V(0, 0),
