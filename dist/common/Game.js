@@ -15,7 +15,7 @@ var Game = (function () {
                 new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(16, 18))
             ]), "assets/images/player.png", "player", new Vector_1.default(16, 18), 4)
         };
-        this.map = new Map_1.default(this, 1000, 16100);
+        this.map = new Map_1.default(this, 1000, 1000);
         setInterval(this.gameLoop.bind(this), 16);
     }
     Game.prototype.gameLoop = function () {
