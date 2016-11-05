@@ -1,5 +1,6 @@
 import Game from "./Game";
 import Entity from "./Entity";
+let dat = require("./dat.gui.js");
 
 /** render class */
 export default class Render {
@@ -33,7 +34,7 @@ export default class Render {
     // Map canvas
     this.mapCanvas = document.createElement('canvas');
     this.mapCanvas.height = this.game.map.size.x;
-    this.mapCanvas.width = this.game.map.size.x;
+    this.mapCanvas.width = this.game.map.size.y;
 
     this.mapContext = this.mapCanvas.getContext('2d');
 
@@ -45,8 +46,21 @@ export default class Render {
 
 
     // Preloading images
-    let texturesToLoad = Object.keys(this.game.models).length;
+    let texturesToLoad = Object.keys(this.game.models).length + 1;
     let loadedTextures = 0;
+
+    // load global background
+    let background = new Image();
+    background.src = "assets/images/grass.png";
+    background.addEventListener('load', () => {
+      loadedTextures++;
+      this.game.map.background = this.context.createPattern(background, "repeat");
+      if (loadedTextures >= texturesToLoad) {
+        this.paintBlocks();
+        setInterval(this.renderLoop.bind(this), 16);
+      }
+    })
+
     for (let modelName in this.game.models) {
       let model = this.game.models[modelName];
       model.texture = new Image();
@@ -58,14 +72,22 @@ export default class Render {
           model.pattern = this.context.createPattern(model.texture, "repeat");
         }
         if (loadedTextures >= texturesToLoad) {
-          for (let i = 0; i < this.game.map.blocks.length; i++) {
-            this.game.map.blocks[i].render(this.mapContext);
-          }
+          this.paintBlocks();
           setInterval(this.renderLoop.bind(this), 16);
         }
       })
     }
     // setInterval(this.renderLoop.bind(this), 16);
+  }
+
+  public paintBlocks(): void {
+    this.mapContext.rect(0, 0, this.mapCanvas.height, this.mapCanvas.width);
+    this.mapContext.fillStyle = this.game.map.background;
+    this.mapContext.fill();
+
+    for (let i = 0; i < this.game.map.blocks.length; i++) {
+      this.game.map.blocks[i].render(this.mapContext);
+    }
   }
 
   /**
@@ -84,5 +106,6 @@ export default class Render {
     }
 
     this.context.restore();
+    requestAnimationFrame(() => {});
   }
 }

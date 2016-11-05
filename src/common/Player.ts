@@ -1,6 +1,12 @@
+/// <reference path="./../../typings/dat-gui.d.ts" />
+
+let dat = require("./dat.gui.js");
+
+
 import Entity from "./Entity";
 import V from "./Vector";
 import Input from "./Input"
+import Render from "./Render"
 
 interface keys {
   w: false,
@@ -11,6 +17,7 @@ interface keys {
 
 /** Player for user input and much more */
 export default class Player {
+  public render: Render;
   public input: Input;
   private keys: keys;
   private playerIndex: number;
@@ -20,10 +27,25 @@ export default class Player {
    * @param  {Input}  input Needs class input to send input to
    * @param  {number} index index of player entity
    */
-  constructor(input: Input, index: number) {
+  constructor(input: Input, index: number, render: Render) {
     this.input = input;
     this.playerIndex = index;
-    
+    this.render = render;
+
+    var text = {
+      message: "LOL",
+      lol: input.game.models["dirt"].textureSize.x,
+      paint: () => {
+        this.render.paintBlocks();
+      }
+    }
+    var gui: dat.GUI = new dat.GUI();
+    gui.add(text, 'message')
+    gui.add(text, 'paint')
+    gui.add(text, 'lol', 0, 500).onChange(function(value) {
+      input.game.models["dirt"].textureSize.x = value;
+    });
+
     let date: number = Date.now();
 
     this.keys = {

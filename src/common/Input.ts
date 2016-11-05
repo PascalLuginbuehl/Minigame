@@ -1,5 +1,6 @@
 import V from "./Vector";
 import Game from "./Game";
+import Render from "./Render";
 
 export default class Input {
   public game: Game;

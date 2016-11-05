@@ -1,4 +1,5 @@
 "use strict";
+var dat = require("./dat.gui.js");
 var Render = (function () {
     function Render(game, canvasParent, getRenderPosition, cameraEntity) {
         var _this = this;
@@ -11,14 +12,24 @@ var Render = (function () {
         this.canvas.width = document.documentElement.clientWidth;
         this.mapCanvas = document.createElement('canvas');
         this.mapCanvas.height = this.game.map.size.x;
-        this.mapCanvas.width = this.game.map.size.x;
+        this.mapCanvas.width = this.game.map.size.y;
         this.mapContext = this.mapCanvas.getContext('2d');
         window.addEventListener('resize', function () {
             _this.canvas.width = document.documentElement.clientWidth;
             _this.canvas.height = document.documentElement.clientHeight;
         });
-        var texturesToLoad = Object.keys(this.game.models).length;
+        var texturesToLoad = Object.keys(this.game.models).length + 1;
         var loadedTextures = 0;
+        var background = new Image();
+        background.src = "assets/images/grass.png";
+        background.addEventListener('load', function () {
+            loadedTextures++;
+            _this.game.map.background = _this.context.createPattern(background, "repeat");
+            if (loadedTextures >= texturesToLoad) {
+                _this.paintBlocks();
+                setInterval(_this.renderLoop.bind(_this), 16);
+            }
+        });
         var _loop_1 = function(modelName) {
             var model = this_1.game.models[modelName];
             model.texture = new Image();
@@ -29,9 +40,7 @@ var Render = (function () {
                     model.pattern = _this.context.createPattern(model.texture, "repeat");
                 }
                 if (loadedTextures >= texturesToLoad) {
-                    for (var i = 0; i < _this.game.map.blocks.length; i++) {
-                        _this.game.map.blocks[i].render(_this.mapContext);
-                    }
+                    _this.paintBlocks();
                     setInterval(_this.renderLoop.bind(_this), 16);
                 }
             });
@@ -41,6 +50,14 @@ var Render = (function () {
             _loop_1(modelName);
         }
     }
+    Render.prototype.paintBlocks = function () {
+        this.mapContext.rect(0, 0, this.mapCanvas.height, this.mapCanvas.width);
+        this.mapContext.fillStyle = this.game.map.background;
+        this.mapContext.fill();
+        for (var i = 0; i < this.game.map.blocks.length; i++) {
+            this.game.map.blocks[i].render(this.mapContext);
+        }
+    };
     Render.prototype.renderLoop = function () {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.save();
@@ -50,6 +67,7 @@ var Render = (function () {
             this.game.map.entitys[i].render(this.context);
         }
         this.context.restore();
+        requestAnimationFrame(function () { });
     };
     return Render;
 }());

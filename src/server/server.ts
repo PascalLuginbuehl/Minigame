@@ -1,4 +1,4 @@
-/// <reference path="../../definitions/node.d.ts"/>
+/// <reference path="../../typings/node.d.ts"/>
 // import Game from "../common/Classes/Game";
 // import Entity from "../common/Classes/Entity";
 // import V from "../common/Classes/Vector";

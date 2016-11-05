@@ -10,17 +10,12 @@ export default class Map {
   public entitys: Array<Entity>;
   public blocks: Array<Block>;
   public size: V;
+  public background: CanvasPattern;
 
   constructor(game: Game, sizeX: number = 1000, sizeY: number = 1000) {
     this.size = new V(sizeX, sizeY);
-    
-    this.blocks = [
-      new Block(
-        new V(0, 0),
-        game.models["grass"],
-        false,
-      ),
 
+    this.blocks = [
       new Block(
         new V(20, 20),
         game.models["dirt"],

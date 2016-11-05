@@ -1,10 +1,25 @@
 "use strict";
+var dat = require("./dat.gui.js");
 var Vector_1 = require("./Vector");
 var Player = (function () {
-    function Player(input, index) {
+    function Player(input, index, render) {
         var _this = this;
         this.input = input;
         this.playerIndex = index;
+        this.render = render;
+        var text = {
+            message: "LOL",
+            lol: input.game.models["dirt"].textureSize.x,
+            paint: function () {
+                _this.render.paintBlocks();
+            }
+        };
+        var gui = new dat.GUI();
+        gui.add(text, 'message');
+        gui.add(text, 'paint');
+        gui.add(text, 'lol', 0, 500).onChange(function (value) {
+            input.game.models["dirt"].textureSize.x = value;
+        });
         var date = Date.now();
         this.keys = {
             w: false,

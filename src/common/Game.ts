@@ -5,6 +5,7 @@ import Block from "./Block";
 import Model from "./Model";
 import Hitbox from "./Hitbox";
 import Rectangle from "./Rectangle";
+import Body from "./Body";
 
 interface AllModels {
    [s: string]: Model;
@@ -17,21 +18,6 @@ export default class Game {
 
   constructor() {
     this.models = {
-      grass: new Model(
-        new Hitbox(
-          [
-            new Rectangle(
-              new V(0, 0),
-              new V(10, 10),
-            ),
-          ]
-        ),
-        "assets/images/grass.png",
-        "grass",
-        new V(100000, 500),
-        1,
-        true,
-      ),
       dirt: new Model(
         new Hitbox(
           [
@@ -86,16 +72,16 @@ export default class Game {
         // new position (now check for collision)
         let position: V = entity.position.add(entity.velocity.scale(delay));
 
-        let collision: boolean = false;
+        let collision: Array<Body> = [];
 
         for (let o = 0; o < this.map.blocks.length; o++) {
           let block: Block = this.map.blocks[o];
           if (block) {
 
-            // Collision detection
             if (block.collision) {
+              // Collision detection
               if (entity.checkCollision(block, position)) {
-                collision = true;
+                collision.push(block);
               }
             }
           }
@@ -107,16 +93,30 @@ export default class Game {
 
             // Collision detection
             if (entity.checkCollision(entity2, position)) {
-              collision = true;
+              collision.push(entity2);
             }
           }
         }
 
         // sets new position or keeps last depending on collision
-        if (collision || !new Rectangle(new V(0, 0), this.map.size).checkCollision(new Rectangle(position, entity.model.hitbox.collisionBox.max))) {
-          entity.velocity = entity.velocity.scale(.1);
+        if (new Rectangle(new V(0, 0), this.map.size).checkCollision(new Rectangle(position, entity.model.hitbox.collisionBox.max))) {
+          if (collision.length > 0) {
+              let newPosition: V = new V(position.x, position.y);
+              let newVelocity: V = new V(entity.velocity.x, entity.velocity.y);
+
+              for (let i = 0; i < collision.length; i++) {
+                let body = collision[i];
+                let ret = entity.getCollisionPosition(newPosition, newVelocity, body)
+                newPosition = ret.position;
+                newVelocity = ret.velocity;
+              }
+              entity.position = newPosition;
+              entity.velocity = newVelocity;
+          } else {
+            entity.position = position;
+          }
         } else {
-          entity.position = position;
+          entity.velocity = entity.velocity.scale(.1);
         }
       }
     }
