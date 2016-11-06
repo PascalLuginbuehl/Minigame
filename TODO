@@ -1,0 +1,5 @@
+[ ] - less new tags
+[ ] - functions to manipulate self instead of new
+[x] - implement stats.js and dat.GUI
+[x] - collision direction keep velocity in other direction
+[ ] - narrow tot target, still a litle open gap between both bodys

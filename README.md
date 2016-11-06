@@ -3,6 +3,9 @@
 ## What is this?
 A 2D multiplayer Minigame written in TypeScript from scratch
 
+## Docs generator
+typedoc
+typedoc --mode file --out docs src/common --module commonjs
 
 ## Todo
 Use extends for Render Entity
