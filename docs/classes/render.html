@@ -67,6 +67,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>render class</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -85,20 +92,22 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="render.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#canvas" class="tsd-kind-icon">canvas</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#ctx" class="tsd-kind-icon">ctx</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#debugging" class="tsd-kind-icon">debugging</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#game" class="tsd-kind-icon">game</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="render.html#positionfn" class="tsd-kind-icon">position<wbr>Fn</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="render.html#cameraentity" class="tsd-kind-icon">camera<wbr>Entity</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="render.html#canvas" class="tsd-kind-icon">canvas</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="render.html#context" class="tsd-kind-icon">context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="render.html#game" class="tsd-kind-icon">game</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="render.html#mapcanvas" class="tsd-kind-icon">map<wbr>Canvas</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="render.html#mapcontext" class="tsd-kind-icon">map<wbr>Context</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="render.html#render-1" class="tsd-kind-icon">render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="render.html#paintblocks" class="tsd-kind-icon">paint<wbr>Blocks</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="render.html#renderloop" class="tsd-kind-icon">render<wbr>Loop</a></li>
 							</ul>
 						</section>
 					</div>
@@ -110,28 +119,48 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Render<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, canvasParent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, debugging<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, positionFn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="render.html" class="tsd-signature-type">Render</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Render<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><a href="game.html" class="tsd-signature-type">Game</a>, canvasParent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span>, getRenderPosition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, cameraEntity<span class="tsd-signature-symbol">: </span><a href="entity.html" class="tsd-signature-type">Entity</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="render.html" class="tsd-signature-type">Render</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in back/Render.ts:12</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Render.ts#L11">Render.ts:11</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>constructor for render, creates canvas, attaches eventlisteners for size, creates renderinterval</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>game: <span class="tsd-signature-type">any</span></h5>
+									<h5>game: <a href="game.html" class="tsd-signature-type">Game</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>game with map and stuff</p>
+										</div>
+									</div>
 								</li>
 								<li>
-									<h5>canvasParent: <span class="tsd-signature-type">any</span></h5>
+									<h5>canvasParent: <span class="tsd-signature-type">HTMLElement</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>parent of canvas on which canvas gets appended</p>
+										</div>
+									</div>
 								</li>
 								<li>
-									<h5>debugging: <span class="tsd-signature-type">any</span></h5>
+									<h5>getRenderPosition: <span class="tsd-signature-type">Function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>function which returns vector which offset it needs</p>
+										</div>
+									</div>
 								</li>
 								<li>
-									<h5>positionFn: <span class="tsd-signature-type">any</span></h5>
+									<h5>cameraEntity: <a href="entity.html" class="tsd-signature-type">Entity</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="render.html" class="tsd-signature-type">Render</a></h4>
@@ -139,55 +168,65 @@
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="cameraentity" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> camera<wbr>Entity</h3>
+					<div class="tsd-signature tsd-kind-icon">camera<wbr>Entity<span class="tsd-signature-symbol">:</span> <a href="entity.html" class="tsd-signature-type">Entity</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Render.ts#L11">Render.ts:11</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="canvas" class="tsd-anchor"></a>
-					<h3>canvas</h3>
-					<div class="tsd-signature tsd-kind-icon">canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> canvas</h3>
+					<div class="tsd-signature tsd-kind-icon">canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLCanvasElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Render.ts:8</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Render.ts#L7">Render.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="ctx" class="tsd-anchor"></a>
-					<h3>ctx</h3>
-					<div class="tsd-signature tsd-kind-icon">ctx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CanvasRenderingContext2D</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="context" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> context</h3>
+					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CanvasRenderingContext2D</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Render.ts:9</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Render.ts#L8">Render.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="debugging" class="tsd-anchor"></a>
-					<h3>debugging</h3>
-					<div class="tsd-signature tsd-kind-icon">debugging<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in back/Render.ts:12</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="game" class="tsd-anchor"></a>
-					<h3>game</h3>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> game</h3>
 					<div class="tsd-signature tsd-kind-icon">game<span class="tsd-signature-symbol">:</span> <a href="game.html" class="tsd-signature-type">Game</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Render.ts:11</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Render.ts#L6">Render.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="positionfn" class="tsd-anchor"></a>
-					<h3>position<wbr>Fn</h3>
-					<div class="tsd-signature tsd-kind-icon">position<wbr>Fn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="mapcanvas" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> map<wbr>Canvas</h3>
+					<div class="tsd-signature tsd-kind-icon">map<wbr>Canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLCanvasElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Render.ts:10</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Render.ts#L9">Render.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="mapcontext" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> map<wbr>Context</h3>
+					<div class="tsd-signature tsd-kind-icon">map<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CanvasRenderingContext2D</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Render.ts#L10">Render.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -195,18 +234,40 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="render-1" class="tsd-anchor"></a>
-					<h3>render</h3>
+					<a name="paintblocks" class="tsd-anchor"></a>
+					<h3>paint<wbr>Blocks</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">paint<wbr>Blocks<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in back/Render.ts:62</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Render.ts#L82">Render.ts:82</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="renderloop" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> render<wbr>Loop</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">render<wbr>Loop<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Render.ts#L95">Render.ts:95</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Renderloop, goes throug all blocks and entitys and draws them on canvas</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -251,6 +312,9 @@
 						<a href="model.html" class="tsd-kind-icon">Model</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="player.html" class="tsd-kind-icon">Player</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="rectangle.html" class="tsd-kind-icon">Rectangle</a>
 					</li>
 				</ul>
@@ -261,23 +325,29 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="render.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="render.html#cameraentity" class="tsd-kind-icon">camera<wbr>Entity</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="render.html#canvas" class="tsd-kind-icon">canvas</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="render.html#ctx" class="tsd-kind-icon">ctx</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="render.html#context" class="tsd-kind-icon">context</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="render.html#debugging" class="tsd-kind-icon">debugging</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="render.html#game" class="tsd-kind-icon">game</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="render.html#positionfn" class="tsd-kind-icon">position<wbr>Fn</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="render.html#mapcanvas" class="tsd-kind-icon">map<wbr>Canvas</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="render.html#mapcontext" class="tsd-kind-icon">map<wbr>Context</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="render.html#render-1" class="tsd-kind-icon">render</a>
+								<a href="render.html#paintblocks" class="tsd-kind-icon">paint<wbr>Blocks</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="render.html#renderloop" class="tsd-kind-icon">render<wbr>Loop</a>
 							</li>
 						</ul>
 					</li>
@@ -287,7 +357,19 @@
 						<a href="v.html" class="tsd-kind-icon">V</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/allmodels.html" class="tsd-kind-icon">All<wbr>Models</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/attackrangeobject.html" class="tsd-kind-icon">attack<wbr>Range<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/keys.html" class="tsd-kind-icon">keys</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
 						<a href="../interfaces/position.html" class="tsd-kind-icon">position</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/updatedvalues.html" class="tsd-kind-icon">updated<wbr>Values</a>
 					</li>
 				</ul>
 			</nav>

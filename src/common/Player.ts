@@ -1,6 +1,5 @@
 /// <reference path="./../../typings/dat-gui.d.ts" />
-
-let dat = require("./dat.gui.js");
+let dat = require("./dat-gui");
 
 
 import Entity from "./Entity";
@@ -37,11 +36,15 @@ export default class Player {
       lol: input.game.models["dirt"].textureSize.x,
       paint: () => {
         this.render.paintBlocks();
+      },
+      attack: () => {
+        this.input.game.attack(1);
       }
     }
     var gui: dat.GUI = new dat.GUI();
     gui.add(text, 'message')
     gui.add(text, 'paint')
+    gui.add(text, 'attack')
     gui.add(text, 'lol', 0, 500).onChange(function(value) {
       input.game.models["dirt"].textureSize.x = value;
     });

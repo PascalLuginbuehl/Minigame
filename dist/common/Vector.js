@@ -40,6 +40,12 @@ var V = (function () {
         var y_prime = vector.y + ((x * Math.sin(angle)) + (y * Math.cos(angle)));
         return new V(x_prime, y_prime);
     };
+    V.prototype.round = function () {
+        return new V(this.x > 0 ? Math.floor(this.x) : Math.ceil(this.x), this.y > 0 ? Math.floor(this.y) : Math.ceil(this.y));
+    };
+    V.prototype.equal = function (v) {
+        return (this.x == v.x && this.y == v.y);
+    };
     return V;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });

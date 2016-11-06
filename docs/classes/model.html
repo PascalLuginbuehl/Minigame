@@ -67,6 +67,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Class for model</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -88,11 +95,13 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#haspattern" class="tsd-kind-icon">has<wbr>Pattern</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#hitbox" class="tsd-kind-icon">hitbox</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#solid" class="tsd-kind-icon">solid</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#pattern" class="tsd-kind-icon">pattern</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#spritemax" class="tsd-kind-icon">sprite<wbr>Max</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#static" class="tsd-kind-icon">static</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#texture" class="tsd-kind-icon">texture</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#texturepath" class="tsd-kind-icon">texture<wbr>Path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="model.html#texturesize" class="tsd-kind-icon">texture<wbr>Size</a></li>
 							</ul>
 						</section>
@@ -111,30 +120,59 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Model<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="model.html" class="tsd-signature-type">Model</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Model<span class="tsd-signature-symbol">(</span>hitbox<span class="tsd-signature-symbol">: </span><a href="hitbox.html" class="tsd-signature-type">Hitbox</a>, texturePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, textureSize<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, spriteMax<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, hasPattern<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="model.html" class="tsd-signature-type">Model</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in back/Model.ts:9</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L13">Model.ts:13</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Constructor</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>__namedParameters: <span class="tsd-signature-type">object</span></h5>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter">
-											<h5>hitbox<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
-										</li>
-										<li class="tsd-parameter">
-											<h5>solid<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5>
-										</li>
-										<li class="tsd-parameter">
-											<h5>static<wbr>Elem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5>
-										</li>
-									</ul>
+									<h5>hitbox: <a href="hitbox.html" class="tsd-signature-type">Hitbox</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Hitbox of Model</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>texturePath: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>name of the model</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>textureSize: <a href="v.html" class="tsd-signature-type">V</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Vector of size of the model</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> spriteMax: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>maximum distance the sprite should go</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> hasPattern: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="model.html" class="tsd-signature-type">Model</a></h4>
@@ -145,23 +183,42 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="hitbox" class="tsd-anchor"></a>
-					<h3>hitbox</h3>
-					<div class="tsd-signature tsd-kind-icon">hitbox<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Hitbox</span></div>
+					<a name="haspattern" class="tsd-anchor"></a>
+					<h3>has<wbr>Pattern</h3>
+					<div class="tsd-signature tsd-kind-icon">has<wbr>Pattern<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Model.ts:6</li>
-							<li>Defined in Model.ts:5</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L12">Model.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="solid" class="tsd-anchor"></a>
-					<h3>solid</h3>
-					<div class="tsd-signature tsd-kind-icon">solid<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="hitbox" class="tsd-anchor"></a>
+					<h3>hitbox</h3>
+					<div class="tsd-signature tsd-kind-icon">hitbox<span class="tsd-signature-symbol">:</span> <a href="hitbox.html" class="tsd-signature-type">Hitbox</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Model.ts:4</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L6">Model.ts:6</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L8">Model.ts:8</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="pattern" class="tsd-anchor"></a>
+					<h3>pattern</h3>
+					<div class="tsd-signature tsd-kind-icon">pattern<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CanvasPattern</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L13">Model.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -171,37 +228,37 @@
 					<div class="tsd-signature tsd-kind-icon">sprite<wbr>Max<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Model.ts:7</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="static" class="tsd-anchor"></a>
-					<h3>static</h3>
-					<div class="tsd-signature tsd-kind-icon">static<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in back/Model.ts:5</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L11">Model.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="texture" class="tsd-anchor"></a>
 					<h3>texture</h3>
-					<div class="tsd-signature tsd-kind-icon">texture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<div class="tsd-signature tsd-kind-icon">texture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLImageElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Model.ts:8</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L7">Model.ts:7</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="texturepath" class="tsd-anchor"></a>
+					<h3>texture<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">texture<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L10">Model.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="texturesize" class="tsd-anchor"></a>
 					<h3>texture<wbr>Size</h3>
-					<div class="tsd-signature tsd-kind-icon">texture<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<div class="tsd-signature tsd-kind-icon">texture<wbr>Size<span class="tsd-signature-symbol">:</span> <a href="v.html" class="tsd-signature-type">V</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Model.ts:9</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L9">Model.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -212,13 +269,13 @@
 					<a name="checkcollision" class="tsd-anchor"></a>
 					<h3>check<wbr>Collision</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">check<wbr>Collision<span class="tsd-signature-symbol">(</span>origin<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span>, originHitbox<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span>, model<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">check<wbr>Collision<span class="tsd-signature-symbol">(</span>origin<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, originHitbox<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, model<span class="tsd-signature-symbol">: </span><a href="model.html" class="tsd-signature-type">Model</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in Model.ts:16</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Model.ts#L39">Model.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -229,13 +286,13 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>origin: <span class="tsd-signature-type">V</span></h5>
+									<h5>origin: <a href="v.html" class="tsd-signature-type">V</a></h5>
 								</li>
 								<li>
-									<h5>originHitbox: <span class="tsd-signature-type">V</span></h5>
+									<h5>originHitbox: <a href="v.html" class="tsd-signature-type">V</a></h5>
 								</li>
 								<li>
-									<h5>model: <span class="tsd-signature-type">Model</span></h5>
+									<h5>model: <a href="model.html" class="tsd-signature-type">Model</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -288,19 +345,25 @@
 								<a href="model.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="model.html#haspattern" class="tsd-kind-icon">has<wbr>Pattern</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="model.html#hitbox" class="tsd-kind-icon">hitbox</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="model.html#solid" class="tsd-kind-icon">solid</a>
+								<a href="model.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="model.html#pattern" class="tsd-kind-icon">pattern</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="model.html#spritemax" class="tsd-kind-icon">sprite<wbr>Max</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="model.html#static" class="tsd-kind-icon">static</a>
+								<a href="model.html#texture" class="tsd-kind-icon">texture</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="model.html#texture" class="tsd-kind-icon">texture</a>
+								<a href="model.html#texturepath" class="tsd-kind-icon">texture<wbr>Path</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="model.html#texturesize" class="tsd-kind-icon">texture<wbr>Size</a>
@@ -313,6 +376,9 @@
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class">
+						<a href="player.html" class="tsd-kind-icon">Player</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="rectangle.html" class="tsd-kind-icon">Rectangle</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -322,7 +388,19 @@
 						<a href="v.html" class="tsd-kind-icon">V</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/allmodels.html" class="tsd-kind-icon">All<wbr>Models</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/attackrangeobject.html" class="tsd-kind-icon">attack<wbr>Range<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/keys.html" class="tsd-kind-icon">keys</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
 						<a href="../interfaces/position.html" class="tsd-kind-icon">position</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/updatedvalues.html" class="tsd-kind-icon">updated<wbr>Values</a>
 					</li>
 				</ul>
 			</nav>

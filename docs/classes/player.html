@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Game | Minigame</title>
+	<title>Player | Minigame</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="game.html">Game</a>
+					<a href="player.html">Player</a>
 				</li>
 			</ul>
-			<h1>Class Game</h1>
+			<h1>Class Player</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +70,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Class representing a point.</p>
+						<p>Player for user input and much more</p>
 					</div>
 				</div>
 			</section>
@@ -78,7 +78,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Game</span>
+						<span class="target">Player</span>
 					</li>
 				</ul>
 			</section>
@@ -89,21 +89,22 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="game.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="player.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="game.html#map" class="tsd-kind-icon">map</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="game.html#models" class="tsd-kind-icon">models</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="player.html#input" class="tsd-kind-icon">input</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="player.html#keys" class="tsd-kind-icon">keys</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="player.html#playerindex" class="tsd-kind-icon">player<wbr>Index</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="player.html#render" class="tsd-kind-icon">render</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="game.html#attack" class="tsd-kind-icon">attack</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="game.html#gameloop" class="tsd-kind-icon">game<wbr>Loop</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="player.html#getdirection" class="tsd-kind-icon">get<wbr>Direction</a></li>
 							</ul>
 						</section>
 					</div>
@@ -115,16 +116,43 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Game<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="game.html" class="tsd-signature-type">Game</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Player<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><a href="input.html" class="tsd-signature-type">Input</a>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, render<span class="tsd-signature-symbol">: </span><a href="render.html" class="tsd-signature-type">Render</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="player.html" class="tsd-signature-type">Player</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Game.ts#L17">Game.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Player.ts#L22">Player.ts:22</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="game.html" class="tsd-signature-type">Game</a></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Constructor for player, initialises listeners</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>input: <a href="input.html" class="tsd-signature-type">Input</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Needs class input to send input to</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>index: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>index of player entity</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>render: <a href="render.html" class="tsd-signature-type">Render</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="player.html" class="tsd-signature-type">Player</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -132,70 +160,77 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="map" class="tsd-anchor"></a>
-					<h3>map</h3>
-					<div class="tsd-signature tsd-kind-icon">map<span class="tsd-signature-symbol">:</span> <a href="map.html" class="tsd-signature-type">Map</a></div>
+					<a name="input" class="tsd-anchor"></a>
+					<h3>input</h3>
+					<div class="tsd-signature tsd-kind-icon">input<span class="tsd-signature-symbol">:</span> <a href="input.html" class="tsd-signature-type">Input</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Game.ts#L16">Game.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Player.ts#L20">Player.ts:20</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="keys" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> keys</h3>
+					<div class="tsd-signature tsd-kind-icon">keys<span class="tsd-signature-symbol">:</span> <a href="../interfaces/keys.html" class="tsd-signature-type">keys</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Player.ts#L21">Player.ts:21</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="playerindex" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> player<wbr>Index</h3>
+					<div class="tsd-signature tsd-kind-icon">player<wbr>Index<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Player.ts#L22">Player.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="models" class="tsd-anchor"></a>
-					<h3>models</h3>
-					<div class="tsd-signature tsd-kind-icon">models<span class="tsd-signature-symbol">:</span> <a href="../interfaces/allmodels.html" class="tsd-signature-type">AllModels</a></div>
+					<a name="render" class="tsd-anchor"></a>
+					<h3>render</h3>
+					<div class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">:</span> <a href="render.html" class="tsd-signature-type">Render</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Game.ts#L17">Game.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Player.ts#L19">Player.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="attack" class="tsd-anchor"></a>
-					<h3>attack</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">attack<span class="tsd-signature-symbol">(</span>index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Game.ts#L57">Game.ts:57</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>index: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="gameloop" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> game<wbr>Loop</h3>
+					<a name="getdirection" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> get<wbr>Direction</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">game<wbr>Loop<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Direction<span class="tsd-signature-symbol">(</span>keys<span class="tsd-signature-symbol">: </span><a href="../interfaces/keys.html" class="tsd-signature-type">keys</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Game.ts#L74">Game.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Player.ts#L87">Player.ts:87</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>function to handle collisiondetection and movement</p>
+									<p>gets direction from pressed keys</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>keys: <a href="../interfaces/keys.html" class="tsd-signature-type">keys</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Object of pressed keys</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="v.html" class="tsd-signature-type">V</a></h4>
+							<p>Vector of direction keys ar going</p>
 						</li>
 					</ul>
 				</section>
@@ -223,30 +258,9 @@
 					<li class=" tsd-kind-class">
 						<a href="entity.html" class="tsd-kind-icon">Entity</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class=" tsd-kind-class">
 						<a href="game.html" class="tsd-kind-icon">Game</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="game.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="game.html#map" class="tsd-kind-icon">map</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="game.html#models" class="tsd-kind-icon">models</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="game.html#attack" class="tsd-kind-icon">attack</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="game.html#gameloop" class="tsd-kind-icon">game<wbr>Loop</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="hitbox.html" class="tsd-kind-icon">Hitbox</a>
 					</li>
@@ -259,9 +273,33 @@
 					<li class=" tsd-kind-class">
 						<a href="model.html" class="tsd-kind-icon">Model</a>
 					</li>
-					<li class=" tsd-kind-class">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
 						<a href="player.html" class="tsd-kind-icon">Player</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="player.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="player.html#input" class="tsd-kind-icon">input</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="player.html#keys" class="tsd-kind-icon">keys</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="player.html#playerindex" class="tsd-kind-icon">player<wbr>Index</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="player.html#render" class="tsd-kind-icon">render</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="player.html#getdirection" class="tsd-kind-icon">get<wbr>Direction</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="rectangle.html" class="tsd-kind-icon">Rectangle</a>
 					</li>

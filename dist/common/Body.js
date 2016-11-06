@@ -31,6 +31,12 @@ var Body = (function () {
             returnVelocity.y = 0;
             returnPosition.y = this.position.y;
         }
+        if (returnPosition.x == newPosition.x && returnPosition.y == newPosition.y) {
+            returnVelocity.x = 0;
+            returnVelocity.y = 0;
+            returnPosition.x = this.position.x;
+            returnPosition.y = this.position.y;
+        }
         return { position: returnPosition, velocity: returnVelocity };
     };
     return Body;

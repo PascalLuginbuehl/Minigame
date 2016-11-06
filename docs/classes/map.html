@@ -88,8 +88,10 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="map.html#background" class="tsd-kind-icon">background</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="map.html#blocks" class="tsd-kind-icon">blocks</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="map.html#entitys" class="tsd-kind-icon">entitys</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="map.html#size" class="tsd-kind-icon">size</a></li>
 							</ul>
 						</section>
 					</div>
@@ -101,15 +103,27 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Map<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="map.html" class="tsd-signature-type">Map</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Map<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><a href="game.html" class="tsd-signature-type">Game</a>, sizeX<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, sizeY<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="map.html" class="tsd-signature-type">Map</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in Map.ts:10</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Map.ts#L13">Map.ts:13</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>game: <a href="game.html" class="tsd-signature-type">Game</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> sizeX: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1000</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> sizeY: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1000</span></h5>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="map.html" class="tsd-signature-type">Map</a></h4>
 						</li>
 					</ul>
@@ -118,22 +132,42 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="background" class="tsd-anchor"></a>
+					<h3>background</h3>
+					<div class="tsd-signature tsd-kind-icon">background<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CanvasPattern</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Map.ts#L13">Map.ts:13</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="blocks" class="tsd-anchor"></a>
 					<h3>blocks</h3>
 					<div class="tsd-signature tsd-kind-icon">blocks<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="block.html" class="tsd-signature-type">Block</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in Map.ts:10</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Map.ts#L11">Map.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="entitys" class="tsd-anchor"></a>
 					<h3>entitys</h3>
-					<div class="tsd-signature tsd-kind-icon">entitys<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">entitys<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="entity.html" class="tsd-signature-type">Entity</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in Map.ts:9</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Map.ts#L10">Map.ts:10</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="size" class="tsd-anchor"></a>
+					<h3>size</h3>
+					<div class="tsd-signature tsd-kind-icon">size<span class="tsd-signature-symbol">:</span> <a href="v.html" class="tsd-signature-type">V</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Map.ts#L12">Map.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -179,10 +213,16 @@
 								<a href="map.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="map.html#background" class="tsd-kind-icon">background</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="map.html#blocks" class="tsd-kind-icon">blocks</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="map.html#entitys" class="tsd-kind-icon">entitys</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="map.html#size" class="tsd-kind-icon">size</a>
 							</li>
 						</ul>
 					</li>
@@ -190,6 +230,9 @@
 				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="model.html" class="tsd-kind-icon">Model</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="player.html" class="tsd-kind-icon">Player</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="rectangle.html" class="tsd-kind-icon">Rectangle</a>
@@ -201,7 +244,19 @@
 						<a href="v.html" class="tsd-kind-icon">V</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/allmodels.html" class="tsd-kind-icon">All<wbr>Models</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/attackrangeobject.html" class="tsd-kind-icon">attack<wbr>Range<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/keys.html" class="tsd-kind-icon">keys</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
 						<a href="../interfaces/position.html" class="tsd-kind-icon">position</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/updatedvalues.html" class="tsd-kind-icon">updated<wbr>Values</a>
 					</li>
 				</ul>
 			</nav>

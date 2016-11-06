@@ -87,6 +87,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Body_1 = require("./Body");
 var Vector_1 = require("./Vector");
+var Rectangle_1 = require("./Rectangle");
+var Hitbox_1 = require("./Hitbox");
 var Entity = (function (_super) {
     __extends(Entity, _super);
     function Entity(position, model, force, velocity) {
@@ -95,50 +97,74 @@ var Entity = (function (_super) {
         _super.call(this, position, model);
         this.velocity = velocity;
         this.force = force;
+        this.lastDirection = 0;
+        var attackRange = 16;
+        this.attackRangeObject = {
+            0: new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, this.model.hitbox.collisionBox.max.y), new Vector_1.default(attackRange, attackRange)),
+            ]),
+            1: new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y / 2), new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y / 2)),
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y), new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y)),
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x / 2, this.model.hitbox.collisionBox.max.y), new Vector_1.default(this.model.hitbox.collisionBox.max.x / 2, this.model.hitbox.collisionBox.max.y))
+            ]),
+            "-1": new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x * -1, this.model.hitbox.collisionBox.max.y / 2), new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y / 2)),
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x * -1, this.model.hitbox.collisionBox.max.y), new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y)),
+                new Rectangle_1.default(new Vector_1.default(0, this.model.hitbox.collisionBox.max.y), new Vector_1.default(this.model.hitbox.collisionBox.max.x / 2, this.model.hitbox.collisionBox.max.y))
+            ]),
+            2: new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x, 0), new Vector_1.default(attackRange, attackRange)),
+            ]),
+            "-2": new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x * -1, 0), new Vector_1.default(attackRange, attackRange)),
+            ]),
+            3: new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x / 2, this.model.hitbox.collisionBox.max.y * -1), new Vector_1.default(this.model.hitbox.collisionBox.max.x / 2, this.model.hitbox.collisionBox.max.y)),
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y * -1), new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y)),
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y), new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y / 2))
+            ]),
+            "-3": new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y * -1), new Vector_1.default(this.model.hitbox.collisionBox.max.x / 2, this.model.hitbox.collisionBox.max.y)),
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y * -1), new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y)),
+                new Rectangle_1.default(new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y), new Vector_1.default(this.model.hitbox.collisionBox.max.x, this.model.hitbox.collisionBox.max.y / 2))
+            ]),
+            4: new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, this.model.hitbox.collisionBox.max.y * -1), new Vector_1.default(attackRange, attackRange)),
+            ]),
+            "-4": new Hitbox_1.default([
+                new Rectangle_1.default(new Vector_1.default(0, this.model.hitbox.collisionBox.max.y * -1), new Vector_1.default(attackRange, attackRange)),
+            ]),
+        };
     }
+    Entity.prototype.inDirectionRange = function (body) {
+        return this.attackRangeObject[this.lastDirection].checkCollision(body.position, this.position, body.model.hitbox);
+    };
+    Entity.prototype.getDirection = function () {
+        if (Math.floor(Math.abs(this.velocity.x)) < 10 && Math.floor(Math.abs(this.velocity.y)) < 10) {
+            return this.lastDirection;
+        }
+        else {
+            var rad = Math.atan2(this.velocity.x, this.velocity.y);
+            return Math.round(rad / Math.PI * 4);
+        }
+    };
     Entity.prototype.render = function (ctx) {
         if (this.spritePositon == undefined || Math.ceil(this.spritePositon) >= this.model.spriteMax) {
             this.spritePositon = 0;
         }
-        var rad = Math.atan2(this.velocity.x, this.velocity.y);
-        var a = Math.round(rad * (4 / Math.PI));
-        var direction = (a < -0 ? a * (-1) + 4 : a);
-        var speed = 0;
-        switch (direction) {
-            case 0:
-                speed = this.velocity.y;
-                break;
-            case 1:
-                speed = (this.velocity.x + this.velocity.y) / 2;
-                break;
-            case 2:
-                speed = this.velocity.x;
-                break;
-            case 3:
-                speed = (this.velocity.x + (this.velocity.y * -1)) / 2;
-                break;
-            case 8:
-            case 4:
-                speed = this.velocity.y * -1;
-                break;
-            case 5:
-                speed = ((this.velocity.x * -1) + this.velocity.y) / 2;
-                break;
-            case 6:
-                speed = this.velocity.x * -1;
-                break;
-            case 7:
-                speed = ((this.velocity.x + this.velocity.y) / 2) * -1;
-                break;
-        }
+        var speed = Math.sqrt(this.velocity.y * this.velocity.y + this.velocity.x * this.velocity.x);
+        ;
+        var direction = this.lastDirection;
         this.spritePositon += speed / 1000;
         ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.spritePositon), 0, this.model.texture.width / this.model.spriteMax, this.model.texture.height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
+        this.attackRangeObject[this.lastDirection].drawHitbox(this.position, ctx);
     };
     return Entity;
 }(Body_1.default));
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Entity;
-},{"./Body":3,"./Vector":13}],5:[function(require,module,exports){
+},{"./Body":3,"./Hitbox":6,"./Rectangle":11,"./Vector":13}],5:[function(require,module,exports){
 "use strict";
 var Vector_1 = require("./Vector");
 var Map_1 = require("./Map");
@@ -159,14 +185,25 @@ var Game = (function () {
         this.map = new Map_1.default(this, 1000, 1000);
         setInterval(this.gameLoop.bind(this), 16);
     }
+    Game.prototype.attack = function (index) {
+        var entity = this.map.entitys[index];
+        var attacked = [];
+        for (var i = 0; i < this.map.entitys.length; i++) {
+            var entity2 = this.map.entitys[i];
+            if (entity != entity2) {
+                entity.inDirectionRange(entity2) ? attacked.push(entity2) : null;
+            }
+        }
+        console.log(attacked);
+    };
     Game.prototype.gameLoop = function () {
         var delay = 16 / 1000;
         for (var i = 0; i < this.map.entitys.length; i++) {
             var entity = this.map.entitys[i];
             if (entity) {
-                var acceleration = entity.force.scale(2000);
-                var friction = .92;
-                entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(friction);
+                var acceleration = entity.force.scale(1500);
+                var friction = .91;
+                entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(friction).round();
                 var position = entity.position.add(entity.velocity.scale(delay));
                 var collision = [];
                 for (var o = 0; o < this.map.blocks.length; o++) {
@@ -207,6 +244,7 @@ var Game = (function () {
                 else {
                     entity.velocity = entity.velocity.scale(.1);
                 }
+                entity.lastDirection = entity.getDirection();
             }
         }
     };
@@ -252,6 +290,11 @@ var Hitbox = (function () {
             min = min.smalest(this.rectangles[i].min);
         }
         return new Rectangle_1.default(min, max);
+    };
+    Hitbox.prototype.drawHitbox = function (origin, ctx) {
+        for (var i = 0; i < this.rectangles.length; i++) {
+            this.rectangles[i].drawRectangle(origin, ctx);
+        }
     };
     return Hitbox;
 }());
@@ -319,7 +362,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Model;
 },{}],10:[function(require,module,exports){
 "use strict";
-var dat = require("./dat.gui.js");
+var dat = require("./dat-gui");
 var Vector_1 = require("./Vector");
 var Player = (function () {
     function Player(input, index, render) {
@@ -332,11 +375,15 @@ var Player = (function () {
             lol: input.game.models["dirt"].textureSize.x,
             paint: function () {
                 _this.render.paintBlocks();
+            },
+            attack: function () {
+                _this.input.game.attack(1);
             }
         };
         var gui = new dat.GUI();
         gui.add(text, 'message');
         gui.add(text, 'paint');
+        gui.add(text, 'attack');
         gui.add(text, 'lol', 0, 500).onChange(function (value) {
             input.game.models["dirt"].textureSize.x = value;
         });
@@ -382,7 +429,7 @@ var Player = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Player;
-},{"./Vector":13,"./dat.gui.js":14}],11:[function(require,module,exports){
+},{"./Vector":13,"./dat-gui":14}],11:[function(require,module,exports){
 "use strict";
 var Rectangle = (function () {
     function Rectangle(min, max) {
@@ -397,13 +444,17 @@ var Rectangle = (function () {
         }
         return false;
     };
+    Rectangle.prototype.drawRectangle = function (origin, ctx) {
+        ctx.fillRect(origin.x + this.min.x, origin.y + this.min.y, this.max.x, this.max.y);
+        ctx.fillStyle = "rgba(0, 0, 0, .5)";
+        ctx.fill();
+    };
     return Rectangle;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Rectangle;
 },{}],12:[function(require,module,exports){
 "use strict";
-var dat = require("./dat.gui.js");
 var Render = (function () {
     function Render(game, canvasParent, getRenderPosition, cameraEntity) {
         var _this = this;
@@ -469,6 +520,7 @@ var Render = (function () {
         this.context.drawImage(this.mapCanvas, 0, 0);
         for (var i = 0; i < this.game.map.entitys.length; i++) {
             this.game.map.entitys[i].render(this.context);
+            this.game.map.entitys[i].model.hitbox.drawHitbox(this.game.map.entitys[i].position, this.context);
         }
         this.context.restore();
         requestAnimationFrame(function () { });
@@ -477,7 +529,7 @@ var Render = (function () {
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Render;
-},{"./dat.gui.js":14}],13:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 var V = (function () {
     function V(x, y) {
@@ -519,6 +571,12 @@ var V = (function () {
         var x_prime = vector.x + ((x * Math.cos(angle)) - (y * Math.sin(angle)));
         var y_prime = vector.y + ((x * Math.sin(angle)) + (y * Math.cos(angle)));
         return new V(x_prime, y_prime);
+    };
+    V.prototype.round = function () {
+        return new V(this.x > 0 ? Math.floor(this.x) : Math.ceil(this.x), this.y > 0 ? Math.floor(this.y) : Math.ceil(this.y));
+    };
+    V.prototype.equal = function (v) {
+        return (this.x == v.x && this.y == v.y);
     };
     return V;
 }());

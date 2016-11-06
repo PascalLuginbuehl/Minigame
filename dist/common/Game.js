@@ -18,14 +18,25 @@ var Game = (function () {
         this.map = new Map_1.default(this, 1000, 1000);
         setInterval(this.gameLoop.bind(this), 16);
     }
+    Game.prototype.attack = function (index) {
+        var entity = this.map.entitys[index];
+        var attacked = [];
+        for (var i = 0; i < this.map.entitys.length; i++) {
+            var entity2 = this.map.entitys[i];
+            if (entity != entity2) {
+                entity.inDirectionRange(entity2) ? attacked.push(entity2) : null;
+            }
+        }
+        console.log(attacked);
+    };
     Game.prototype.gameLoop = function () {
         var delay = 16 / 1000;
         for (var i = 0; i < this.map.entitys.length; i++) {
             var entity = this.map.entitys[i];
             if (entity) {
-                var acceleration = entity.force.scale(2000);
-                var friction = .92;
-                entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(friction);
+                var acceleration = entity.force.scale(1500);
+                var friction = .91;
+                entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(friction).round();
                 var position = entity.position.add(entity.velocity.scale(delay));
                 var collision = [];
                 for (var o = 0; o < this.map.blocks.length; o++) {
@@ -66,6 +77,7 @@ var Game = (function () {
                 else {
                     entity.velocity = entity.velocity.scale(.1);
                 }
+                entity.lastDirection = entity.getDirection();
             }
         }
     };

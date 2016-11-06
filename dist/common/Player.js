@@ -1,5 +1,5 @@
 "use strict";
-var dat = require("./dat.gui.js");
+var dat = require("./dat-gui");
 var Vector_1 = require("./Vector");
 var Player = (function () {
     function Player(input, index, render) {
@@ -12,11 +12,15 @@ var Player = (function () {
             lol: input.game.models["dirt"].textureSize.x,
             paint: function () {
                 _this.render.paintBlocks();
+            },
+            attack: function () {
+                _this.input.game.attack(1);
             }
         };
         var gui = new dat.GUI();
         gui.add(text, 'message');
         gui.add(text, 'paint');
+        gui.add(text, 'attack');
         gui.add(text, 'lol', 0, 500).onChange(function (value) {
             input.game.models["dirt"].textureSize.x = value;
         });

@@ -36,6 +36,11 @@ var Hitbox = (function () {
         }
         return new Rectangle_1.default(min, max);
     };
+    Hitbox.prototype.drawHitbox = function (origin, ctx) {
+        for (var i = 0; i < this.rectangles.length; i++) {
+            this.rectangles[i].drawRectangle(origin, ctx);
+        }
+    };
     return Hitbox;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });

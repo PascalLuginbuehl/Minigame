@@ -69,4 +69,11 @@ export default class Hitbox {
 
     return new Rectangle(min, max);
   }
+
+
+  public drawHitbox(origin: V, ctx: CanvasRenderingContext2D) {
+    for (let i = 0; i < this.rectangles.length; i++) {
+      this.rectangles[i].drawRectangle(origin, ctx);
+    }
+  }
 }

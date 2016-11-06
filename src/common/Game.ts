@@ -54,6 +54,20 @@ export default class Game {
     setInterval(this.gameLoop.bind(this), 16);
   }
 
+  public attack(index: number) {
+    let entity = this.map.entitys[index];
+    let attacked: Array<Entity> = [];
+
+    for (let i = 0; i < this.map.entitys.length; i++) {
+      let entity2 = this.map.entitys[i];
+      if (entity != entity2) {
+        entity.inDirectionRange(entity2) ? attacked.push(entity2) : null;
+      }
+    }
+
+    console.log(attacked);
+  }
+
   /**
    * function to handle collisiondetection and movement
    */
@@ -64,10 +78,11 @@ export default class Game {
     for (let i = 0; i < this.map.entitys.length; i++) {
       let entity: Entity = this.map.entitys[i];
       if (entity) {
-        let acceleration: V = entity.force.scale(2000);
-        let friction: number = .92;
+        let acceleration: V = entity.force.scale(1500);
+        let friction: number = .91;
+        // let friction: number = .92;
 
-        entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(friction);
+        entity.velocity = entity.velocity.add(acceleration.scale(delay)).scale(friction).round();
 
         // new position (now check for collision)
         let position: V = entity.position.add(entity.velocity.scale(delay));
@@ -118,6 +133,9 @@ export default class Game {
         } else {
           entity.velocity = entity.velocity.scale(.1);
         }
+
+        entity.lastDirection = entity.getDirection();
+        // console.log(entity.lastDirection);
       }
     }
   }

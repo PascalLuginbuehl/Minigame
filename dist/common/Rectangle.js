@@ -12,6 +12,11 @@ var Rectangle = (function () {
         }
         return false;
     };
+    Rectangle.prototype.drawRectangle = function (origin, ctx) {
+        ctx.fillRect(origin.x + this.min.x, origin.y + this.min.y, this.max.x, this.max.y);
+        ctx.fillStyle = "rgba(0, 0, 0, .5)";
+        ctx.fill();
+    };
     return Rectangle;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });

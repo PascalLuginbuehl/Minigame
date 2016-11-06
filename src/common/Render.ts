@@ -1,6 +1,5 @@
 import Game from "./Game";
 import Entity from "./Entity";
-let dat = require("./dat.gui.js");
 
 /** render class */
 export default class Render {
@@ -103,6 +102,7 @@ export default class Render {
 
     for (let i = 0; i < this.game.map.entitys.length; i++) {
       this.game.map.entitys[i].render(this.context);
+      this.game.map.entitys[i].model.hitbox.drawHitbox(this.game.map.entitys[i].position, this.context);
     }
 
     this.context.restore();

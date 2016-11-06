@@ -33,4 +33,11 @@ export default class Rectangle {
 
     return false;
   }
+
+
+  public drawRectangle(origin: V, ctx: CanvasRenderingContext2D) {
+    ctx.fillRect(origin.x + this.min.x, origin.y + this.min.y, this.max.x, this.max.y)
+    ctx.fillStyle = "rgba(0, 0, 0, .5)"
+    ctx.fill();
+  }
 }

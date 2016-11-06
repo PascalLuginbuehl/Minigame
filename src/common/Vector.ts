@@ -108,4 +108,14 @@ export default class V {
 
     return new V(x_prime, y_prime);
   }
+
+
+  public round(): V {
+    return new V(this.x > 0 ? Math.floor(this.x) : Math.ceil(this.x), this.y > 0 ? Math.floor(this.y) : Math.ceil(this.y));
+  }
+
+
+  public equal(v: V): boolean {
+    return (this.x == v.x && this.y == v.y);
+  }
 }

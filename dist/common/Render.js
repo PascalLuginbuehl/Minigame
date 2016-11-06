@@ -1,5 +1,4 @@
 "use strict";
-var dat = require("./dat.gui.js");
 var Render = (function () {
     function Render(game, canvasParent, getRenderPosition, cameraEntity) {
         var _this = this;
@@ -65,6 +64,7 @@ var Render = (function () {
         this.context.drawImage(this.mapCanvas, 0, 0);
         for (var i = 0; i < this.game.map.entitys.length; i++) {
             this.game.map.entitys[i].render(this.context);
+            this.game.map.entitys[i].model.hitbox.drawHitbox(this.game.map.entitys[i].position, this.context);
         }
         this.context.restore();
         requestAnimationFrame(function () { });

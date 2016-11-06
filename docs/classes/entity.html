@@ -93,10 +93,12 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="entity.html#attackrangeobject" class="tsd-kind-icon">attack<wbr>Range<wbr>Object</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="entity.html#force" class="tsd-kind-icon">force</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="entity.html#lastsprite" class="tsd-kind-icon">last<wbr>Sprite</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="entity.html#model" class="tsd-kind-icon">model</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="entity.html#position" class="tsd-kind-icon">position</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="entity.html#lastdirection" class="tsd-kind-icon">last<wbr>Direction</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="entity.html#model" class="tsd-kind-icon">model</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="entity.html#position" class="tsd-kind-icon">position</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="entity.html#spritepositon" class="tsd-kind-icon">sprite<wbr>Positon</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="entity.html#velocity" class="tsd-kind-icon">velocity</a></li>
 							</ul>
 						</section>
@@ -104,8 +106,10 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="entity.html#checkcollision" class="tsd-kind-icon">check<wbr>Collision</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="entity.html#getmodel" class="tsd-kind-icon">get<wbr>Model</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="entity.html#rendertexture" class="tsd-kind-icon">render<wbr>Texture</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="entity.html#getcollisionposition" class="tsd-kind-icon">get<wbr>Collision<wbr>Position</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="entity.html#getdirection" class="tsd-kind-icon">get<wbr>Direction</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="entity.html#indirectionrange" class="tsd-kind-icon">in<wbr>Direction<wbr>Range</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="entity.html#render" class="tsd-kind-icon">render</a></li>
 							</ul>
 						</section>
 					</div>
@@ -117,14 +121,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Entity<span class="tsd-signature-symbol">(</span>position<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, model<span class="tsd-signature-symbol">: </span><a href="model.html" class="tsd-signature-type">Model</a>, velocity<span class="tsd-signature-symbol">?: </span><a href="v.html" class="tsd-signature-type">V</a>, force<span class="tsd-signature-symbol">?: </span><a href="v.html" class="tsd-signature-type">V</a>, lastSprite<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="entity.html" class="tsd-signature-type">Entity</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Entity<span class="tsd-signature-symbol">(</span>position<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, model<span class="tsd-signature-symbol">: </span><a href="model.html" class="tsd-signature-type">Model</a>, force<span class="tsd-signature-symbol">?: </span><a href="v.html" class="tsd-signature-type">V</a>, velocity<span class="tsd-signature-symbol">?: </span><a href="v.html" class="tsd-signature-type">V</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="entity.html" class="tsd-signature-type">Entity</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overwrites <a href="body.html">Body</a>.<a href="body.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in back/Entity.ts:9</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Entity.ts#L24">Entity.ts:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -136,13 +140,10 @@
 									<h5>model: <a href="model.html" class="tsd-signature-type">Model</a></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> velocity: <a href="v.html" class="tsd-signature-type">V</a><span class="tsd-signature-symbol"> =&nbsp;new V(0, 0)</span></h5>
-								</li>
-								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> force: <a href="v.html" class="tsd-signature-type">V</a><span class="tsd-signature-symbol"> =&nbsp;new V(0, 0)</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> lastSprite: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> velocity: <a href="v.html" class="tsd-signature-type">V</a><span class="tsd-signature-symbol"> =&nbsp;new V(0, 0)</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="entity.html" class="tsd-signature-type">Entity</a></h4>
@@ -153,56 +154,74 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="force" class="tsd-anchor"></a>
-					<h3>force</h3>
-					<div class="tsd-signature tsd-kind-icon">force<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">V</span></div>
+					<a name="attackrangeobject" class="tsd-anchor"></a>
+					<h3>attack<wbr>Range<wbr>Object</h3>
+					<div class="tsd-signature tsd-kind-icon">attack<wbr>Range<wbr>Object<span class="tsd-signature-symbol">:</span> <a href="../interfaces/attackrangeobject.html" class="tsd-signature-type">attackRangeObject</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Entity.ts:6</li>
-							<li>Defined in Entity.ts:7</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Entity.ts#L24">Entity.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="lastsprite" class="tsd-anchor"></a>
-					<h3>last<wbr>Sprite</h3>
-					<div class="tsd-signature tsd-kind-icon">last<wbr>Sprite<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="force" class="tsd-anchor"></a>
+					<h3>force</h3>
+					<div class="tsd-signature tsd-kind-icon">force<span class="tsd-signature-symbol">:</span> <a href="v.html" class="tsd-signature-type">V</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Entity.ts:9</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Entity.ts#L21">Entity.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="lastdirection" class="tsd-anchor"></a>
+					<h3>last<wbr>Direction</h3>
+					<div class="tsd-signature tsd-kind-icon">last<wbr>Direction<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Entity.ts#L23">Entity.ts:23</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="model" class="tsd-anchor"></a>
 					<h3>model</h3>
 					<div class="tsd-signature tsd-kind-icon">model<span class="tsd-signature-symbol">:</span> <a href="model.html" class="tsd-signature-type">Model</a></div>
 					<aside class="tsd-sources">
-						<p>Overwrites <a href="body.html">Body</a>.<a href="body.html#model">model</a></p>
+						<p>Inherited from <a href="body.html">Body</a>.<a href="body.html#model">model</a></p>
 						<ul>
-							<li>Defined in back/Entity.ts:5</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Body.ts#L13">Body.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="position" class="tsd-anchor"></a>
 					<h3>position</h3>
 					<div class="tsd-signature tsd-kind-icon">position<span class="tsd-signature-symbol">:</span> <a href="v.html" class="tsd-signature-type">V</a></div>
 					<aside class="tsd-sources">
-						<p>Overwrites <a href="body.html">Body</a>.<a href="body.html#position">position</a></p>
+						<p>Inherited from <a href="body.html">Body</a>.<a href="body.html#position">position</a></p>
 						<ul>
-							<li>Defined in back/Entity.ts:8</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Body.ts#L12">Body.ts:12</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="spritepositon" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> sprite<wbr>Positon</h3>
+					<div class="tsd-signature tsd-kind-icon">sprite<wbr>Positon<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Entity.ts#L22">Entity.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="velocity" class="tsd-anchor"></a>
 					<h3>velocity</h3>
-					<div class="tsd-signature tsd-kind-icon">velocity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">V</span></div>
+					<div class="tsd-signature tsd-kind-icon">velocity<span class="tsd-signature-symbol">:</span> <a href="v.html" class="tsd-signature-type">V</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Entity.ts:7</li>
-							<li>Defined in Entity.ts:6</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Entity.ts#L20">Entity.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -213,14 +232,14 @@
 					<a name="checkcollision" class="tsd-anchor"></a>
 					<h3>check<wbr>Collision</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">check<wbr>Collision<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="body.html" class="tsd-signature-type">Body</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">check<wbr>Collision<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="body.html" class="tsd-signature-type">Body</a>, newPositon<span class="tsd-signature-symbol">?: </span><a href="v.html" class="tsd-signature-type">V</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="body.html">Body</a>.<a href="body.html#checkcollision">checkCollision</a></p>
 								<ul>
-									<li>Defined in Body.ts:25</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Body.ts#L31">Body.ts:31</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,52 +252,103 @@
 								<li>
 									<h5>body: <a href="body.html" class="tsd-signature-type">Body</a></h5>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> newPositon: <a href="v.html" class="tsd-signature-type">V</a><span class="tsd-signature-symbol"> =&nbsp;this.position</span></h5>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 							<p>returns a boolean if collsion occured</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getmodel" class="tsd-anchor"></a>
-					<h3>get<wbr>Model</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Model<span class="tsd-signature-symbol">(</span>models<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="getcollisionposition" class="tsd-anchor"></a>
+					<h3>get<wbr>Collision<wbr>Position</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Collision<wbr>Position<span class="tsd-signature-symbol">(</span>newPosition<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, newVelocity<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, collidedBody<span class="tsd-signature-symbol">: </span><a href="body.html" class="tsd-signature-type">Body</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/updatedvalues.html" class="tsd-signature-type">updatedValues</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="body.html">Body</a>.<a href="body.html#getcollisionposition">getCollisionPosition</a></p>
 								<ul>
-									<li>Defined in back/Entity.ts:95</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Body.ts#L52">Body.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>models: <span class="tsd-signature-type">any</span></h5>
+									<h5>newPosition: <a href="v.html" class="tsd-signature-type">V</a></h5>
+								</li>
+								<li>
+									<h5>newVelocity: <a href="v.html" class="tsd-signature-type">V</a></h5>
+								</li>
+								<li>
+									<h5>collidedBody: <a href="body.html" class="tsd-signature-type">Body</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/updatedvalues.html" class="tsd-signature-type">updatedValues</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="rendertexture" class="tsd-anchor"></a>
-					<h3>render<wbr>Texture</h3>
+					<a name="getdirection" class="tsd-anchor"></a>
+					<h3>get<wbr>Direction</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">render<wbr>Texture<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Direction<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in back/Entity.ts:30</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Entity.ts#L77">Entity.ts:77</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="indirectionrange" class="tsd-anchor"></a>
+					<h3>in<wbr>Direction<wbr>Range</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">in<wbr>Direction<wbr>Range<span class="tsd-signature-symbol">(</span>body<span class="tsd-signature-symbol">: </span><a href="body.html" class="tsd-signature-type">Body</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Entity.ts#L73">Entity.ts:73</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>ctx: <span class="tsd-signature-type">any</span></h5>
+									<h5>body: <a href="body.html" class="tsd-signature-type">Body</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="render" class="tsd-anchor"></a>
+					<h3>render</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanvasRenderingContext2D</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="body.html">Body</a>.<a href="body.html#render">render</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Entity.ts#L86">Entity.ts:86</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -315,16 +385,22 @@
 								<a href="entity.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="entity.html#attackrangeobject" class="tsd-kind-icon">attack<wbr>Range<wbr>Object</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="entity.html#force" class="tsd-kind-icon">force</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="entity.html#lastsprite" class="tsd-kind-icon">last<wbr>Sprite</a>
+								<a href="entity.html#lastdirection" class="tsd-kind-icon">last<wbr>Direction</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="entity.html#model" class="tsd-kind-icon">model</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="entity.html#position" class="tsd-kind-icon">position</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="entity.html#spritepositon" class="tsd-kind-icon">sprite<wbr>Positon</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="entity.html#velocity" class="tsd-kind-icon">velocity</a>
@@ -332,11 +408,17 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="entity.html#checkcollision" class="tsd-kind-icon">check<wbr>Collision</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="entity.html#getmodel" class="tsd-kind-icon">get<wbr>Model</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="entity.html#getcollisionposition" class="tsd-kind-icon">get<wbr>Collision<wbr>Position</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="entity.html#rendertexture" class="tsd-kind-icon">render<wbr>Texture</a>
+								<a href="entity.html#getdirection" class="tsd-kind-icon">get<wbr>Direction</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="entity.html#indirectionrange" class="tsd-kind-icon">in<wbr>Direction<wbr>Range</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="entity.html#render" class="tsd-kind-icon">render</a>
 							</li>
 						</ul>
 					</li>
@@ -358,6 +440,9 @@
 						<a href="model.html" class="tsd-kind-icon">Model</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="player.html" class="tsd-kind-icon">Player</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="rectangle.html" class="tsd-kind-icon">Rectangle</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -367,7 +452,19 @@
 						<a href="v.html" class="tsd-kind-icon">V</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/allmodels.html" class="tsd-kind-icon">All<wbr>Models</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/attackrangeobject.html" class="tsd-kind-icon">attack<wbr>Range<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/keys.html" class="tsd-kind-icon">keys</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
 						<a href="../interfaces/position.html" class="tsd-kind-icon">position</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/updatedvalues.html" class="tsd-kind-icon">updated<wbr>Values</a>
 					</li>
 				</ul>
 			</nav>

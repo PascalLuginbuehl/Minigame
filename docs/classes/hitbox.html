@@ -89,16 +89,15 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="hitbox.html#collisionbox" class="tsd-kind-icon">collision<wbr>Box</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="hitbox.html#hitboxes" class="tsd-kind-icon">hitboxes</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="hitbox.html#rectangles" class="tsd-kind-icon">rectangles</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="hitbox.html#test" class="tsd-kind-icon">test</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="hitbox.html#checkcollision" class="tsd-kind-icon">check<wbr>Collision</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="hitbox.html#getcollisionbox" class="tsd-kind-icon">get<wbr>Collision<wbr>Box</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="hitbox.html#drawhitbox" class="tsd-kind-icon">draw<wbr>Hitbox</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="hitbox.html#getcollisionbox" class="tsd-kind-icon">get<wbr>Collision<wbr>Box</a></li>
 							</ul>
 						</section>
 					</div>
@@ -110,25 +109,29 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Hitbox<span class="tsd-signature-symbol">(</span>hitboxconf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="hitbox.html" class="tsd-signature-type">Hitbox</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Hitbox<span class="tsd-signature-symbol">(</span>rectangles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="rectangle.html" class="tsd-signature-type">Rectangle</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="hitbox.html" class="tsd-signature-type">Hitbox</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in back/Hitbox.ts:6</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Hitbox.ts#L6">Hitbox.ts:6</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Constructor callculates outer Collision box only requerires one param
-									Constructor callculates outer Collision box only requerires one param</p>
+									<p>Constructor callculates outer Collision box only requerires one param</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>hitboxconf: <span class="tsd-signature-type">any</span></h5>
+									<h5>rectangles: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="rectangle.html" class="tsd-signature-type">Rectangle</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>recatangle out of which the collisionbox constist</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="hitbox.html" class="tsd-signature-type">Hitbox</a></h4>
@@ -141,41 +144,20 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="collisionbox" class="tsd-anchor"></a>
 					<h3>collision<wbr>Box</h3>
-					<div class="tsd-signature tsd-kind-icon">collision<wbr>Box<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Rectangle</span></div>
+					<div class="tsd-signature tsd-kind-icon">collision<wbr>Box<span class="tsd-signature-symbol">:</span> <a href="rectangle.html" class="tsd-signature-type">Rectangle</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in back/Hitbox.ts:6</li>
-							<li>Defined in Hitbox.ts:6</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="hitboxes" class="tsd-anchor"></a>
-					<h3>hitboxes</h3>
-					<div class="tsd-signature tsd-kind-icon">hitboxes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="rectangle.html" class="tsd-signature-type">Rectangle</a><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in back/Hitbox.ts:5</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Hitbox.ts#L6">Hitbox.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="rectangles" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> rectangles</h3>
-					<div class="tsd-signature tsd-kind-icon">rectangles<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Rectangle</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">rectangles<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="rectangle.html" class="tsd-signature-type">Rectangle</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in Hitbox.ts:5</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="test" class="tsd-anchor"></a>
-					<h3>test</h3>
-					<div class="tsd-signature tsd-kind-icon">test<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in Hitbox.ts:7</li>
+							<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Hitbox.ts#L5">Hitbox.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -186,13 +168,13 @@
 					<a name="checkcollision" class="tsd-anchor"></a>
 					<h3>check<wbr>Collision</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">check<wbr>Collision<span class="tsd-signature-symbol">(</span>origin<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, eOrigin<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, eHitbox<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">check<wbr>Collision<span class="tsd-signature-symbol">(</span>origin<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, originHitbox<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, hitbox<span class="tsd-signature-symbol">: </span><a href="hitbox.html" class="tsd-signature-type">Hitbox</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in back/Hitbox.ts:17</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Hitbox.ts#L26">Hitbox.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -204,18 +186,22 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>origin: <span class="tsd-signature-type">any</span></h5>
+									<h5>origin: <a href="v.html" class="tsd-signature-type">V</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>origin of the Hitbox in the lastHitbox parameter</p>
-										</div>
+										<p>origin of the Hitbox in the lastHitbox parameter</p>
 									</div>
 								</li>
 								<li>
-									<h5>eOrigin: <span class="tsd-signature-type">any</span></h5>
+									<h5>originHitbox: <a href="v.html" class="tsd-signature-type">V</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>origin of the this hitbos, so the caller of the function</p>
+									</div>
 								</li>
 								<li>
-									<h5>eHitbox: <span class="tsd-signature-type">any</span></h5>
+									<h5>hitbox: <a href="hitbox.html" class="tsd-signature-type">Hitbox</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>hitbox to check collision with</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -224,16 +210,42 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getcollisionbox" class="tsd-anchor"></a>
-					<h3>get<wbr>Collision<wbr>Box</h3>
+					<a name="drawhitbox" class="tsd-anchor"></a>
+					<h3>draw<wbr>Hitbox</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">draw<wbr>Hitbox<span class="tsd-signature-symbol">(</span>origin<span class="tsd-signature-symbol">: </span><a href="v.html" class="tsd-signature-type">V</a>, ctx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanvasRenderingContext2D</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Hitbox.ts#L74">Hitbox.ts:74</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>origin: <a href="v.html" class="tsd-signature-type">V</a></h5>
+								</li>
+								<li>
+									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="getcollisionbox" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> get<wbr>Collision<wbr>Box</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
 						<li class="tsd-signature tsd-kind-icon">get<wbr>Collision<wbr>Box<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="rectangle.html" class="tsd-signature-type">Rectangle</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in back/Hitbox.ts:33</li>
+									<li>Defined in <a href="https://github.com/SpargelPlays/Minigame/blob/5f3df80/src/common/Hitbox.ts#L55">Hitbox.ts:55</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -284,19 +296,16 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="hitbox.html#collisionbox" class="tsd-kind-icon">collision<wbr>Box</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="hitbox.html#hitboxes" class="tsd-kind-icon">hitboxes</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="hitbox.html#rectangles" class="tsd-kind-icon">rectangles</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="hitbox.html#test" class="tsd-kind-icon">test</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="hitbox.html#checkcollision" class="tsd-kind-icon">check<wbr>Collision</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="hitbox.html#drawhitbox" class="tsd-kind-icon">draw<wbr>Hitbox</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="hitbox.html#getcollisionbox" class="tsd-kind-icon">get<wbr>Collision<wbr>Box</a>
 							</li>
 						</ul>
@@ -313,6 +322,9 @@
 						<a href="model.html" class="tsd-kind-icon">Model</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="player.html" class="tsd-kind-icon">Player</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="rectangle.html" class="tsd-kind-icon">Rectangle</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -322,7 +334,19 @@
 						<a href="v.html" class="tsd-kind-icon">V</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/allmodels.html" class="tsd-kind-icon">All<wbr>Models</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/attackrangeobject.html" class="tsd-kind-icon">attack<wbr>Range<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/keys.html" class="tsd-kind-icon">keys</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
 						<a href="../interfaces/position.html" class="tsd-kind-icon">position</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="../interfaces/updatedvalues.html" class="tsd-kind-icon">updated<wbr>Values</a>
 					</li>
 				</ul>
 			</nav>
