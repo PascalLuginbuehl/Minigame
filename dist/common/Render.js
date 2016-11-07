@@ -62,6 +62,10 @@ var Render = (function () {
         this.context.save();
         this.context.translate(Math.round(this.cameraEntity.position.x) * -1 + Math.round(this.canvas.width / 2), Math.round(this.cameraEntity.position.y) * -1 + Math.round(this.canvas.height / 2));
         this.context.drawImage(this.mapCanvas, 0, 0);
+        for (var i = 0; i < this.game.map.entitys.length; i++) {
+            this.game.map.entitys[i].render(this.context);
+            this.game.map.entitys[i].model.hitbox.drawHitbox(this.game.map.entitys[i].position, this.context);
+        }
         this.context.restore();
         requestAnimationFrame(function () { });
     };
