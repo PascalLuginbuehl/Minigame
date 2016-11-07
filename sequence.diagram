@@ -1,0 +1,19 @@
+title: Entity collision checking
+
+Entity->Model: requestHitbox
+Model->Hitbox: return Hitbox to Entity
+
+Hitbox->Entity: return Hitbox
+Entity->Hitbox: Check collision
+
+Hitbox->Hitbox: CheckOuter CollisionBox
+Hitbox-->Entity: return no collision
+
+Hitbox->Rectangle: Each checkCollision
+Rectangle-> Vector: Inbetween
+Vector->Rectangle: collision or not
+
+Rectangle->Hitbox: collision or not
+
+Hitbox->Entity: collision or not
+Entity->Entity: Prevent collision

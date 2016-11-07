@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="996.109375" height="620"><style xmlns="http://www.w3.org/1999/xhtml" type="text/css">
+svg text {
+  fill: #000;
+  stroke: none;
+  font-size: 12pt;
+  font-family: 'Andale Mono', monospace;
+}
+
+svg :not(text) {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.textbg {
+  fill: #fff;
+  stroke: none;
+}
+
+.rect {
+  fill: #fff;
+}
+
+.signal-solid {
+  stroke-dasharray: 0;
+}
+
+.signal-dotted {
+  stroke-dasharray: 5;
+}
+
+.arrow-filled {
+  marker-end: url(#arrow-filled);
+}
+
+.arrow-open {
+  marker-end: url(#arrow-open);
+}
+</style><defs><marker id="arrow-filled" refX="5" refY="2.5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 5,2.5 0,5z" style="stroke: none; fill: #000"/></marker><marker id="arrow-open" refX="5" refY="2.5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 5,2.5 0,5" style="stroke-width: 1"/></marker></defs><rect width="250.03125" height="28" x="10" y="10" class="rect"/><text x="135.015625" y="24" style="text-anchor: middle; alignment-baseline: central;">Entity collision checking</text><rect width="77.609375" height="38" x="10" y="48" class="rect"/><text x="48.8046875" y="67" style="text-anchor: middle; alignment-baseline: central;">Entity</text><rect width="77.609375" height="38" x="10" y="562" class="rect"/><text x="48.8046875" y="581" style="text-anchor: middle; alignment-baseline: central;">Entity</text><path d="M48.8046875,86 v476" class="timeline"/><rect width="68" height="38" x="218.0234375" y="48" class="rect"/><text x="252.0234375" y="67" style="text-anchor: middle; alignment-baseline: central;">Model</text><rect width="68" height="38" x="218.0234375" y="562" class="rect"/><text x="252.0234375" y="581" style="text-anchor: middle; alignment-baseline: central;">Model</text><path d="M252.0234375,86 v476" class="timeline"/><rect width="77.609375" height="38" x="454.046875" y="48" class="rect"/><text x="492.8515625" y="67" style="text-anchor: middle; alignment-baseline: central;">Hitbox</text><rect width="77.609375" height="38" x="454.046875" y="562" class="rect"/><text x="492.8515625" y="581" style="text-anchor: middle; alignment-baseline: central;">Hitbox</text><path d="M492.8515625,86 v476" class="timeline"/><rect width="106.40625" height="38" x="700.4765625" y="48" class="rect"/><text x="753.6796875" y="67" style="text-anchor: middle; alignment-baseline: central;">Rectangle</text><rect width="106.40625" height="38" x="700.4765625" y="562" class="rect"/><text x="753.6796875" y="581" style="text-anchor: middle; alignment-baseline: central;">Rectangle</text><path d="M753.6796875,86 v476" class="timeline"/><rect width="77.609375" height="38" x="888.5" y="48" class="rect"/><text x="927.3046875" y="67" style="text-anchor: middle; alignment-baseline: central;">Vector</text><rect width="77.609375" height="38" x="888.5" y="562" class="rect"/><text x="927.3046875" y="581" style="text-anchor: middle; alignment-baseline: central;">Vector</text><path d="M927.3046875,86 v476" class="timeline"/><rect width="124.8125" height="18" x="88" y="102" class="textbg"/><text x="150.4140625" y="111" style="text-anchor: middle; alignment-baseline: central;">requestHitbox</text><path d="M48.8046875,124 h203.21875" class="signal-solid arrow-filled"/><rect width="220.828125" height="18" x="262.015625" y="140" class="textbg"/><text x="372.4375" y="149" style="text-anchor: middle; alignment-baseline: central;">return Hitbox to Entity</text><path d="M252.0234375,162 h240.828125" class="signal-solid arrow-filled"/><rect width="124.8125" height="18" x="208.40625" y="178" class="textbg"/><text x="270.828125" y="187" style="text-anchor: middle; alignment-baseline: central;">return Hitbox</text><path d="M492.8515625,200 h-444.046875" class="signal-solid arrow-filled"/><rect width="144.015625" height="18" x="198.8125" y="216" class="textbg"/><text x="270.828125" y="225" style="text-anchor: middle; alignment-baseline: central;">Check collision</text><path d="M48.8046875,238 h444.046875" class="signal-solid arrow-filled"/><rect width="220.828125" height="18" x="517.84375" y="258" class="textbg"/><text x="628.265625" y="267" style="text-anchor: middle; alignment-baseline: central;">CheckOuter CollisionBox</text><path d="M492.8515625,253 h20 v33 h-20" class="signal-solid arrow-filled"/><rect width="182.421875" height="18" x="179.609375" y="292" class="textbg"/><text x="270.828125" y="301" style="text-anchor: middle; alignment-baseline: central;">return no collision</text><path d="M492.8515625,314 h-444.046875" class="signal-dotted arrow-filled"/><rect width="182.421875" height="18" x="532.046875" y="330" class="textbg"/><text x="623.265625" y="339" style="text-anchor: middle; alignment-baseline: central;">Each checkCollision</text><path d="M492.8515625,352 h260.828125" class="signal-solid arrow-filled"/><rect width="86.40625" height="18" x="797.28125" y="368" class="textbg"/><text x="840.4921875" y="377" style="text-anchor: middle; alignment-baseline: central;">Inbetween</text><path d="M753.6796875,390 h173.625" class="signal-solid arrow-filled"/><rect width="153.625" height="18" x="763.671875" y="406" class="textbg"/><text x="840.4921875" y="415" style="text-anchor: middle; alignment-baseline: central;">collision or not</text><path d="M927.3046875,428 h-173.625" class="signal-solid arrow-filled"/><rect width="153.625" height="18" x="546.453125" y="444" class="textbg"/><text x="623.265625" y="453" style="text-anchor: middle; alignment-baseline: central;">collision or not</text><path d="M753.6796875,466 h-260.828125" class="signal-solid arrow-filled"/><rect width="153.625" height="18" x="194.015625" y="482" class="textbg"/><text x="270.828125" y="491" style="text-anchor: middle; alignment-baseline: central;">collision or not</text><path d="M492.8515625,504 h-444.046875" class="signal-solid arrow-filled"/><rect width="163.21875" height="18" x="73.796875" y="524" class="textbg"/><text x="155.4140625" y="533" style="text-anchor: middle; alignment-baseline: central;">Prevent collision</text><path d="M48.8046875,519 h20 v33 h-20" class="signal-solid arrow-filled"/></svg>
