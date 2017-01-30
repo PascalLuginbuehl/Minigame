@@ -153,12 +153,31 @@ var Entity = (function (_super) {
         if (this.spritePositon == undefined || Math.ceil(this.spritePositon) >= this.model.spriteMax) {
             this.spritePositon = 0;
         }
+        var width = this.model.texture.width / this.model.spriteMax;
+        var height = this.model.texture.height / this.model.spriteHeight;
+        console.log(this.lastDirection);
+        var textureX = 0;
+        switch (this.lastDirection) {
+            case 1:
+            case 2:
+            case 3:
+                textureX = 3;
+                break;
+            case -1:
+            case -2:
+            case -3:
+                textureX = 1;
+                break;
+            case -4:
+            case 4:
+                textureX = 2;
+                break;
+        }
         var speed = Math.sqrt(this.velocity.y * this.velocity.y + this.velocity.x * this.velocity.x);
         ;
         var direction = this.lastDirection;
         this.spritePositon += speed / 1000;
-        ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.spritePositon), 0, this.model.texture.width / this.model.spriteMax, this.model.texture.height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
-        this.attackRangeObject[this.lastDirection].drawHitbox(this.position, ctx);
+        ctx.drawImage(this.model.texture, width * Math.floor(this.spritePositon), height * textureX, width, height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
     };
     return Entity;
 }(Body_1.default));
@@ -180,7 +199,7 @@ var Game = (function () {
             ]), "assets/images/dirt.png", "dirt", new Vector_1.default(10, 10), 1),
             player: new Model_1.default(new Hitbox_1.default([
                 new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(16, 18))
-            ]), "assets/images/player.png", "player", new Vector_1.default(16, 18), 4)
+            ]), "assets/images/player.png", "player", new Vector_1.default(16, 18), 10, false, 4)
         };
         this.map = new Map_1.default(this, 1000, 1000);
         setInterval(this.gameLoop.bind(this), 16);
@@ -343,13 +362,15 @@ exports.default = Map;
 },{"./Block":2,"./Entity":4,"./Vector":13}],9:[function(require,module,exports){
 "use strict";
 var Model = (function () {
-    function Model(hitbox, texturePath, name, textureSize, spriteMax, hasPattern) {
+    function Model(hitbox, texturePath, name, textureSize, spriteMax, hasPattern, spriteHeight) {
         if (spriteMax === void 0) { spriteMax = 1; }
         if (hasPattern === void 0) { hasPattern = false; }
+        if (spriteHeight === void 0) { spriteHeight = 1; }
         this.hitbox = hitbox;
         this.name = name;
         this.textureSize = textureSize;
         this.hasPattern = hasPattern;
+        this.spriteHeight = spriteHeight;
         this.spriteMax = spriteMax;
         this.texturePath = texturePath;
     }
@@ -520,6 +541,7 @@ var Render = (function () {
         this.context.drawImage(this.mapCanvas, 0, 0);
         for (var i = 0; i < this.game.map.entitys.length; i++) {
             this.game.map.entitys[i].render(this.context);
+            this.game.map.entitys[i].attackRangeObject[this.game.map.entitys[i].lastDirection].drawHitbox(this.game.map.entitys[i].position, this.context);
             this.game.map.entitys[i].model.hitbox.drawHitbox(this.game.map.entitys[i].position, this.context);
         }
         this.context.restore();

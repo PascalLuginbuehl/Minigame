@@ -72,12 +72,31 @@ var Entity = (function (_super) {
         if (this.spritePositon == undefined || Math.ceil(this.spritePositon) >= this.model.spriteMax) {
             this.spritePositon = 0;
         }
+        var width = this.model.texture.width / this.model.spriteMax;
+        var height = this.model.texture.height / this.model.spriteHeight;
+        console.log(this.lastDirection);
+        var textureX = 0;
+        switch (this.lastDirection) {
+            case 1:
+            case 2:
+            case 3:
+                textureX = 3;
+                break;
+            case -1:
+            case -2:
+            case -3:
+                textureX = 1;
+                break;
+            case -4:
+            case 4:
+                textureX = 2;
+                break;
+        }
         var speed = Math.sqrt(this.velocity.y * this.velocity.y + this.velocity.x * this.velocity.x);
         ;
         var direction = this.lastDirection;
         this.spritePositon += speed / 1000;
-        ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.spritePositon), 0, this.model.texture.width / this.model.spriteMax, this.model.texture.height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
-        this.attackRangeObject[this.lastDirection].drawHitbox(this.position, ctx);
+        ctx.drawImage(this.model.texture, width * Math.floor(this.spritePositon), height * textureX, width, height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
     };
     return Entity;
 }(Body_1.default));

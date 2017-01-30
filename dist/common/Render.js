@@ -64,6 +64,7 @@ var Render = (function () {
         this.context.drawImage(this.mapCanvas, 0, 0);
         for (var i = 0; i < this.game.map.entitys.length; i++) {
             this.game.map.entitys[i].render(this.context);
+            this.game.map.entitys[i].attackRangeObject[this.game.map.entitys[i].lastDirection].drawHitbox(this.game.map.entitys[i].position, this.context);
             this.game.map.entitys[i].model.hitbox.drawHitbox(this.game.map.entitys[i].position, this.context);
         }
         this.context.restore();

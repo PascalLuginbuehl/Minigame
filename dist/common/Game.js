@@ -13,7 +13,7 @@ var Game = (function () {
             ]), "assets/images/dirt.png", "dirt", new Vector_1.default(10, 10), 1),
             player: new Model_1.default(new Hitbox_1.default([
                 new Rectangle_1.default(new Vector_1.default(0, 0), new Vector_1.default(16, 18))
-            ]), "assets/images/player.png", "player", new Vector_1.default(16, 18), 4)
+            ]), "assets/images/player.png", "player", new Vector_1.default(16, 18), 10, false, 4)
         };
         this.map = new Map_1.default(this, 1000, 1000);
         setInterval(this.gameLoop.bind(this), 16);

@@ -88,13 +88,34 @@ export default class Entity extends Body {
       this.spritePositon = 0;
     }
 
+    let width = this.model.texture.width / this.model.spriteMax;
+    let height = this.model.texture.height / this.model.spriteHeight;
+
+    console.log(this.lastDirection);
+    let textureX = 0;
+    switch (this.lastDirection) {
+      case 1:
+      case 2:
+      case 3:
+        textureX = 3;
+        break;
+      case -1:
+      case -2:
+      case -3:
+        textureX = 1;
+        break;
+      case -4:
+      case 4:
+        textureX = 2;
+        break;
+    }
+
     let speed = Math.sqrt(this.velocity.y*this.velocity.y + this.velocity.x * this.velocity.x);;
 
     let direction = this.lastDirection;
 
     this.spritePositon += speed / 1000;
-    ctx.drawImage(this.model.texture, this.model.textureSize.x * Math.floor(this.spritePositon), 0, this.model.texture.width / this.model.spriteMax, this.model.texture.height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
+    ctx.drawImage(this.model.texture, width * Math.floor(this.spritePositon), height * textureX, width, height, Math.round(this.position.x), Math.round(this.position.y), this.model.textureSize.x, this.model.textureSize.y);
     // console.log(this.attackRangeObject[this.lastDirection]);
-    this.attackRangeObject[this.lastDirection].drawHitbox(this.position, ctx);
   }
 }

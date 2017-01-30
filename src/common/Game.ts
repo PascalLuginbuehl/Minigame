@@ -44,6 +44,8 @@ export default class Game {
         "assets/images/player.png",
         "player",
         new V(16, 18),
+        10,
+        false,
         4,
       )
     };

@@ -102,6 +102,7 @@ export default class Render {
 
     for (let i = 0; i < this.game.map.entitys.length; i++) {
       this.game.map.entitys[i].render(this.context);
+      this.game.map.entitys[i].attackRangeObject[this.game.map.entitys[i].lastDirection].drawHitbox(this.game.map.entitys[i].position, this.context)
       this.game.map.entitys[i].model.hitbox.drawHitbox(this.game.map.entitys[i].position, this.context);
     }
 
